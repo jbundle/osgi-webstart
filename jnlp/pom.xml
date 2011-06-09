@@ -42,9 +42,14 @@
 	    </dependency>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>org.jbundle.util.osgi</groupId>
 			<artifactId>org.jbundle.util.osgi</artifactId>
-			<version>${project.version}</version>
+			<version>${jbundleOsgiVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jbundle.util.webapp</groupId>
+			<artifactId>org.jbundle.util.webapp.osgi</artifactId>
+			<version>${jbundle-util-webappVersion}</version>
 		</dependency>
 
 		<dependency>
