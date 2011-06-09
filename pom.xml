@@ -11,11 +11,11 @@
   </parent>
 
   <groupId>org.jbundle.util.osgi</groupId>
-  <artifactId>jbundle-util-osgi-reactor</artifactId>
+  <artifactId>jbundle-util-osgi-webapp-reactor</artifactId>
   <version>1.1.2-SNAPSHOT</version>
 
   <packaging>pom</packaging>
-  <name>jbundle-util-osgi-reactor</name>
+  <name>jbundle-util-osgi-webapp-reactor</name>
 
   <scm>
     <url>https://github.com/jbundle/osgi-webstart</url>
