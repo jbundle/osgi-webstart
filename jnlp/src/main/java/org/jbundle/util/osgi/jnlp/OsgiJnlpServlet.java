@@ -1162,15 +1162,6 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
         return null;
     }
     /**
-     * Get the Servlet context for this servlet.
-     * Override if different from default context.
-     * @return The httpcontext.
-     */
-    public HttpContext getHttpContext()
-    {
-        return new JnlpHttpContext(getBundleContext().getBundle());
-    }
-    /**
      * Convenience method.
      * Note: You will have to cast the class or override this in your actual OSGi servlet.
      */
