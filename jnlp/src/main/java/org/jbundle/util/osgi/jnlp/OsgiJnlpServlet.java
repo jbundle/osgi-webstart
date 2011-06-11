@@ -76,7 +76,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
-import org.osgi.service.http.HttpContext;
 
 /**
  * OSGi to Jnlp translation Servlet.
@@ -146,17 +145,17 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
      * Constructor.
      * @param context
      */
-    public OsgiJnlpServlet(BundleContext context) {
+    public OsgiJnlpServlet(BundleContext context, String servicePid, Dictionary<String, String> properties) {
     	this();
-    	init(context);
+    	init(context, servicePid, properties);
     }
     
     /**
      * Constructor.
      * @param context
      */
-    public void init(BundleContext context) {
-    	super.init(context);
+    public void init(BundleContext context, String servicePid, Dictionary<String, String> properties) {
+    	super.init(context, servicePid, properties);
     	
     	listener = new BundleChangeListener(this);
     	context.addBundleListener(listener);
@@ -1122,21 +1121,9 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
 		} catch (IOException e) {
 		    if (!ignoreErrors)
 		        e.printStackTrace();
-		}    	
+		}
     }
 
-    public static String getRequestParam(HttpServletRequest request, String param, String defaultValue)
-    {
-    	String value = request.getParameter(SERVICE_PID + param);
-    	if (value == null)
-    	{
-    	    value = request.getParameter(param);
-            if (value == null)
-                return defaultValue;
-    	}
-    	return value;
-    }
-    
     private static SimpleDateFormat httpDateFormat = null;
     static {
         httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
