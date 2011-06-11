@@ -145,7 +145,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
      * Constructor.
      * @param context
      */
-    public OsgiJnlpServlet(BundleContext context, String servicePid, Dictionary<String, String> properties) {
+    public OsgiJnlpServlet(Object context, String servicePid, Dictionary<String, String> properties) {
     	this();
     	init(context, servicePid, properties);
     }
@@ -154,11 +154,11 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
      * Constructor.
      * @param context
      */
-    public void init(BundleContext context, String servicePid, Dictionary<String, String> properties) {
+    public void init(Object context, String servicePid, Dictionary<String, String> properties) {
     	super.init(context, servicePid, properties);
     	
     	listener = new BundleChangeListener(this);
-    	context.addBundleListener(listener);
+    	this.getBundleContext().addBundleListener(listener);
     }
     
     BundleChangeListener listener = null;
