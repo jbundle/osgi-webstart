@@ -34,6 +34,13 @@
 		</plugins>
 	</build>
 
+  <distributionManagement>
+    <site>
+      <id>jbundle.org</id>
+      <url>scp://www.jbundle.org://space/web/jbundle/osgi-webstart</url>
+    </site>
+  </distributionManagement>
+
 	<dependencies>
 	    <dependency>
 		    <groupId>org.jibx.schema.net.java</groupId>
@@ -44,12 +51,12 @@
 		<dependency>
 			<groupId>org.jbundle.util.osgi</groupId>
 			<artifactId>org.jbundle.util.osgi</artifactId>
-			<version>1.1.3-SNAPSHOT</version>
+			<version>${jbundleOsgiVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jbundle.util.webapp</groupId>
 			<artifactId>org.jbundle.util.webapp.osgi</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
+			<version>${jbundle-util-webappVersion}</version>
 		</dependency>
 
 		<dependency>
