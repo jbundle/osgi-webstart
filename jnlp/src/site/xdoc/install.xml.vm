@@ -49,7 +49,7 @@ span.comment {color:blue; font-style:italic}
 Of course, you can just install obr artifacts by typing:
 features:install obr
 Then, just add the repositories using the karaf
-provaddrepo and provinstall commands.
+obr:addurl and obr:deploy commands.
 
 or you can install from the karaf features file:
 features:install war
