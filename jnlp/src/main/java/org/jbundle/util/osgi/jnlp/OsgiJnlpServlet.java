@@ -130,7 +130,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
         UNKNOWN,
         NONE,
         PARTIAL,
-        ALL
+        ALL,
     };
 
     /**
@@ -360,6 +360,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
 		String version = getRequestParam(request, VERSION, null);
 		String packageName = ClassFinderActivator.getPackageName(mainClass, false);
 		Bundle bundle = findBundle(packageName, version);
+		if (bundle == null)
+			return Changes.UNKNOWN;
 
 		jnlp.setCodebase(getCodebase(request));
 		jnlp.setHref(getHref(request));
