@@ -196,7 +196,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
     	else
     	    fileFound = getJarFile(request, response);
     	if (!fileFound)
-    	    fileFound = getResourceFile(request, response);
+    	    fileFound = getResourceFile(request, response, false);
 //        if (!fileFound)   // See JnlpDownloadServlet note
 //    		super.doGet(request, response);
     }
@@ -999,38 +999,6 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
     	return this.checkCache(request, response, file);
     }
 
-    /**
-     * See if this is a resource.
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
-    public boolean getResourceFile(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
-        String path = request.getPathInfo();
-        if (path == null)
-            return false;
-        if (!path.startsWith("/"))
-            path = "/" + path;  // Must start from root
-        
-        URL url = this.getClass().getResource(path);
-        if (url == null)
-            return false;   // Not found
-        InputStream inStream = null;
-        try {
-            inStream = url.openStream();
-        } catch (Exception e) {
-            return false;   // Not found
-        }
-
-        // Todo may want to add cache info (using bundle lastModified).
-        OutputStream writer = response.getOutputStream();
-        copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
-        writer.close();
-        return true;
-    }
-
 	/**
 	 * Get the package name from the jar entry path.
 	 * @param name
@@ -1109,21 +1077,6 @@ public class OsgiJnlpServlet extends BaseOsgiServlet/*JnlpDownloadServlet*/ {
                     properties[i] = "";
     	}
     	return properties;
-    }
-	static final int BUFFER = 2048;
-    public static void copyStream(InputStream inStream, OutputStream outStream, boolean ignoreErrors)
-    {
-    	byte[] data = new byte[BUFFER];
-        int count;
-        try {
-			while((count = inStream.read(data, 0, BUFFER)) != -1)
-			{
-				outStream.write(data, 0, count);
-			}
-		} catch (IOException e) {
-		    if (!ignoreErrors)
-		        e.printStackTrace();
-		}
     }
 
     private static SimpleDateFormat httpDateFormat = null;
