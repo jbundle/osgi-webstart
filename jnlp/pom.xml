@@ -5,7 +5,7 @@
   <parent>
     <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
     <groupId>org.jbundle.util.osgi</groupId>
-    <version>1.1.4</version>
+    <version>1.1.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>org.jbundle.util.osgi.jnlp</artifactId>
@@ -51,12 +51,12 @@
 		<dependency>
 			<groupId>org.jbundle.util.osgi</groupId>
 			<artifactId>org.jbundle.util.osgi</artifactId>
-			<version>1.1.4</version>
+			<version>1.1.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jbundle.util.webapp</groupId>
 			<artifactId>org.jbundle.util.webapp.osgi</artifactId>
-			<version>0.9.4</version>
+			<version>0.9.5-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
