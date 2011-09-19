@@ -51,12 +51,10 @@
 		<dependency>
 			<groupId>org.jbundle.util.osgi</groupId>
 			<artifactId>org.jbundle.util.osgi</artifactId>
-			<version>1.1.6-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jbundle.util.webapp</groupId>
 			<artifactId>org.jbundle.util.webapp.osgi</artifactId>
-			<version>0.9.6-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
