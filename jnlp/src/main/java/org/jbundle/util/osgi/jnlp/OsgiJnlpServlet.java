@@ -791,7 +791,50 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
 		}
 		return packages.toArray(EMPTY_ARRAY);
 	}
-	
+	/**
+	 * Unpack bundle files and add them to the destination directory.
+	 * @param bundle
+	 * @param rootPathInJar
+	 * @param destDir
+	 */
+	public static void transferBundleFiles(Bundle bundle, String rootPathInJar, String destDir)
+	{
+		if ((!destDir.endsWith("/")) && (!destDir.endsWith(File.separator)))
+			destDir = destDir + File.separator;
+	    Enumeration<?> paths = bundle.findEntries(rootPathInJar, "*", true);
+	    if (paths != null)
+	    {
+	    	while (paths.hasMoreElements())
+	    	{
+				URL url = (URL)paths.nextElement();
+				String fileName = url.getFile();
+				if ((!fileName.endsWith("/")) && (!fileName.endsWith(File.separator)))
+				{
+					int startLocalPath = fileName.indexOf(rootPathInJar) + rootPathInJar.length();
+					if (startLocalPath > 0)
+					{	// Always
+						fileName = fileName.substring(startLocalPath);
+						if ((fileName.startsWith("/")) || (fileName.startsWith(File.separator)))
+							fileName = fileName.substring(1);
+						fileName = destDir + fileName;
+	                	File file = new File(fileName);
+	                	file = file.getParentFile();
+	                	if (!file.exists())
+	                		file.mkdirs();
+						try {
+							FileOutputStream outStream = new FileOutputStream(fileName);
+							copyStream(url.openStream(), outStream, false);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+	    	}
+	    }
+	}
+
 	/**
 	 * Very similar to the code in jar tool.
 	 * @param name
