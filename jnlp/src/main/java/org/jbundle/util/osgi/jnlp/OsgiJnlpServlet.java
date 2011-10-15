@@ -594,7 +594,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
 		Bundle bundle = classFinder.findBundle(null, getBundleContext(), packageName, version);
 		if (bundle == null)
 		{
-	        Object resource = classFinder.deployThisResource(packageName + ".ClassName", false, false);    // Deploy, but do not start the bundle
+	        Object resource = classFinder.deployThisResource(packageName, version, false);    // Deploy, but do not start the bundle
 	        if (resource != null)
 	        	bundle = classFinder.findBundle(resource, getBundleContext(), packageName, version);
 		}
