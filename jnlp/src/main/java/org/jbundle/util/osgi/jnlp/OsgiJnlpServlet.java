@@ -197,7 +197,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
     	if (isJnlp(request))
     		makeJnlp(request, response);
     	else
-    	    fileFound = getJarFile(request, response);
+    	    fileFound = getDataFile(request, response);
     	if (!fileFound)
     	    fileFound = getResourceFile(request, response, false);
 //        if (!fileFound)   // See JnlpDownloadServlet note
@@ -1029,7 +1029,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
      * @return
      * @throws IOException
      */
-    public boolean getJarFile(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public boolean getDataFile(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
     	String path = request.getPathInfo();
     	if (path == null)
