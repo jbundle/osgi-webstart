@@ -193,13 +193,13 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	boolean fileFound = false;
+    	boolean fileSent = false;
     	if (isJnlp(request))
     		makeJnlp(request, response);
     	else
-    	    fileFound = getDataFile(request, response);
-    	if (!fileFound)
-    	    fileFound = getResourceFile(request, response, false);
+    	    fileSent = sendDataFile(request, response);
+    	if (!fileSent)
+    	    fileSent = sendResourceFile(request, response);	// If I can't file it, try to find it in the resources and send it
 //        if (!fileFound)   // See JnlpDownloadServlet note
 //    		super.doGet(request, response);
     }
@@ -263,7 +263,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
 			        setupJnlp(jnlp, request, true);  // Need to rescan everything
             if (bundleChanged == Changes.NONE)
             {   // Note: It may seem better to listen for bundle changes, but actually webstart uses the cached jnlp file
-                if (checkCache(request, response, jnlpFile))
+                if (checkCacheAndSend(request, response, jnlpFile))
                     return;   // Returned the cached jnlp or a cache up-to-date response
             }
             // If bundleChanged == Changes.ALL need to return the new jnlp
@@ -297,7 +297,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
         if ((lastBundleChange == null)
             || (lastBundleChange.after(lastModified)))
                 return false;
-        return checkCache(request, response, file);
+        return checkCacheAndSend(request, response, file);
     }
     /**
      * Return http response that the cache is up-to-date.
@@ -306,7 +306,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
      * @return
      * @throws IOException
      */
-    public boolean checkCache(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
+    public boolean checkCacheAndSend(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
     {
         String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
         Date lastModified = new Date(file.lastModified());
@@ -1029,7 +1029,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
      * @return
      * @throws IOException
      */
-    public boolean getDataFile(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public boolean sendDataFile(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
     	String path = request.getPathInfo();
     	if (path == null)
@@ -1042,7 +1042,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
 //            response.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
     		return false;
     	}
-    	return this.checkCache(request, response, file);
+    	return this.checkCacheAndSend(request, response, file);
     }
 
 	/**
