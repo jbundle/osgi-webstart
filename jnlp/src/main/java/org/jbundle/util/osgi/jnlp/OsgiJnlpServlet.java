@@ -124,9 +124,6 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
     public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*";
 
-    // Deploy param
-    public static final String SERVICE_PID = "org.jbundle.util.osgi.jnlp";
-    
     Date lastBundleChange = null;
 
     enum Changes {
@@ -989,7 +986,7 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
     {
         if (name == null)
             return false;
-        if (name.startsWith(SERVICE_PID))
+        if (name.startsWith(getPackageFromName(OsgiJnlpServlet.class.getName())))
             return true;
         return false;
     }
