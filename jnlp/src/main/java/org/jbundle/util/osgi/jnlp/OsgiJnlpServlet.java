@@ -191,17 +191,15 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
     /**
      * Main entry point for a web get request.
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     	boolean fileSent = false;
-    	if (isJnlp(request))
-    		makeJnlp(request, response);
+    	if (isJnlp(req))
+    		makeJnlp(req, resp);
     	else
-    	    fileSent = sendDataFile(request, response);
+    	    fileSent = sendDataFile(req, resp);
     	if (!fileSent)
-    	    fileSent = sendResourceFile(request, response);	// If I can't file it, try to find it in the resources and send it
-//        if (!fileFound)   // See JnlpDownloadServlet note
-//    		super.doGet(request, response);
+    	    super.service(req, resp);
     }
     
     /**
