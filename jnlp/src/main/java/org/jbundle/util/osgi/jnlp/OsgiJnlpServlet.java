@@ -1137,14 +1137,6 @@ public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
     public static final String LAST_MODIFIED = "Last-Modified";
      
     /**
-     * Get the properties for this OSGi service.
-     * @return The properties.
-     */
-    public Dictionary<String,String> getDictionary()
-    {
-        return null;
-    }
-    /**
      * Convenience method.
      * Note: You will have to cast the class or override this in your actual OSGi servlet.
      */
