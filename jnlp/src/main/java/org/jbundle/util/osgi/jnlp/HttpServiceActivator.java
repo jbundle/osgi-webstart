@@ -3,6 +3,7 @@
  */
 package org.jbundle.util.osgi.jnlp;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpContext;
 
 /**
@@ -11,7 +12,7 @@ import org.osgi.service.http.HttpContext;
  */
 public class HttpServiceActivator extends org.jbundle.util.webapp.osgi.HttpServiceActivator
 {
-    public String getServletClass()
+    public String getServletClass(BundleContext context)
     {
         return OsgiJnlpServlet.class.getName();
     }
