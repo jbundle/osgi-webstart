@@ -42,7 +42,7 @@ import org.jbundle.util.osgi.ClassFinder;
 import org.jbundle.util.osgi.ClassService;
 import org.jbundle.util.osgi.finder.ClassFinderActivator;
 import org.jbundle.util.osgi.finder.ClassServiceUtility;
-import org.jbundle.util.webapp.osgi.OSGiFileServlet;
+import org.jbundle.util.webapp.base.BaseOsgiServlet;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -90,7 +90,7 @@ import org.osgi.framework.Constants;
  * @author don
  *
  */
-public class OsgiJnlpServlet extends OSGiFileServlet /*JnlpDownloadServlet*/ {
+public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 	private static final long serialVersionUID = 1L;
 
     public static final String JNLP_MIME_TYPE = "application/x-java-jnlp-file";
