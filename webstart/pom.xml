@@ -8,9 +8,9 @@
     <version>1.3.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.jbundle.util.osgi.jnlp</artifactId>
+  <artifactId>org.jbundle.util.osgi.webstart</artifactId>
 
-	<name>jbundle-util-osgi-jnlp - osgi to web start web bundle</name>
+	<name>jbundle-util-osgi-webstart - osgi to web start web bundle</name>
 	<description>osgi to web start servlet</description>
 
 	<packaging>bundle</packaging>

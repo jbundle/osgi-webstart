@@ -35,7 +35,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>org.jbundle.util.osgi.jnlp</artifactId>
+			<artifactId>org.jbundle.util.osgi.webstart</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2011 jbundle.org. All rights reserved.
  */
-package org.jbundle.util.osgi.jnlp;
+package org.jbundle.util.osgi.webstart;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpContext;

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2011 jbundle.org. All rights reserved.
  */
-package org.jbundle.util.osgi.jnlp;
+package org.jbundle.util.osgi.webstart;
 
 import static java.util.jar.JarFile.MANIFEST_NAME;
 
