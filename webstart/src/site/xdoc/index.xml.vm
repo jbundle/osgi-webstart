@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to JNLP Web Start Web Bundle</title>
+    <title>OSGi to Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -24,13 +24,13 @@ It's a pain to set up Web Start to run java in a web browser. You have to specif
 correct package to module mappings in a JNLP file to make everything work.
 </p>
 <p>
-Wouldn't it be nice if Web Start were as easy to set up as OSGi. <i>Well now it is.</i> The OSGi to JNLP
+Wouldn't it be nice if Web Start were as easy to set up as OSGi. <i>Well now it is.</i> The OSGi to Web Start
 converter will automatically create JNLP and jar files from OSGi dependencies.
 </p>
 <p>
 All you have to do is specify the main java class in your url. For example:<br/>
 <code>
-<a href="http://www.jbundle.org/jnlp/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/jnlp/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
 is all you would need to type to launch the OSGi Biorhythm program from a web browser.
 The OSGi to Web Start Web Bundle takes care of all the Web Start configuration. It even automatically
@@ -64,7 +64,7 @@ Import-Package: ${project.artifactId};resolution:=optional;version=${project.ver
 
 <subsection name="Maven Integration">
 <p>
-The <strong>jbundle OSGi to JNLP Web Bundle</strong> is a standard <a href="http://maven.apache.org/">Maven</a> artifact. Here is its dependency information:
+The <strong>jbundle OSGi to Web Start Web Bundle</strong> is a standard <a href="http://maven.apache.org/">Maven</a> artifact. Here is its dependency information:
 </p>
 <p>
 <source>
