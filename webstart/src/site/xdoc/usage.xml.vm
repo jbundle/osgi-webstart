@@ -52,8 +52,8 @@ homePage - Home page
 description - Application description
 icon - Icon path
 online - Set to 'true' if application must run online
-desktop -  Set to 'true' to include application on user's desktop
-menu - Setting this value will include the application in the system's menu
+shortcutDesktop -  Set to 'true' to include application on user's desktop
+shortcutMenu - Setting this value will include the application in the system's menu
 javaVersion - Required java version (defaults to 1.6+)
 initialHeapSize - Initial heap size
 maxHeapSize - Maximum heap size

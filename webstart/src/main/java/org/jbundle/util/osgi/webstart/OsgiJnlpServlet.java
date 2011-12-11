@@ -110,8 +110,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     public static final String DESCRIPTION = "description";
     public static final String ICON = "icon";
     public static final String ONLINE = "online";
-    public static final String DESKTOP = "desktop";
-    public static final String MENU = "menu";
+    public static final String DESKTOP = "shortcutDesktop";
+    public static final String MENU = "shortcutMenu";
     public static final String JAVA_VERSION = "javaVersion";
     public static final String INITIAL_HEAP_SIZE = "initialHeapSize";
     public static final String MAX_HEAP_SIZE = "maxHeapSize";
