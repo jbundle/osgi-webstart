@@ -60,7 +60,7 @@ maxHeapSize - Maximum heap size
 width - Applet width
 height - Applet height
 include - A regular expression specifying which packages to include (since many osgi manifests include unused bundles)
-exclude - A regular expression specifying which packages to exclude (by default, excludes org.osgi.*)
+exclude - A regular expression specifying which packages to exclude (by default, excludes org.osgi.*,javax.*,org.xml.sax*,org.w3c.dom*,org.omg.*)
 codebase - The codebase of the application (defaults to contextPath/)
 
 Note: All parameters (including these system params) are passed to the applet/application.

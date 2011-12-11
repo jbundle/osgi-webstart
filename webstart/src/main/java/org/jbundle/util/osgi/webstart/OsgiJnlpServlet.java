@@ -122,7 +122,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     public static final String CODEBASE = "codebase";
 
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
-    public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*";
+    public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*|javax\\..*|org\\.xml\\.\\.sax.*|org\\.w3c\\.dom.*|org\\.omg\\..*";
 
     Date lastBundleChange = null;
 
