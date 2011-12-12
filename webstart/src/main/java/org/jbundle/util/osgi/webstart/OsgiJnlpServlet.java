@@ -754,9 +754,9 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	            continue;
     	        if ((name.equalsIgnoreCase(MANIFEST_DIR)) || (name.equalsIgnoreCase(MANIFEST_PATH)))
             		continue;
+                boolean isDir = name.endsWith("/");
     	        if (createNewJar)
     	        {
-        	        boolean isDir = name.endsWith("/");
         	        long size = isDir ? 0 : -1; // ***????****  file.length();
         	        JarEntry e = new JarEntry(name);
         	        e.setTime(fileOut.lastModified()); //???
@@ -774,7 +774,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         	        zos.closeEntry();
     	        }
     	        
-    	        if (!(name.toUpperCase().startsWith(MANIFEST_DIR)))
+    	        if (!isDir)
+    	            if (!(name.toUpperCase().startsWith(MANIFEST_DIR)))
     	        		packages.add(getPackageFromName(name));
 			}
 			if (zos != null)
