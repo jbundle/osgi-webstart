@@ -575,10 +575,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     /**
      * Call the osgi utility to find the bundle for this package and version.
      * @param packageName
-     * @param version
+     * @param versionRange
      * @return
      */
-	public Bundle findBundle(String packageName, String version)
+	public Bundle findBundle(String packageName, String versionRange)
 	{
 		ClassService classService = ClassServiceUtility.getClassService();
 		if (classService == null)
@@ -586,12 +586,12 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		ClassFinder classFinder = classService.getClassFinder(getBundleContext());
 		if (classFinder == null)
 			return null;
-		Bundle bundle = classFinder.findBundle(null, getBundleContext(), packageName, version);
+		Bundle bundle = classFinder.findBundle(null, getBundleContext(), packageName, versionRange);
 		if (bundle == null)
 		{
-	        Object resource = classFinder.deployThisResource(packageName, version, false);    // Deploy, but do not start the bundle
+	        Object resource = classFinder.deployThisResource(packageName, versionRange, false);    // Deploy, but do not start the bundle
 	        if (resource != null)
-	        	bundle = classFinder.findBundle(resource, getBundleContext(), packageName, version);
+	        	bundle = classFinder.findBundle(resource, getBundleContext(), packageName, versionRange);
 		}
 		return bundle;
 	}
