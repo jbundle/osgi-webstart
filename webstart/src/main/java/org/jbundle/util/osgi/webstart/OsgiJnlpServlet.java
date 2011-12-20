@@ -586,12 +586,12 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		ClassFinder classFinder = classService.getClassFinder(getBundleContext());
 		if (classFinder == null)
 			return null;
-		Bundle bundle = classFinder.findBundle(null, getBundleContext(), packageName, versionRange);
+		Bundle bundle = (Bundle)classFinder.findBundle(null, getBundleContext(), packageName, versionRange);
 		if (bundle == null)
 		{
 	        Object resource = classFinder.deployThisResource(packageName, versionRange, false);    // Deploy, but do not start the bundle
 	        if (resource != null)
-	        	bundle = classFinder.findBundle(resource, getBundleContext(), packageName, versionRange);
+	        	bundle = (Bundle)classFinder.findBundle(resource, getBundleContext(), packageName, versionRange);
 		}
 		return bundle;
 	}
