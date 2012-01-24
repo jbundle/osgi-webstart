@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Set;
 import java.util.SimpleTimeZone;
 import java.util.jar.JarEntry;
@@ -1145,4 +1146,62 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     {
         return (BundleContext)super.getBundleContext();
     }
+    /**
+     * Get this param from the request or from the servlet's properties.
+     * @param request
+     * @param param
+     * @param defaultValue
+     * @return
+     */
+    public String getRequestParam(HttpServletRequest request, String param, String defaultValue)
+    {
+        if (fileProperties != NO_PROPERTIES)
+        {
+            if (fileProperties == null)
+            {   // First time
+                if (super.getRequestParam(request, "properties", defaultValue) == null)
+                    fileProperties = NO_PROPERTIES;
+                else
+                {
+                    String path = super.getRequestParam(request, "properties", defaultValue);
+                    path = this.fixPathInfo(path);
+                    
+                    URL url = null;
+                    try {
+                        url = ClassServiceUtility.getClassService().getResourceURL(path, baseURL, null, this.getClass().getClassLoader());
+                    } catch (RuntimeException e) {
+                        e.printStackTrace();    // ???
+                    }           
+                    InputStream inStream = null;
+                    if (url != null)
+                    {
+                        try {
+                            inStream = url.openStream();
+                        } catch (Exception e) {
+                            // Not found
+                        }
+                    }
+                    if (inStream == null)
+                        fileProperties = NO_PROPERTIES;
+                    else
+                    {
+                        try {
+                            // Todo may want to add cache info (using bundle lastModified).
+                            fileProperties = new Properties();
+                            fileProperties.load(inStream);
+                            inStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            if (fileProperties != null)
+                if (fileProperties.getProperty(param) != null)
+                    return fileProperties.getProperty(param);
+        }
+        return super.getRequestParam(request, param, defaultValue);
+    }
+    private Properties fileProperties = null;
+    private Properties NO_PROPERTIES = new Properties();
 }
