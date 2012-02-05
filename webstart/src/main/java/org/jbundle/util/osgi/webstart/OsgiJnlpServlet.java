@@ -52,6 +52,7 @@ import org.jibx.runtime.JiBXException;
 import org.jibx.schema.net.java.jnlp_6_0.AppletDesc;
 import org.jibx.schema.net.java.jnlp_6_0.ApplicationDesc;
 import org.jibx.schema.net.java.jnlp_6_0.Argument;
+import org.jibx.schema.net.java.jnlp_6_0.ComponentDesc;
 import org.jibx.schema.net.java.jnlp_6_0.Description;
 import org.jibx.schema.net.java.jnlp_6_0.Description.Kind;
 import org.jibx.schema.net.java.jnlp_6_0.Desktop;
@@ -100,6 +101,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     // Servlet params
     public static final String MAIN_CLASS = "mainClass";
     public static final String APPLET_CLASS = "appletClass";
+    public static final String COMPONENT_CLASS = "componentClass";
+    
     public static final String VERSION = "version";
     public static final String OTHER_PACKAGES = "otherPackages";
     public static final String TEMPLATE = "template";
@@ -211,6 +214,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     {
         if ((getRequestParam(request, MAIN_CLASS, null) != null)
                 || (getRequestParam(request, APPLET_CLASS, null) != null)
+                || (getRequestParam(request, COMPONENT_CLASS, null) != null)
                 || (getRequestParam(request, PROPERTIES, null) != null))
             if (!request.getRequestURI().toUpperCase().endsWith(".HTML"))
                 if (!request.getRequestURI().toUpperCase().endsWith(".HTM"))
@@ -361,6 +365,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		String mainClass = getRequestParam(request, MAIN_CLASS, null);
 		if (mainClass == null)
 		    mainClass = getRequestParam(request, APPLET_CLASS, null);
+        if (mainClass == null)
+            mainClass = getRequestParam(request, COMPONENT_CLASS, null);
 		String version = getRequestParam(request, VERSION, null);
 		String packageName = ClassFinderActivator.getPackageName(mainClass, false);
 		Bundle bundle = findBundle(packageName, version);
@@ -391,8 +397,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         
 		if (getRequestParam(request, MAIN_CLASS, null) != null)
 			setApplicationDesc(jnlp, mainClass, request);
-		else
+		else if (getRequestParam(request, APPLET_CLASS, null) != null)
 			setAppletDesc(jnlp, mainClass, bundle, request);
+        else
+            setComponentDesc(jnlp, mainClass, request);
 		return bundleChanged;
     }
     
@@ -928,19 +936,33 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	if (arguments == null)
     	    applicationDesc.setArgumentList(arguments = new ArrayList<Argument>());
     	@SuppressWarnings("unchecked")
-        Enumeration<String> names = request.getParameterNames();
-    	while (names.hasMoreElements())
+        Enumeration<String> keys = request.getParameterNames();
+    	while (keys.hasMoreElements())
     	{
-    	    String name = names.nextElement();
-            if (isServletParam(name))
+    	    String key = keys.nextElement();
+            if (isServletParam(key))
                 continue;
-    	    String value = request.getParameter(name);
+    	    String value = request.getParameter(key);
     	    if (value != null)
-    	        name = name + "=" + value;
+    	        key = key + "=" + value;
         	Argument argument = new Argument();
-        	argument.setArgument(name);
+        	argument.setArgument(key);
         	arguments.add(argument);
     	}
+        if (fileProperties != null)
+        {
+            for (Object key : fileProperties.keySet())
+            {
+                if (isServletParam(key.toString()))
+                    continue;
+                String value = fileProperties.getProperty(key.toString());
+                if (value != null)
+                    key = key.toString() + "=" + value;
+                Argument argument = new Argument();
+                argument.setArgument(key.toString());
+                arguments.add(argument);
+            }
+        }
     }
     
     /**
@@ -998,6 +1020,17 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                 params.add(argument);                
             }
         }
+    }
+
+    /**
+     * Set jnlp component xml (empty) element.
+     * @param jnlp
+     * @param mainClass
+     */
+    public void setComponentDesc(Jnlp jnlp, String mainClass, HttpServletRequest request)
+    {
+        if (jnlp.getComponentDesc() == null)
+            jnlp.setComponentDesc(new ComponentDesc());
     }
 
     /**
