@@ -190,16 +190,17 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     /**
      * Main entry point for a web get request.
      */
-    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+    {
+        this.linkPropertiesFile(req);
 
-    	boolean fileSent = false;
+        boolean fileSent = false;
     	if (isJnlp(req))
     		makeJnlp(req, resp);
     	else
     	    fileSent = sendDataFile(req, resp);
     	if (!fileSent)
     	    super.service(req, resp);
-    	fileProperties = null; // Remove cached properties
     }
     /**
      * Is this a url for jnlp?
@@ -234,9 +235,6 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 
 			Jnlp jnlp = null;
 			
-            String properties = getRequestParam(request, PROPERTIES, null);
-            if (properties != null)
-                this.linkPropertiesFile(properties);
 			String template = getRequestParam(request, TEMPLATE, null);
 			File jnlpFile = getJnlpFile(request);
 			boolean forceScanBundle = !jnlpFile.exists();
@@ -973,18 +971,32 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         if (params == null)
             appletDesc.setParamList(params = new ArrayList<Param>());
         @SuppressWarnings("unchecked")
-        Enumeration<String> names = request.getParameterNames();
-        while (names.hasMoreElements())
+        Enumeration<String> keys = request.getParameterNames();
+        while (keys.hasMoreElements())
         {
-            String name = names.nextElement();
-            if (isServletParam(name))
+            String key = keys.nextElement();
+            if (isServletParam(key))
                 continue;
-            String value = request.getParameter(name);
+            String value = request.getParameter(key);
             Param argument = new Param();
-            argument.setName(name);
+            argument.setName(key);
             if (value != null)
                 argument.setValue(value);
             params.add(argument);
+        }
+        if (fileProperties != null)
+        {
+            for (Object key : fileProperties.keySet())
+            {
+                if (isServletParam(key.toString()))
+                    continue;
+                String value = fileProperties.getProperty(key.toString());
+                Param argument = new Param();
+                argument.setName(key.toString());
+                if (value != null)
+                    argument.setValue(value);
+                params.add(argument);                
+            }
         }
     }
 
@@ -1155,19 +1167,34 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     {
         return (BundleContext)super.getBundleContext();
     }
+
+    private String filePropertiesPath = null;
+    private Properties fileProperties = null;
+    private Properties NO_PROPERTIES = new Properties();
+
     /**
      * 
      * @param propertiesFile
      */
-    public void linkPropertiesFile(String path)
+    public void linkPropertiesFile(HttpServletRequest req)
     {
-        if (fileProperties == null)
-        {   // First time
-            path = this.fixPathInfo(path);
+        Properties tempProperties = fileProperties;
+        fileProperties = null;  // Don't get params using old properties
+
+        String propertiesPath = getRequestParam(req, PROPERTIES, null);
+        if (propertiesPath != null)
+        {
+            if (propertiesPath.equals(filePropertiesPath))
+            {   // Same as last time, use same properties
+                fileProperties = tempProperties;
+                return;
+            }
+
+            propertiesPath = this.fixPathInfo(propertiesPath);
             
             URL url = null;
             try {
-                url = ClassServiceUtility.getClassService().getResourceURL(path, baseURL, null, this.getClass().getClassLoader());
+                url = ClassServiceUtility.getClassService().getResourceURL(propertiesPath, baseURL, null, this.getClass().getClassLoader());
             } catch (RuntimeException e) {
                 e.printStackTrace();    // ???
             }           
@@ -1191,9 +1218,12 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                     inStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    fileProperties = NO_PROPERTIES;
                 }
             }
         }
+        
+        filePropertiesPath = propertiesPath;
     }
     /**
      * Get this param from the request or from the servlet's properties.
@@ -1209,6 +1239,4 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                 return fileProperties.getProperty(param);
         return super.getRequestParam(request, param, defaultValue);
     }
-    private Properties fileProperties = null;
-    private Properties NO_PROPERTIES = new Properties();
 }
