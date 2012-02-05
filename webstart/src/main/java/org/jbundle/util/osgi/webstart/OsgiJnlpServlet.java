@@ -121,7 +121,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     public static final String INCLUDE = "include";
     public static final String EXCLUDE = "exclude";
     public static final String CODEBASE = "codebase";
-
+    public static final String PROPERTIES = "webStartProperties";
+    
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
     public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*|javax\\..*|org\\.xml\\.\\.sax.*|org\\.w3c\\.dom.*|org\\.omg\\..*";
 
@@ -198,8 +199,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	    fileSent = sendDataFile(req, resp);
     	if (!fileSent)
     	    super.service(req, resp);
+    	fileProperties = null; // Remove cached properties
     }
-    
     /**
      * Is this a url for jnlp?
      * @param request
@@ -207,7 +208,9 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      */
     public boolean isJnlp(HttpServletRequest request)
     {
-        if ((getRequestParam(request, MAIN_CLASS, null) != null) || (getRequestParam(request, APPLET_CLASS, null) != null))
+        if ((getRequestParam(request, MAIN_CLASS, null) != null)
+                || (getRequestParam(request, APPLET_CLASS, null) != null)
+                || (getRequestParam(request, PROPERTIES, null) != null))
             if (!request.getRequestURI().toUpperCase().endsWith(".HTML"))
                 if (!request.getRequestURI().toUpperCase().endsWith(".HTM"))
                     return true;
@@ -231,23 +234,27 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 
 			Jnlp jnlp = null;
 			
+            String properties = getRequestParam(request, PROPERTIES, null);
+            if (properties != null)
+                this.linkPropertiesFile(properties);
 			String template = getRequestParam(request, TEMPLATE, null);
-			if (template == null)
-				jnlp = new Jnlp();
-			else
-			{
-				URL url = context.getResource(template);
-				InputStream inStream = url.openStream();
-				
-				IUnmarshallingContext unmarshaller = jc.createUnmarshallingContext();
-				jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
-			}
-			
 			File jnlpFile = getJnlpFile(request);
 			boolean forceScanBundle = !jnlpFile.exists();
 			if (!forceScanBundle)
 			    if (checkBundleChanges(request, response, jnlpFile))
 			        return;   // Returned the cached jnlp or a cache up-to-date response
+
+			if (template == null)
+                jnlp = new Jnlp();
+            else
+            {
+                URL url = context.getResource(template);
+                InputStream inStream = url.openStream();
+                
+                IUnmarshallingContext unmarshaller = jc.createUnmarshallingContext();
+                jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
+            }
+            
 			Changes bundleChanged = setupJnlp(jnlp, request, forceScanBundle);
             if (bundleChanged == Changes.UNKNOWN)
             {
@@ -653,6 +660,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		String[] packages = parseHeader(importPackage, regexInclude, regexExclude);
 		for (String packageName : packages)
 		{
+		    if (packageName.length() == 0)
+		        continue;
 			String properties[] = parseImport(packageName);
 			String version = getVersion(properties);
 			packageName = properties[0];
@@ -1103,7 +1112,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	for (int i = 0; i < properties.length; i++)
     	{
     		if (properties[i].indexOf(Constants.VERSION_ATTRIBUTE + "=") != -1)
-    		{	// Version may have been split because it has spaces
+    		{	// Version may have been split because it has commas
     			for (int j = i + 1; j < properties.length; j++)
     			{
     	    		if (!properties[j].endsWith("\""))
@@ -1147,6 +1156,46 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         return (BundleContext)super.getBundleContext();
     }
     /**
+     * 
+     * @param propertiesFile
+     */
+    public void linkPropertiesFile(String path)
+    {
+        if (fileProperties == null)
+        {   // First time
+            path = this.fixPathInfo(path);
+            
+            URL url = null;
+            try {
+                url = ClassServiceUtility.getClassService().getResourceURL(path, baseURL, null, this.getClass().getClassLoader());
+            } catch (RuntimeException e) {
+                e.printStackTrace();    // ???
+            }           
+            InputStream inStream = null;
+            if (url != null)
+            {
+                try {
+                    inStream = url.openStream();
+                } catch (Exception e) {
+                    // Not found
+                }
+            }
+            if (inStream == null)
+                fileProperties = NO_PROPERTIES;
+            else
+            {
+                try {
+                    // Todo may want to add cache info (using bundle lastModified).
+                    fileProperties = new Properties();
+                    fileProperties.load(inStream);
+                    inStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    /**
      * Get this param from the request or from the servlet's properties.
      * @param request
      * @param param
@@ -1155,51 +1204,9 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      */
     public String getRequestParam(HttpServletRequest request, String param, String defaultValue)
     {
-        if (fileProperties != NO_PROPERTIES)
-        {
-            if (fileProperties == null)
-            {   // First time
-                if (super.getRequestParam(request, "properties", defaultValue) == null)
-                    fileProperties = NO_PROPERTIES;
-                else
-                {
-                    String path = super.getRequestParam(request, "properties", defaultValue);
-                    path = this.fixPathInfo(path);
-                    
-                    URL url = null;
-                    try {
-                        url = ClassServiceUtility.getClassService().getResourceURL(path, baseURL, null, this.getClass().getClassLoader());
-                    } catch (RuntimeException e) {
-                        e.printStackTrace();    // ???
-                    }           
-                    InputStream inStream = null;
-                    if (url != null)
-                    {
-                        try {
-                            inStream = url.openStream();
-                        } catch (Exception e) {
-                            // Not found
-                        }
-                    }
-                    if (inStream == null)
-                        fileProperties = NO_PROPERTIES;
-                    else
-                    {
-                        try {
-                            // Todo may want to add cache info (using bundle lastModified).
-                            fileProperties = new Properties();
-                            fileProperties.load(inStream);
-                            inStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-            if (fileProperties != null)
-                if (fileProperties.getProperty(param) != null)
-                    return fileProperties.getProperty(param);
-        }
+        if (fileProperties != null)
+            if (fileProperties.getProperty(param) != null)
+                return fileProperties.getProperty(param);
         return super.getRequestParam(request, param, defaultValue);
     }
     private Properties fileProperties = null;
