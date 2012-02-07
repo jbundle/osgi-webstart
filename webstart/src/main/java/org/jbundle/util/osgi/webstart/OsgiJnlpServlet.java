@@ -6,6 +6,7 @@ package org.jbundle.util.osgi.webstart;
 import static java.util.jar.JarFile.MANIFEST_NAME;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,8 +14,12 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.text.ParseException;
@@ -25,6 +30,8 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -36,8 +43,11 @@ import java.util.jar.Manifest;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.jbundle.util.osgi.ClassFinder;
 import org.jbundle.util.osgi.ClassService;
@@ -56,6 +66,7 @@ import org.jibx.schema.net.java.jnlp_6_0.ComponentDesc;
 import org.jibx.schema.net.java.jnlp_6_0.Description;
 import org.jibx.schema.net.java.jnlp_6_0.Description.Kind;
 import org.jibx.schema.net.java.jnlp_6_0.Desktop;
+import org.jibx.schema.net.java.jnlp_6_0.Extension;
 import org.jibx.schema.net.java.jnlp_6_0.Homepage;
 import org.jibx.schema.net.java.jnlp_6_0.Icon;
 import org.jibx.schema.net.java.jnlp_6_0.Information;
@@ -96,7 +107,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 	private static final long serialVersionUID = 1L;
 
     public static final String JNLP_MIME_TYPE = "application/x-java-jnlp-file";
-    public final static String OUTPUT_ENCODING = "UTF-8";
+    public static final String OUTPUT_ENCODING = "UTF-8";
 
     // Servlet params
     public static final String MAIN_CLASS = "mainClass";
@@ -125,6 +136,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     public static final String EXCLUDE = "exclude";
     public static final String CODEBASE = "codebase";
     public static final String PROPERTIES = "webStartProperties";
+    public static final String COMPONENTS = "webStartComponents";
     
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
     public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*|javax\\..*|org\\.xml\\.\\.sax.*|org\\.w3c\\.dom.*|org\\.omg\\..*";
@@ -191,15 +203,13 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         super.free();
     }
     /**
-     * Main entry point for a web get request.
+     * Main entry point for a web get req.
      */
     public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        this.linkPropertiesFile(req);
-
         boolean fileSent = false;
     	if (isJnlp(req))
-    		makeJnlp(req, resp);
+    	    fileSent = makeJnlp(req, resp);
     	else
     	    fileSent = sendDataFile(req, resp);
     	if (!fileSent)
@@ -207,44 +217,46 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     }
     /**
      * Is this a url for jnlp?
-     * @param request
+     * @param req
      * @return
      */
-    public boolean isJnlp(HttpServletRequest request)
+    public boolean isJnlp(HttpServletRequest req)
     {
-        if ((getRequestParam(request, MAIN_CLASS, null) != null)
-                || (getRequestParam(request, APPLET_CLASS, null) != null)
-                || (getRequestParam(request, COMPONENT_CLASS, null) != null)
-                || (getRequestParam(request, PROPERTIES, null) != null))
-            if (!request.getRequestURI().toUpperCase().endsWith(".HTML"))
-                if (!request.getRequestURI().toUpperCase().endsWith(".HTM"))
+        if ((getRequestParam(req, MAIN_CLASS, null) != null)
+                || (getRequestParam(req, APPLET_CLASS, null) != null)
+                || (getRequestParam(req, COMPONENT_CLASS, null) != null)
+                || (getRequestParam(req, PROPERTIES, null) != null))
+            if (!req.getRequestURI().toUpperCase().endsWith(".HTML"))
+                if (!req.getRequestURI().toUpperCase().endsWith(".HTM"))
                     return true;
         return false;
     }
     
     /**
      * Create the jnlp file give the main class name.
-     * @param request
-     * @param response
+     * @param req
+     * @param resp
      * @throws ServletException
      * @throws IOException
      */
-    public void makeJnlp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    public boolean makeJnlp(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
     {
+        req = this.readIfPropertiesFile(req, getRequestParam(req, PROPERTIES, null), false);
+
 		ServletContext context = getServletContext();
-		response.setContentType(JNLP_MIME_TYPE);
+		resp.setContentType(JNLP_MIME_TYPE);
 		
 	    try {
 			IBindingFactory jc = BindingDirectory.getFactory(Jnlp.class);
 
 			Jnlp jnlp = null;
 			
-			String template = getRequestParam(request, TEMPLATE, null);
-			File jnlpFile = getJnlpFile(request);
+			String template = getRequestParam(req, TEMPLATE, null);
+			File jnlpFile = getJnlpFile(req);
 			boolean forceScanBundle = !jnlpFile.exists();
 			if (!forceScanBundle)
-			    if (checkBundleChanges(request, response, jnlpFile))
-			        return;   // Returned the cached jnlp or a cache up-to-date response
+			    if (checkBundleChanges(req, resp, jnlpFile))
+			        return true;   // Returned the cached jnlp or a cache up-to-date resp
 
 			if (template == null)
                 jnlp = new Jnlp();
@@ -257,19 +269,19 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                 jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
             }
             
-			Changes bundleChanged = setupJnlp(jnlp, request, forceScanBundle);
+			Changes bundleChanged = setupJnlp(jnlp, req, resp, forceScanBundle);
             if (bundleChanged == Changes.UNKNOWN)
             {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
-                return;
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
+                return true;
             }
 			if (!forceScanBundle)
 			    if (bundleChanged == Changes.PARTIAL)
-			        setupJnlp(jnlp, request, true);  // Need to rescan everything
+			        setupJnlp(jnlp, req, resp, true);  // Need to rescan everything
             if (bundleChanged == Changes.NONE)
             {   // Note: It may seem better to listen for bundle changes, but actually webstart uses the cached jnlp file
-                if (checkCacheAndSend(request, response, jnlpFile))
-                    return;   // Returned the cached jnlp or a cache up-to-date response
+                if (checkCacheAndSend(req, resp, jnlpFile))
+                    return true;   // Returned the cached jnlp or a cache up-to-date resp
             }
             // If bundleChanged == Changes.ALL need to return the new jnlp
 			
@@ -280,40 +292,42 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
             marshaller.marshalDocument(jnlp, OUTPUT_ENCODING, null, fileWriter);   // Cache jnlp
             fileWriter.close();
             Date lastModified = new Date(jnlpFile.lastModified());
-            response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
+            resp.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
             
-            PrintWriter writer = response.getWriter();
+            PrintWriter writer = resp.getWriter();
             marshaller.marshalDocument(jnlp, OUTPUT_ENCODING, null, writer);
             lastBundleChange = lastModified;     // Use this cached file until bundles change
+            return true;
 		} catch (JiBXException e) {
 			e.printStackTrace();
 		}
+	    return false;
 	}
     /**
      * If there have not been any bundle changes, return the cached jnlp file.
-     * @param request
-     * @param response
+     * @param req
+     * @param resp
      * @return
      * @throws IOException
      */
-    public boolean checkBundleChanges(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
+    public boolean checkBundleChanges(HttpServletRequest req, HttpServletResponse resp, File file) throws IOException
     {
         Date lastModified = new Date(file.lastModified());
         if ((lastBundleChange == null)
             || (lastBundleChange.after(lastModified)))
                 return false;
-        return checkCacheAndSend(request, response, file);
+        return checkCacheAndSend(req, resp, file);
     }
     /**
-     * Return http response that the cache is up-to-date.
-     * @param request
-     * @param response
+     * Return http resp that the cache is up-to-date.
+     * @param req
+     * @param resp
      * @return
      * @throws IOException
      */
-    public boolean checkCacheAndSend(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
+    public boolean checkCacheAndSend(HttpServletRequest req, HttpServletResponse resp, File file) throws IOException
     {
-        String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
+        String requestIfModifiedSince = req.getHeader(IF_MODIFIED_SINCE);
         Date lastModified = new Date(file.lastModified());
         try {
             if(requestIfModifiedSince!=null){
@@ -321,8 +335,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                 if (file != null)
                     if (!requestDate.before(lastModified))
                     {   // Not modified since last time
-                        response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
-                        response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+                        resp.setHeader(LAST_MODIFIED, req.getHeader(IF_MODIFIED_SINCE));
+                        resp.sendError(HttpServletResponse.SC_NOT_MODIFIED);
                         return true;    // Success - use your cached copy
                     }
             }
@@ -332,10 +346,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         // If they want it again, send them my cached copy
         if ((file == null) || (!file.exists()))
             return false;   // Error - cache doesn't exist
-        response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
+        resp.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
         
         InputStream inStream = new FileInputStream(file);
-        OutputStream writer = response.getOutputStream();
+        OutputStream writer = resp.getOutputStream();
         copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
         inStream.close();
         writer.close();
@@ -343,119 +357,123 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     }
     /**
      * Get the jnlp cache file name.
-     * @param request
+     * @param req
      * @return
      */
-    protected File getJnlpFile(HttpServletRequest request)
+    protected File getJnlpFile(HttpServletRequest req)
     {
-        String query = getCodebase(request) + getHref(request) + '?' + request.getQueryString();
-        String hash = Integer.toString(query.hashCode()).replace('-', 'a') + ".jnlp";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getCodebase(req)).append(getHref(req)); // + '?' + req.getQueryString();
+        String hash = Integer.toString(sb.toString().hashCode()).replace('-', 'a') + ".jnlp";
         return getBundleContext().getDataFile(hash);
     }
     /**
      * Populate the Jnlp xml.
      * @param jnlp
-     * @param request
+     * @param req
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
      */
-    protected Changes setupJnlp(Jnlp jnlp, HttpServletRequest request, boolean forceScanBundle)
+    protected Changes setupJnlp(Jnlp jnlp, HttpServletRequest req, HttpServletResponse resp, boolean forceScanBundle)
     {
-    	Set<Bundle> bundles = new HashSet<Bundle>();	// Bundle list
-
-		String mainClass = getRequestParam(request, MAIN_CLASS, null);
+		String mainClass = getRequestParam(req, MAIN_CLASS, null);
 		if (mainClass == null)
-		    mainClass = getRequestParam(request, APPLET_CLASS, null);
+		    mainClass = getRequestParam(req, APPLET_CLASS, null);
         if (mainClass == null)
-            mainClass = getRequestParam(request, COMPONENT_CLASS, null);
-		String version = getRequestParam(request, VERSION, null);
+            mainClass = getRequestParam(req, COMPONENT_CLASS, null);
+		String version = getRequestParam(req, VERSION, null);
 		String packageName = ClassFinderActivator.getPackageName(mainClass, false);
 		Bundle bundle = findBundle(packageName, version);
 		if (bundle == null)
 			return Changes.UNKNOWN;
 
-		jnlp.setCodebase(getCodebase(request));
-		jnlp.setHref(getHref(request));
+        Set<Bundle> bundles = new HashSet<Bundle>();    // Inital empty Bundle list
+
+        jnlp.setCodebase(getCodebase(req));
+		jnlp.setHref(getHref(req));
 		
-		setInformation(jnlp, bundle, request);
+		setInformation(jnlp, bundle, req);
     	Security security = new Security();
     	jnlp.setSecurity(security);
 				
-		setJ2se(jnlp, bundle, request);
+		setJ2se(jnlp, bundle, req);
 		
-        String regexInclude = getRequestParam(request, INCLUDE, INCLUDE_DEFAULT);
-        String regexExclude = getRequestParam(request, EXCLUDE, EXCLUDE_DEFAULT);
-        String pathToJars = getPathToJars(request);
+        String regexInclude = getRequestParam(req, INCLUDE, INCLUDE_DEFAULT);
+        String regexExclude = getRequestParam(req, EXCLUDE, EXCLUDE_DEFAULT);
+        String pathToJars = getPathToJars(req);
 
 		Changes bundleChanged = Changes.UNKNOWN;
 		bundleChanged = addBundle(jnlp, bundle, Main.TRUE, forceScanBundle, bundleChanged, pathToJars);
 		isNewBundle(bundle, bundles);	// Add only once
 		
-		bundleChanged = addDependentBundles(jnlp, getBundleProperty(bundle, Constants.IMPORT_PACKAGE), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
+        if (getRequestParam(req, COMPONENTS, null) != null)
+            bundleChanged = addComponents(req, resp, jnlp, getRequestParam(req, COMPONENTS, null).toString(), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
+
+        bundleChanged = addDependentBundles(jnlp, getBundleProperty(bundle, Constants.IMPORT_PACKAGE), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
 		
-		if (getRequestParam(request, OTHER_PACKAGES, null) != null)
-		    bundleChanged = addDependentBundles(jnlp, getRequestParam(request, OTHER_PACKAGES, null).toString(), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
+		if (getRequestParam(req, OTHER_PACKAGES, null) != null)
+		    bundleChanged = addDependentBundles(jnlp, getRequestParam(req, OTHER_PACKAGES, null).toString(), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
         
-		if (getRequestParam(request, MAIN_CLASS, null) != null)
-			setApplicationDesc(jnlp, mainClass, request);
-		else if (getRequestParam(request, APPLET_CLASS, null) != null)
-			setAppletDesc(jnlp, mainClass, bundle, request);
+		if (getRequestParam(req, MAIN_CLASS, null) != null)
+			setApplicationDesc(jnlp, mainClass, req);
+		else if (getRequestParam(req, APPLET_CLASS, null) != null)
+			setAppletDesc(jnlp, mainClass, bundle, req);
         else
-            setComponentDesc(jnlp, mainClass, request);
+            setComponentDesc(jnlp, mainClass, req);
 		return bundleChanged;
     }
     
     /**
-     * Get the codebase from the request path.
-     * @param request
+     * Get the codebase from the req path.
+     * @param req
      * @return
      */
-    private String getCodebase(HttpServletRequest request)
+    private String getCodebase(HttpServletRequest req)
     {
-        String urlprefix = getUrlPrefix(request);
-        String respath = request.getRequestURI();
+        String urlprefix = getUrlPrefix(req);
+        String respath = req.getRequestURI();
         if (respath == null)
         	respath = "";
-        String codebaseParam = getRequestParam(request, CODEBASE, null);
+        String codebaseParam = getRequestParam(req, CODEBASE, null);
         int idx = respath.lastIndexOf('/');
         if (codebaseParam != null)
             if (respath.indexOf(codebaseParam) != -1)
                 idx = respath.indexOf(codebaseParam) + codebaseParam.length() - 1;
         String codebase = respath.substring(0, idx + 1); // Include /
-        codebase = urlprefix + request.getContextPath() + codebase;
+        codebase = urlprefix + req.getContextPath() + codebase;
         return codebase;
     }
     
     /**
-     * Get the jnlp href from the request path.
-     * @param request
+     * Get the jnlp href from the req path.
+     * @param req
      * @return
      */
-    private String getHref(HttpServletRequest request)
+    private String getHref(HttpServletRequest req)
     {
-        String respath = request.getRequestURI();
+        String respath = req.getRequestURI();
         if (respath == null)
         	respath = "";
-        String codebaseParam = getRequestParam(request, CODEBASE, null);
+        String codebaseParam = getRequestParam(req, CODEBASE, null);
         int idx = respath.lastIndexOf('/');
         if (codebaseParam != null)
             if (respath.indexOf(codebaseParam) != -1)
                 idx = respath.indexOf(codebaseParam) + codebaseParam.length() - 1;
         String href = respath.substring(idx + 1);    // Exclude /
-        href = href + '?' + request.getQueryString();
+        href = href + '?' + req.getQueryString();
         return href;
     }
     /**
      * Get the path to the jar files (root of context path if codebase specified).
-     * @param request
+     * @param req
      * @return
      */
-    private String getPathToJars(HttpServletRequest request)
+    private String getPathToJars(HttpServletRequest req)
     {
-        String codebaseParam = getRequestParam(request, CODEBASE, null);
+        String codebaseParam = getRequestParam(req, CODEBASE, null);
         if ((codebaseParam == null) || (codebaseParam.length() == 0))
                 return "";
-        String pathToJars = request.getRequestURI();
-        String path = request.getPathInfo();
+        String pathToJars = req.getRequestURI();
+        String path = req.getPathInfo();
         if (pathToJars.endsWith(path))
             pathToJars = pathToJars.substring(0, pathToJars.length() - path.length() + 1);  // Keep the trailing '/'
         int idx = pathToJars.indexOf(codebaseParam);
@@ -485,7 +503,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * Set up the jnlp information fields.
      * @param jnlp
      */
-    public void setInformation(Jnlp jnlp, Bundle bundle, HttpServletRequest request)
+    public void setInformation(Jnlp jnlp, Bundle bundle, HttpServletRequest req)
 	{
     	if (jnlp.getInformationList() == null)
     		jnlp.setInformationList(new ArrayList<Information>());
@@ -495,8 +513,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	Information information = informationList.get(0);
     	
     	Title title = new Title();
-    	if (getRequestParam(request, TITLE, null) != null)
-    		title.setTitle(getRequestParam(request, TITLE, null));
+    	if (getRequestParam(req, TITLE, null) != null)
+    		title.setTitle(getRequestParam(req, TITLE, null));
     	else if (getBundleProperty(bundle, Constants.BUNDLE_NAME) != null)
     		title.setTitle(getBundleProperty(bundle, Constants.BUNDLE_NAME));
     	else if (getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME) != null)
@@ -506,8 +524,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	information.setTitle(title);
     	
     	Vendor vendor = new Vendor();
-    	if (getRequestParam(request, VENDOR, null) != null)
-        	vendor.setVendor(getRequestParam(request, VENDOR, null));
+    	if (getRequestParam(req, VENDOR, null) != null)
+        	vendor.setVendor(getRequestParam(req, VENDOR, null));
     	else if (getBundleProperty(bundle, Constants.BUNDLE_VENDOR) != null)
     		vendor.setVendor(getBundleProperty(bundle, Constants.BUNDLE_VENDOR));
     	else
@@ -515,8 +533,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	information.setVendor(vendor);
     	
     	Homepage homepage = new Homepage();
-    	if (getRequestParam(request, HOME_PAGE, null) != null)
-    		homepage.setHref(getRequestParam(request, HOME_PAGE, null));
+    	if (getRequestParam(req, HOME_PAGE, null) != null)
+    		homepage.setHref(getRequestParam(req, HOME_PAGE, null));
     	else if (getBundleProperty(bundle, Constants.BUNDLE_DOCURL) != null)
     		homepage.setHref(getBundleProperty(bundle, Constants.BUNDLE_DOCURL));
     	else
@@ -529,8 +547,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	{
 	    	Description description = new Description();
 	    	description.setKind(Kind.ONELINE);
-	    	if (getRequestParam(request, DESCRIPTION, null) != null)
-	    		description.setString(getRequestParam(request, DESCRIPTION, null));
+	    	if (getRequestParam(req, DESCRIPTION, null) != null)
+	    		description.setString(getRequestParam(req, DESCRIPTION, null));
 	    	else if (getBundleProperty(bundle, Constants.BUNDLE_DESCRIPTION) != null)
 	    		description.setString(getBundleProperty(bundle, Constants.BUNDLE_DESCRIPTION));
 	    	else
@@ -543,7 +561,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	if (information.getIconList().size() == 0)
     	{
 	    	Icon icon = new Icon();
-	    	icon.setHref(getRequestParam(request, ICON, getPathToJars(request) + "images/icons/jbundle32.jpg"));
+	    	icon.setHref(getRequestParam(req, ICON, getPathToJars(req) + "images/icons/jbundle32.jpg"));
 	    	information.getIconList().add(icon);
     	}
     	
@@ -551,17 +569,17 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	information.setOfflineAllowed(offlineAllowed);
     	
     	Shortcut shortcut = new Shortcut();
-    	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(request, ONLINE, null)))
+    	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(req, ONLINE, null)))
     		shortcut.setOnline(Online.TRUE);
     	else
     		shortcut.setOnline(Online.FALSE);	// Default
     	information.setShortcut(shortcut);
-    	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(request, DESKTOP, null)))
+    	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(req, DESKTOP, null)))
     	{
     		Desktop desktop = new Desktop();
     		shortcut.setDesktop(desktop);
     	}
-    	String menuItem = getRequestParam(request, MENU, null);
+    	String menuItem = getRequestParam(req, MENU, null);
     	if (menuItem != null)
     	{
 	    	Menu menu = new Menu();
@@ -574,16 +592,16 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * Add the j2se lines.
      * @param jnlp
      */
-    public void setJ2se(Jnlp jnlp, Bundle bundle, HttpServletRequest request)
+    public void setJ2se(Jnlp jnlp, Bundle bundle, HttpServletRequest req)
 	{
 		Choice choice = getResource(jnlp, true);	// Clear the entries and create a new one
 		Java java = new Java();
 		choice.setJava(java);
-		java.setVersion(getRequestParam(request, JAVA_VERSION, "1.6+"));
-		if (getRequestParam(request, INITIAL_HEAP_SIZE, null) != null)
-		    java.setInitialHeapSize(getRequestParam(request, INITIAL_HEAP_SIZE, null));
-        if (getRequestParam(request, MAX_HEAP_SIZE, null) != null)
-            java.setMaxHeapSize(getRequestParam(request, MAX_HEAP_SIZE, null));
+		java.setVersion(getRequestParam(req, JAVA_VERSION, "1.6+"));
+		if (getRequestParam(req, INITIAL_HEAP_SIZE, null) != null)
+		    java.setInitialHeapSize(getRequestParam(req, INITIAL_HEAP_SIZE, null));
+        if (getRequestParam(req, MAX_HEAP_SIZE, null) != null)
+            java.setMaxHeapSize(getRequestParam(req, MAX_HEAP_SIZE, null));
 	}
     
     /**
@@ -925,7 +943,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * @param jnlp
      * @param mainClass
      */
-    public void setApplicationDesc(Jnlp jnlp, String mainClass, HttpServletRequest request)
+    public void setApplicationDesc(Jnlp jnlp, String mainClass, HttpServletRequest req)
     {
     	if (jnlp.getApplicationDesc() == null)
     		jnlp.setApplicationDesc(new ApplicationDesc());
@@ -936,33 +954,19 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	if (arguments == null)
     	    applicationDesc.setArgumentList(arguments = new ArrayList<Argument>());
     	@SuppressWarnings("unchecked")
-        Enumeration<String> keys = request.getParameterNames();
+        Enumeration<String> keys = req.getParameterNames();
     	while (keys.hasMoreElements())
     	{
     	    String key = keys.nextElement();
             if (isServletParam(key))
                 continue;
-    	    String value = request.getParameter(key);
+    	    String value = req.getParameter(key);
     	    if (value != null)
     	        key = key + "=" + value;
         	Argument argument = new Argument();
         	argument.setArgument(key);
         	arguments.add(argument);
     	}
-        if (fileProperties != null)
-        {
-            for (Object key : fileProperties.keySet())
-            {
-                if (isServletParam(key.toString()))
-                    continue;
-                String value = fileProperties.getProperty(key.toString());
-                if (value != null)
-                    key = key.toString() + "=" + value;
-                Argument argument = new Argument();
-                argument.setArgument(key.toString());
-                arguments.add(argument);
-            }
-        }
     }
     
     /**
@@ -970,11 +974,11 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * @param jnlp
      * @param mainClass
      */
-    public void setAppletDesc(Jnlp jnlp, String mainClass, Bundle bundle, HttpServletRequest request)
+    public void setAppletDesc(Jnlp jnlp, String mainClass, Bundle bundle, HttpServletRequest req)
     {
         String appletName = null;
-        if (getRequestParam(request, TITLE, null) != null)
-            appletName = getRequestParam(request, TITLE, null);
+        if (getRequestParam(req, TITLE, null) != null)
+            appletName = getRequestParam(req, TITLE, null);
         else if (getBundleProperty(bundle, Constants.BUNDLE_NAME) != null)
             appletName = getBundleProperty(bundle, Constants.BUNDLE_NAME);
         else if (getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME) != null)
@@ -986,39 +990,25 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	AppletDesc appletDesc = jnlp.getAppletDesc();
     	appletDesc.setMainClass(mainClass);
     	appletDesc.setName(appletName);
-    	appletDesc.setWidth(getRequestParam(request, WIDTH, "350"));
-    	appletDesc.setHeight(getRequestParam(request, HEIGHT, "600"));
+    	appletDesc.setWidth(getRequestParam(req, WIDTH, "350"));
+    	appletDesc.setHeight(getRequestParam(req, HEIGHT, "600"));
         
         List<Param> params = appletDesc.getParamList();
         if (params == null)
             appletDesc.setParamList(params = new ArrayList<Param>());
         @SuppressWarnings("unchecked")
-        Enumeration<String> keys = request.getParameterNames();
+        Enumeration<String> keys = req.getParameterNames();
         while (keys.hasMoreElements())
         {
             String key = keys.nextElement();
             if (isServletParam(key))
                 continue;
-            String value = request.getParameter(key);
+            String value = req.getParameter(key);
             Param argument = new Param();
             argument.setName(key);
             if (value != null)
                 argument.setValue(value);
             params.add(argument);
-        }
-        if (fileProperties != null)
-        {
-            for (Object key : fileProperties.keySet())
-            {
-                if (isServletParam(key.toString()))
-                    continue;
-                String value = fileProperties.getProperty(key.toString());
-                Param argument = new Param();
-                argument.setName(key.toString());
-                if (value != null)
-                    argument.setValue(value);
-                params.add(argument);                
-            }
         }
     }
 
@@ -1027,7 +1017,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * @param jnlp
      * @param mainClass
      */
-    public void setComponentDesc(Jnlp jnlp, String mainClass, HttpServletRequest request)
+    public void setComponentDesc(Jnlp jnlp, String mainClass, HttpServletRequest req)
     {
         if (jnlp.getComponentDesc() == null)
             jnlp.setComponentDesc(new ComponentDesc());
@@ -1075,14 +1065,14 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 
     /**
      * Jnlp is asking for the jar file that I just created, return it.
-     * @param request
-     * @param response
+     * @param req
+     * @param resp
      * @return
      * @throws IOException
      */
-    public boolean sendDataFile(HttpServletRequest request, HttpServletResponse response) throws IOException
+    public boolean sendDataFile(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-    	String path = request.getPathInfo();
+    	String path = req.getPathInfo();
     	if (path == null)
     		return false;
     	path = path.substring(path.lastIndexOf("/") + 1);  // Jars are placed at the root of the cache directory
@@ -1090,10 +1080,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     	File file = getBundleContext().getDataFile(path);
     	if ((file == null) || (!file.exists()))
     	{  // Don't return a 404, try to read the file using JnlpDownloadServlet
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
+//            resp.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
     		return false;
     	}
-    	return this.checkCacheAndSend(request, response, file);
+    	return this.checkCacheAndSend(req, resp, file);
     }
 
 	/**
@@ -1201,75 +1191,299 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         return (BundleContext)super.getBundleContext();
     }
 
-    private String filePropertiesPath = null;
-    private Properties fileProperties = null;
-    private Properties NO_PROPERTIES = new Properties();
+    // Note: Since this is a servlet, don't access or change these outside a synchronized method
+    private String cachedPropertiesPath = null;
+    private Properties cachedProperties = null;
 
     /**
      * 
      * @param propertiesFile
      */
-    public void linkPropertiesFile(HttpServletRequest req)
+    public synchronized HttpServletRequest readIfPropertiesFile(HttpServletRequest req, String propertiesPath, boolean returnPropertiesPathAsQuery)
     {
-        Properties tempProperties = fileProperties;
-        fileProperties = null;  // Don't get params using old properties
+        if (propertiesPath == null)
+            return req;
+        propertiesPath = this.fixPathInfo(propertiesPath);
 
-        String propertiesPath = getRequestParam(req, PROPERTIES, null);
-        if (propertiesPath != null)
+        if (propertiesPath.equals(cachedPropertiesPath))
+        {   // Same as last time, use same properties
+            if (req instanceof HttpServletRequestWithProperties)
+                req = (HttpServletRequest)((HttpServletRequestWithProperties)req).getRequest();
+            return new HttpServletRequestWithProperties(req, cachedProperties, returnPropertiesPathAsQuery ? propertiesPath : null);
+        }
+        
+        URL url = null;
+        try {
+            url = ClassServiceUtility.getClassService().getResourceURL(propertiesPath, baseURL, null, this.getClass().getClassLoader());
+        } catch (RuntimeException e) {
+            e.printStackTrace();    // ???
+            return req;
+        }           
+        Reader inStream = null;
+        if (url != null)
         {
-            if (propertiesPath.equals(filePropertiesPath))
-            {   // Same as last time, use same properties
-                fileProperties = tempProperties;
-                return;
-            }
-
-            propertiesPath = this.fixPathInfo(propertiesPath);
-            
-            URL url = null;
             try {
-                url = ClassServiceUtility.getClassService().getResourceURL(propertiesPath, baseURL, null, this.getClass().getClassLoader());
-            } catch (RuntimeException e) {
-                e.printStackTrace();    // ???
-            }           
-            InputStream inStream = null;
-            if (url != null)
-            {
-                try {
-                    inStream = url.openStream();
-                } catch (Exception e) {
-                    // Not found
-                }
+                inStream = new InputStreamReader(url.openStream());
+            } catch (Exception e) {
+                // Not found
             }
-            if (inStream == null)
-                fileProperties = NO_PROPERTIES;
-            else
+        }
+        if (inStream == null)
+            return req;
+        else
+        {
+            try {
+                // Todo may want to add cache info (using bundle lastModified).
+                cachedProperties = new Properties();
+                cachedProperties.load(inStream);
+                inStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return req;
+            }
+        }
+        
+        cachedPropertiesPath = propertiesPath;
+        if (req instanceof HttpServletRequestWithProperties)
+            req = (HttpServletRequest)((HttpServletRequestWithProperties)req).getRequest();
+        return new HttpServletRequestWithProperties(req, cachedProperties, returnPropertiesPathAsQuery ? propertiesPath : null);
+    }
+    /**
+     * Add all the dependent bundles (of this bundle) to the jar and package list.
+     * @param jnlp
+     * @param bundle
+     * @param bundles
+     * @param forceScanBundle Scan the bundle for package names even if the cache is current
+     * @return true if the bundle has changed from last time
+     */
+    public Changes addComponents(HttpServletRequest req, HttpServletResponse resp, Jnlp jnlp, String components, Set<Bundle> bundles, boolean forceScanBundle, Changes bundleChanged, String regexInclude, String regexExclude, String pathToJars)
+    {
+        String[] comps = components.split(",");
+        for (String comp : comps)
+        {
+            String bundlePath = this.addComponentBundles(req, resp, comp, bundles);
+            if (bundlePath != null)
             {
-                try {
-                    // Todo may want to add cache info (using bundle lastModified).
-                    fileProperties = new Properties();
-                    fileProperties.load(inStream);
-                    inStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    fileProperties = NO_PROPERTIES;
+                Choice choice = this.getResource(jnlp, false);
+                Extension extension = new Extension();
+                extension.setName(comp);
+                extension.setHref(bundlePath);
+                choice.setExtension(extension);
+            }
+        }
+        return bundleChanged;
+    }
+    
+    public String addComponentBundles(HttpServletRequest req, HttpServletResponse resp, String comp, Set<Bundle> bundles)
+    {
+        Jnlp jnlp = this.getJnlpFromProperties(req, resp, comp);
+        if (jnlp == null)
+            return null;
+        
+        Iterator<Resources> iterator = jnlp.getResourceList().iterator();
+        while (iterator.hasNext())
+        {
+            Resources resources = iterator.next();
+            Iterator<Choice> choices = resources.getChoiceList().iterator();
+            while (choices.hasNext())
+            {
+                Choice choice = choices.next();
+                if (choice.ifJar())
+                {
+                    Jar jar = choice.getJar();
+                    String part = jar.getPart();
+                    for (Bundle bundle : this.getBundleContext().getBundles())
+                    {
+                        if (part.equals(bundle.getSymbolicName()))
+                            this.isNewBundle(bundle, bundles);  // Add this bundle
+                    }
                 }
             }
         }
         
-        filePropertiesPath = propertiesPath;
+        return /* jnlp.getCodebase() + */ jnlp.getHref();   // The component path
+    }
+
+    public Jnlp getJnlpFromProperties(HttpServletRequest req, HttpServletResponse resp, String comp)
+    {
+        HttpServletRequest compreq = this.readIfPropertiesFile(req, comp, true);
+        if (compreq == req)
+            return null;    // Invalid properties file
+
+        ((HttpServletRequestWithProperties)compreq).setPropertiesOnly(true);
+        
+        if (resp instanceof HttpServletResponseShell)
+            resp = (HttpServletResponse)((HttpServletResponseShell)resp).getResponse();
+        resp = new HttpServletResponseShell(resp);
+        try {
+            this.makeJnlp(compreq, resp);
+
+            IBindingFactory jc = BindingDirectory.getFactory(Jnlp.class);
+            Reader reader = new StringReader(((HttpServletResponseShell)resp).getBufferString());
+            IUnmarshallingContext unmarshaller = jc.createUnmarshallingContext();
+            Jnlp jnlp = (Jnlp)unmarshaller.unmarshalDocument(reader, OUTPUT_ENCODING);
+            reader.close();
+            return jnlp;
+        } catch (JiBXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    /**
+     * A response wrapper that redirects the output to this printwriter.
+     * @author don
+     *
+     */
+    class HttpServletResponseShell extends HttpServletResponseWrapper
+    {
+        private PrintWriter writer = null;
+        Writer stringWriter = null;
+        ServletOutputStreamByteBuffer buffer = null;
+        
+        public HttpServletResponseShell(HttpServletResponse response)
+        {
+            super(response);
+        }
+        /**
+         * Return the writer associated with this Response.
+         *
+         * @exception IllegalStateException if <code>getOutputStream</code> has
+         *  already been called for this response
+         * @exception IOException if an input/output error occurs
+         */
+        @Override
+        public PrintWriter getWriter() throws IOException
+        {
+            stringWriter = new StringWriter();
+            writer = new PrintWriter(stringWriter);
+            return writer;
+        }
+        /**
+         * The default behavior of this method is to return getOutputStream()
+         * on the wrapped response object.
+         */
+
+        public ServletOutputStream getOutputStream() throws IOException {
+            return buffer = new ServletOutputStreamByteBuffer();
+        }
+        
+        public String getBufferString()
+        {
+            if (buffer != null)
+            {
+                return buffer.getBufferString();
+            }
+            if (writer != null)
+            {
+                writer.close();
+                try {
+                    stringWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return stringWriter.toString();
+            }
+            return null;
+        }
+    }
+    class ServletOutputStreamByteBuffer extends ServletOutputStream
+    {
+        OutputStream streamOut = new ByteArrayOutputStream();
+        
+        protected ServletOutputStreamByteBuffer()
+        {
+            super();
+        }
+       
+        @Override
+        public void write(int b) throws IOException {
+            streamOut.write(b);
+        }
+        public String getBufferString()
+        {
+            try {
+                streamOut.close();
+            } catch (IOException e) {   // Never
+            }
+            return streamOut.toString();
+        }
     }
     /**
-     * Get this param from the request or from the servlet's properties.
-     * @param request
-     * @param param
-     * @param defaultValue
-     * @return
+     * Wrap the current servlet req and also return these extra properties.
+     * @author don
+     *
      */
-    public String getRequestParam(HttpServletRequest request, String param, String defaultValue)
+    class HttpServletRequestWithProperties extends HttpServletRequestWrapper
     {
-        if (fileProperties != null)
-            if (fileProperties.getProperty(param) != null)
-                return fileProperties.getProperty(param);
-        return super.getRequestParam(request, param, defaultValue);
+        Properties properties = null;
+        boolean propertiesOnly = false; // Only return properties values, not request properties
+        String propertiesPath = null;
+        
+        public HttpServletRequestWithProperties(HttpServletRequest req, Properties properties, String propertiesPath)
+        {
+            super(req);
+            this.properties = properties;
+            this.propertiesPath = propertiesPath;
+        }
+        /**
+         * The default behavior of this method is to return getParameter(String name)
+        * on the wrapped req object.
+        */
+
+       public String getParameter(String name) {
+           String value = null;
+           if (!propertiesOnly)
+               value = super.getParameter(name);
+           if (value == null)
+               return properties.getProperty(name);
+           return value;
+       }
+       /**
+        * The default behavior of this method is to return getQueryString()
+        * on the wrapped request object.
+        */
+       public String getQueryString() {
+           String queryString = super.getQueryString();
+           if (propertiesPath != null)
+               return PROPERTIES + '=' + propertiesPath;
+           return queryString;
+       }
+       /**
+        * The default behavior of this method is to return getParameterNames()
+       * on the wrapped req object.
+       */
+      public Enumeration<String> getParameterNames() {
+          Enumeration<?> names = super.getParameterNames();
+          Hashtable<String, String[]> map = new Hashtable<String, String[]>();
+          if (!propertiesOnly)
+          {
+              while (names.hasMoreElements())
+              {
+                  String name = (String)names.nextElement();
+                  map.put(name, this.getParameterValues(name));
+              }
+          }
+          String[] tempArray = new String[1];
+          for (Object key : properties.keySet())
+          {
+              tempArray[0] = (String)properties.get(key);
+              map.put((String)key, tempArray);
+          }
+          return map.keys();
+      }
+      public void setPropertiesOnly(boolean propertiesOnly)
+      {
+          this.propertiesOnly = propertiesOnly;
+      }
+      public String getPropertiesPath()
+      {
+          return propertiesPath;
+      }
     }
 }
