@@ -34,12 +34,18 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.SimpleTimeZone;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
+import java.util.jar.Pack200;
+import java.util.jar.Pack200.Packer;
+import java.util.jar.Pack200.Unpacker;
+import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -78,6 +84,7 @@ import org.jibx.schema.net.java.jnlp_6_0.Jnlp;
 import org.jibx.schema.net.java.jnlp_6_0.Menu;
 import org.jibx.schema.net.java.jnlp_6_0.OfflineAllowed;
 import org.jibx.schema.net.java.jnlp_6_0.Param;
+import org.jibx.schema.net.java.jnlp_6_0.Property;
 import org.jibx.schema.net.java.jnlp_6_0.Resources;
 import org.jibx.schema.net.java.jnlp_6_0.Resources.Choice;
 import org.jibx.schema.net.java.jnlp_6_0.Security;
@@ -135,8 +142,9 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     public static final String INCLUDE = "include";
     public static final String EXCLUDE = "exclude";
     public static final String CODEBASE = "codebase";
-    public static final String PROPERTIES = "webStartProperties";
+    public static final String PROPERTIES_FILE = "webStartPropertiesFile";
     public static final String COMPONENTS = "webStartComponents";
+    public static final String PROPERTIES = "webStartProperties";
     
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
     public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*|javax\\..*|org\\.xml\\.\\.sax.*|org\\.w3c\\.dom.*|org\\.omg\\..*";
@@ -225,7 +233,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         if ((getRequestParam(req, MAIN_CLASS, null) != null)
                 || (getRequestParam(req, APPLET_CLASS, null) != null)
                 || (getRequestParam(req, COMPONENT_CLASS, null) != null)
-                || (getRequestParam(req, PROPERTIES, null) != null))
+                || (getRequestParam(req, PROPERTIES_FILE, null) != null))
             if (!req.getRequestURI().toUpperCase().endsWith(".HTML"))
                 if (!req.getRequestURI().toUpperCase().endsWith(".HTM"))
                     return true;
@@ -241,7 +249,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      */
     public boolean makeJnlp(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
     {
-        req = this.readIfPropertiesFile(req, getRequestParam(req, PROPERTIES, null), false);
+        req = this.readIfPropertiesFile(req, getRequestParam(req, PROPERTIES_FILE, null), false);
 
 		ServletContext context = getServletContext();
 		resp.setContentType(JNLP_MIME_TYPE);
@@ -405,8 +413,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		bundleChanged = addBundle(jnlp, bundle, Main.TRUE, forceScanBundle, bundleChanged, pathToJars);
 		isNewBundle(bundle, bundles);	// Add only once
 		
+        bundleChanged = addProperties(req, resp, jnlp, bundleChanged);
+
         if (getRequestParam(req, COMPONENTS, null) != null)
-            bundleChanged = addComponents(req, resp, jnlp, getRequestParam(req, COMPONENTS, null).toString(), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
+            bundleChanged = addComponents(req, resp, jnlp, getRequestParam(req, COMPONENTS, null).toString(), bundles, bundleChanged, pathToJars);
 
         bundleChanged = addDependentBundles(jnlp, getBundleProperty(bundle, Constants.IMPORT_PACKAGE), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
 		
@@ -656,7 +666,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		String activationPolicy = getBundleProperty(bundle, Constants.BUNDLE_ACTIVATIONPOLICY);
 		Download download = Constants.ACTIVATION_LAZY.equalsIgnoreCase(activationPolicy) ? Download.LAZY : Download.EAGER;
 		String filename = name + '-' + version + ".jar";
-		String[] packages = moveBundleToJar(bundle, filename, forceScanBundle);
+		boolean pack = !"false".equalsIgnoreCase(this.getProperty("jnlp.packEnabled"));   // Pack by default
+		String[] packages = moveBundleToJar(bundle, filename, forceScanBundle, pack);
 		if (packages == null) // No changes on this bundle
 	        return (bundleChanged == Changes.NONE || bundleChanged == Changes.UNKNOWN) ? Changes.NONE : Changes.PARTIAL;
 		if (main == null)
@@ -719,9 +730,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 	 * @param bundle
 	 * @param filename
 	 * @param forceScanBundle Scan the bundle for package names even if the cache is current
+	 * @param pack Also do a pack gzip on the jar.
 	 * @return All the package names in the bundle or null if I am using the cached jar.
 	 */
-	public String[] moveBundleToJar(Bundle bundle, String filename, boolean forceScanBundle)
+	public String[] moveBundleToJar(Bundle bundle, String filename, boolean forceScanBundle, boolean pack)
 	{
         File fileOut = getBundleContext().getDataFile(filename);
         boolean createNewJar = true;
@@ -819,7 +831,104 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+        if ((createNewJar) && (pack))
+		    this.packJar(fileOut.getPath(), false);   // I use that original jar for debugging
+		
 		return packages.toArray(EMPTY_ARRAY);
+	}
+	/**
+	 * Pack and gzip this jar file.
+	 * Note: Most of this code comes from the oracle (thanks!) sample at:
+	 * http://docs.oracle.com/javase/1.5.0/docs/api/java/util/jar/Pack200.html
+	 * Note: I pack and then unpack to recreate the original jar since pack messes up the magic number.
+	 * @param jarFileName
+	 */
+	public void packJar(String jarFileName, boolean modifyOriginalJar)
+	{
+	    String packFileName = jarFileName + ".pack";
+	    Packer packer = Pack200.newPacker();
+
+	    // Initialize the state by setting the desired properties
+	    Map<String,String> p = packer.properties();
+	    // take more time choosing codings for better compression
+	    p.put(Packer.EFFORT, "7");  // default is "5"
+	    // use largest-possible archive segments (>10% better compression).
+	    p.put(Packer.SEGMENT_LIMIT, "-1");
+	    // reorder files for better compression.
+	    p.put(Packer.KEEP_FILE_ORDER, Packer.FALSE);
+	    // smear modification times to a single value.
+	    p.put(Packer.MODIFICATION_TIME, Packer.LATEST);
+	    // ignore all JAR deflation requests,
+	    // transmitting a single request to use "store" mode.
+	    p.put(Packer.DEFLATE_HINT, Packer.FALSE);
+	    // discard debug attributes
+	    p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
+	    // throw an error if an attribute is unrecognized
+	    p.put(Packer.UNKNOWN_ATTRIBUTE, Packer.ERROR);
+	    // pass one class file uncompressed:
+	    p.put(Packer.PASS_FILE_PFX+0, "mutants/Rogue.class");
+	    try {
+	        JarFile jarFile = new JarFile(jarFileName);
+	        FileOutputStream fos = new FileOutputStream(packFileName);
+	        // Call the packer
+	        packer.pack(jarFile, fos);
+	        jarFile.close();
+	        fos.close();
+	        
+	        File f = new File(packFileName);
+	        String reJaredFileName = jarFileName;
+	        if (!modifyOriginalJar)
+	            reJaredFileName = reJaredFileName + ".temp";
+	        FileOutputStream fostream = new FileOutputStream(reJaredFileName);
+	        JarOutputStream jostream = new JarOutputStream(fostream);
+	        Unpacker unpacker = Pack200.newUnpacker();
+	        // Call the unpacker
+	        unpacker.unpack(f, jostream);
+	        // Must explicitly close the output.
+	        jostream.close();
+	        // Need to repack it so the new magic number will be correct
+            jarFile = new JarFile(reJaredFileName);
+            fos = new FileOutputStream(packFileName);
+            // Call the packer
+            packer.pack(jarFile, fos);
+            jarFile.close();
+            fos.close();	        
+            if (!modifyOriginalJar)
+            {
+                File reJaredFile = new File(reJaredFileName);
+                reJaredFile.delete();   // Delete the temp jar file
+            }
+	    } catch (IOException ioe) {
+	        ioe.printStackTrace();
+	    }
+	    
+	    this.gzipFile(packFileName);
+	    // Delete the pack file
+        File packFile = new File(packFileName);
+        packFile.delete();
+	}
+	/**
+	 * GZip this pack file.
+	 * @param pathName
+	 */
+	public void gzipFile(String pathName)
+	{
+	    try {
+            InputStream inStream = new FileInputStream(pathName);
+            // serialize the pack file
+            FileOutputStream fos = new  FileOutputStream(pathName + ".gz");
+            GZIPOutputStream outStream = new GZIPOutputStream(fos);
+            
+            copyStream(inStream, outStream, false);
+            
+            inStream.close();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	/**
 	 * Unpack bundle files and add them to the destination directory.
@@ -1256,7 +1365,52 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @return true if the bundle has changed from last time
      */
-    public Changes addComponents(HttpServletRequest req, HttpServletResponse resp, Jnlp jnlp, String components, Set<Bundle> bundles, boolean forceScanBundle, Changes bundleChanged, String regexInclude, String regexExclude, String pathToJars)
+    public Changes addProperties(HttpServletRequest req, HttpServletResponse resp, Jnlp jnlp, Changes bundleChanged)
+    {
+        Choice choice = this.getResource(jnlp, false);
+        
+        Properties properties = new Properties();
+        String propertiesString = this.getRequestParam(req, PROPERTIES, null);
+        if (propertiesString != null)
+        {
+            String[] propertyString = propertiesString.split(",");
+            for (String property : propertyString)
+            {
+                int equals = property.indexOf('=');
+                String key = (equals == -1) ? property : property.substring(0, equals);
+                String value = (equals == -1) ? "" : property.substring(0, equals);
+                properties.put(key, value);
+            }
+        }
+        String key = "jnlp.packEnabled";
+        if (properties.get(key) == null)
+        {
+            String value = this.getProperty(key);
+            if (value == null)
+                value = "true"; // Defaults to true
+            properties.put(key, value);
+        }
+        Iterator<?> iterator = properties.keySet().iterator();
+        while (iterator.hasNext())
+        {
+            key = (String)iterator.next();
+            String value = (String)properties.get(key);
+            Property property = new Property();
+            property.setName(key);
+            property.setValue(value);
+            choice.setProperty(property);
+        }
+        return bundleChanged;
+    }
+    /**
+     * Add all the dependent bundles (of this bundle) to the jar and package list.
+     * @param jnlp
+     * @param bundle
+     * @param bundles
+     * @param forceScanBundle Scan the bundle for package names even if the cache is current
+     * @return true if the bundle has changed from last time
+     */
+    public Changes addComponents(HttpServletRequest req, HttpServletResponse resp, Jnlp jnlp, String components, Set<Bundle> bundles, Changes bundleChanged, String pathToJars)
     {
         String[] comps = components.split(",");
         for (String comp : comps)
@@ -1451,7 +1605,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
        public String getQueryString() {
            String queryString = super.getQueryString();
            if (propertiesPath != null)
-               return PROPERTIES + '=' + propertiesPath;
+               return PROPERTIES_FILE + '=' + propertiesPath;
            return queryString;
        }
        /**

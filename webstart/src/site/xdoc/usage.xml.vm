@@ -63,6 +63,10 @@ include - A regular expression specifying which packages to include (since many 
 exclude - A regular expression specifying which packages to exclude (by default, excludes org.osgi.*,javax.*,org.xml.sax*,org.w3c.dom*,org.omg.*)
 codebase - The codebase of the application (defaults to contextPath/)
 
+webStartPropertiesFile - The property file that contains these params ie., '/org/jbundle/util/biorhythm/applet.properties'
+webStartComponents - A comma delimited list of included components properties files
+webStartProperties - A comma delimited list of web start properties (ie., jnlp.packEnabled=false).
+
 Note: All parameters (including these system params) are passed to the applet/application.
 If you don't want these params passed to your application, prefix them with 'org.jbundle.util.osgi.jnlp.'.
 
