@@ -409,13 +409,13 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         String regexExclude = getRequestParam(request, EXCLUDE, EXCLUDE_DEFAULT);
         String pathToJars = getPathToJars(request);
 
-		Changes bundleChanged = Changes.UNKNOWN;
+        Changes bundleChanged = Changes.UNKNOWN;
+        bundleChanged = addProperties(request, response, jnlp, bundleChanged);
+
 		Main main = getRequestParam(request, COMPONENT_CLASS, null) == null ? Main.TRUE : Main.FALSE;
 		bundleChanged = addBundle(request, jnlp, bundle, main, forceScanBundle, bundleChanged, pathToJars);
 		isNewBundle(bundle, bundles);	// Add only once
 		
-        bundleChanged = addProperties(request, response, jnlp, bundleChanged);
-
         if (getRequestParam(request, COMPONENTS, null) != null)
             bundleChanged = addComponents(request, response, jnlp, getRequestParam(request, COMPONENTS, null).toString(), bundles, bundleChanged, pathToJars);
 
