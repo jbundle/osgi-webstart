@@ -464,14 +464,36 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         String respath = request.getRequestURI();
         if (respath == null)
         	respath = "";
-        String codebaseParam = getRequestParam(request, CODEBASE, null);
+        String codebase = getRequestParam(request, CODEBASE, null);
         int idx = respath.lastIndexOf('/');
-        if (codebaseParam != null)
-            if (respath.indexOf(codebaseParam) != -1)
-                idx = respath.indexOf(codebaseParam) + codebaseParam.length() - 1;
+        if (codebase != null)
+            if (respath.indexOf(codebase) != -1)
+                idx = respath.indexOf(codebase) + codebase.length() - 1;
         String href = respath.substring(idx + 1);    // Exclude /
         href = href + '?' + request.getQueryString();
         return href;
+    }
+    /**
+     * Make this jnlp's path relative to the parent's codebase.
+     * @param request The parent's request
+     * @param path The component's path (from the jnlp href attribute)
+     * @return
+     */
+    public String fixRelativePath(HttpServletRequest request, String path)
+    {
+        //String codeBaseParent = this.getCodebase(request);
+        //String hrefParent = this.getHref(request);
+        String respathParent = request.getRequestURI();
+        if ((respathParent == null) || (respathParent.length() == 0))
+            return path;
+        // First, make the respath relative
+        if (respathParent.startsWith("/"))
+            respathParent = respathParent.substring(1);
+        // Now remove the relative path
+        if (path.startsWith(respathParent))
+            return path;    // Already correct
+        // Add code to correct the path
+        return path;
     }
     /**
      * Get the path to the jar files (root of context path if codebase specified).
@@ -1351,6 +1373,10 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                 cachedProperties = new Properties();
                 cachedProperties.load(inStream);
                 inStream.close();
+                String codeBase = this.getRequestParam(request, CODEBASE, null);
+                if (codeBase != null)
+                    if (cachedProperties.get(CODEBASE) == null)
+                        cachedProperties.put(CODEBASE, codeBase);
             } catch (IOException e) {
                 e.printStackTrace();
                 return request;
@@ -1426,7 +1452,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                 Choice choice = this.getResource(jnlp, false);
                 Extension extension = new Extension();
                 extension.setName(comp);
-                extension.setHref(bundlePath);
+                extension.setHref(this.fixRelativePath(request, bundlePath));
                 choice.setExtension(extension);
             }
         }
@@ -1456,6 +1482,12 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
                         if (part.equals(bundle.getSymbolicName()))
                             this.isNewBundle(bundle, bundles);  // Add this bundle
                     }
+                }
+                if (choice.ifExtension())
+                {   // Note: May want to add a test for recursive endless loop
+                    Extension extension = choice.getExtension();
+                    String component = extension.getName();
+                    this.addComponentBundles(request, response, component, bundles);
                 }
             }
         }
