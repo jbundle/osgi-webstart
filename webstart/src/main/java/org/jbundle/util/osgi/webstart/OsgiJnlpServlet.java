@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -144,6 +145,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     public static final String CODEBASE = "codebase";
     public static final String PROPERTIES_FILE = "webStartPropertiesFile";
     public static final String COMPONENTS = "webStartComponents";
+    public static final String EXCLUDE_COMPONENTS = "excludeComponents";
     public static final String PROPERTIES = "webStartProperties";
     
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
@@ -398,6 +400,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 
         jnlp.setCodebase(getCodebase(request));
 		jnlp.setHref(getHref(request));
+		jnlp.setSpec("1.0+");
 		
 		setInformation(jnlp, bundle, request);
     	Security security = new Security();
@@ -416,15 +419,17 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		bundleChanged = addBundle(request, jnlp, bundle, main, forceScanBundle, bundleChanged, pathToJars);
 		isNewBundle(bundle, bundles);	// Add only once
 		
-        if (getRequestParam(request, COMPONENTS, null) != null)
-            bundleChanged = addComponents(request, response, jnlp, getRequestParam(request, COMPONENTS, null).toString(), bundles, bundleChanged, pathToJars);
+		Map<String, String> components = new LinkedHashMap<String, String>();
+		bundleChanged = processComponents(request, response, jnlp, components, bundles, bundleChanged, pathToJars);
 
         bundleChanged = addDependentBundles(request, jnlp, getBundleProperty(bundle, Constants.IMPORT_PACKAGE), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
 		
 		if (getRequestParam(request, OTHER_PACKAGES, null) != null)
 		    bundleChanged = addDependentBundles(request, jnlp, getRequestParam(request, OTHER_PACKAGES, null).toString(), bundles, forceScanBundle, bundleChanged, regexInclude, regexExclude, pathToJars);
         
-		if (getRequestParam(request, MAIN_CLASS, null) != null)
+        bundleChanged = addComponents(request, response, jnlp, components, bundles, bundleChanged, pathToJars);
+
+        if (getRequestParam(request, MAIN_CLASS, null) != null)
 			setApplicationDesc(jnlp, mainClass, request);
 		else if (getRequestParam(request, APPLET_CLASS, null) != null)
 			setAppletDesc(jnlp, mainClass, bundle, request);
@@ -472,28 +477,6 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
         String href = respath.substring(idx + 1);    // Exclude /
         href = href + '?' + request.getQueryString();
         return href;
-    }
-    /**
-     * Make this jnlp's path relative to the parent's codebase.
-     * @param request The parent's request
-     * @param path The component's path (from the jnlp href attribute)
-     * @return
-     */
-    public String fixRelativePath(HttpServletRequest request, String path)
-    {
-        //String codeBaseParent = this.getCodebase(request);
-        //String hrefParent = this.getHref(request);
-        String respathParent = request.getRequestURI();
-        if ((respathParent == null) || (respathParent.length() == 0))
-            return path;
-        // First, make the respath relative
-        if (respathParent.startsWith("/"))
-            respathParent = respathParent.substring(1);
-        // Now remove the relative path
-        if (path.startsWith(respathParent))
-            return path;    // Already correct
-        // Add code to correct the path
-        return path;
     }
     /**
      * Get the path to the jar files (root of context path if codebase specified).
@@ -1443,18 +1426,49 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @return true if the bundle has changed from last time
      */
-    public Changes addComponents(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp, String components, Set<Bundle> bundles, Changes bundleChanged, String pathToJars)
+    public Changes processComponents(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp, Map<String,String>components, Set<Bundle> bundles, Changes bundleChanged, String pathToJars)
     {
-        String[] comps = components.split(",");
-        for (String comp : comps)
+        String componentList = getRequestParam(request, EXCLUDE_COMPONENTS, null);
+        if (componentList != null)
         {
-            String bundlePath = this.addComponentBundles(request, response, comp, bundles);
+            String[] comps = componentList.split(",");
+            for (String comp : comps)
+            {
+                this.addComponentBundles(request, response, comp, bundles);
+            }
+        }
+        componentList = getRequestParam(request, COMPONENTS, null);
+        if (componentList != null)
+        {
+            String[] comps = componentList.split(",");
+            for (String comp : comps)
+            {
+                String bundlePath = this.addComponentBundles(request, response, comp, bundles);
+                if (bundlePath != null)
+                    components.put(comp, bundlePath);
+            }
+        }
+        return bundleChanged;
+    }
+    /**
+     * Add all the dependent bundles (of this bundle) to the jar and package list.
+     * @param jnlp
+     * @param bundle
+     * @param bundles
+     * @param forceScanBundle Scan the bundle for package names even if the cache is current
+     * @return true if the bundle has changed from last time
+     */
+    public Changes addComponents(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp, Map<String,String>components, Set<Bundle> bundles, Changes bundleChanged, String pathToJars)
+    {
+        for (String comp : components.keySet())
+        {
+            String bundlePath = components.get(comp);
             if (bundlePath != null)
             {
                 Choice choice = this.getResource(jnlp, false);
                 Extension extension = new Extension();
                 extension.setName(comp);
-                extension.setHref(this.fixRelativePath(request, bundlePath));
+                extension.setHref(bundlePath);
                 choice.setExtension(extension);
             }
         }
