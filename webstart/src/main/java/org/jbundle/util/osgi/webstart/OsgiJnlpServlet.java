@@ -687,6 +687,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		String name = getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME);
 		String version = getBundleProperty(bundle, Constants.BUNDLE_VERSION);
 		String activationPolicy = getBundleProperty(bundle, Constants.BUNDLE_ACTIVATIONPOLICY);
+        if ((activationPolicy == null) || (activationPolicy.length() == 0))
+            activationPolicy = this.getRequestParam(request, name + '.' + Constants.BUNDLE_ACTIVATIONPOLICY, null);
 		if ((activationPolicy == null) || (activationPolicy.length() == 0))
 		    activationPolicy = this.getRequestParam(request, Constants.BUNDLE_ACTIVATIONPOLICY, null);
         if ((activationPolicy == null) || (activationPolicy.length() == 0))
