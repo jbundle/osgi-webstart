@@ -291,7 +291,13 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
             if (bundleChanged == Changes.NONE)
             {   // Note: It may seem better to listen for bundle changes, but actually webstart uses the cached jnlp file
                 if (checkCacheAndSend(request, response, jnlpFile))
+                {
+                    Date lastModified = new Date(jnlpFile.lastModified());
+                    if ((lastBundleChange != null)
+                        && (lastBundleChange.after(lastModified)))
+                            jnlpFile.setLastModified(lastBundleChange.getTime());   // Make sure this file is up-to-date for the next checkBundleChanges call
                     return true;   // Returned the cached jnlp or a cache up-to-date response
+                }
             }
             // If bundleChanged == Changes.ALL need to return the new jnlp
 			
