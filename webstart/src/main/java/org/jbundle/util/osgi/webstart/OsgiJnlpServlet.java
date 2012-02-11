@@ -411,8 +411,9 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		setInformation(jnlp, bundle, request);
     	Security security = new Security();
     	jnlp.setSecurity(security);
-				
-		setJ2se(jnlp, bundle, request);
+
+        if (getRequestParam(request, COMPONENT_CLASS, null) == null)
+            setJ2se(jnlp, bundle, request); // For applets or apps
 		
         String regexInclude = getRequestParam(request, INCLUDE, INCLUDE_DEFAULT);
         String regexExclude = getRequestParam(request, EXCLUDE, EXCLUDE_DEFAULT);
@@ -577,37 +578,40 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 	    		description.setString("Jnlp Application");
 	    	information.getDescriptionList().add(description);
     	}
-    	
-    	if (information.getIconList() == null)
-    		information.setIconList(new ArrayList<Icon>());
-    	if (information.getIconList().size() == 0)
-    	{
-	    	Icon icon = new Icon();
-	    	icon.setHref(getRequestParam(request, ICON, getPathToJars(request) + "images/icons/jbundle32.jpg"));
-	    	information.getIconList().add(icon);
-    	}
-    	
-    	OfflineAllowed offlineAllowed = new OfflineAllowed();
-    	information.setOfflineAllowed(offlineAllowed);
-    	
-    	Shortcut shortcut = new Shortcut();
-    	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(request, ONLINE, null)))
-    		shortcut.setOnline(Online.TRUE);
-    	else
-    		shortcut.setOnline(Online.FALSE);	// Default
-    	information.setShortcut(shortcut);
-    	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(request, DESKTOP, null)))
-    	{
-    		Desktop desktop = new Desktop();
-    		shortcut.setDesktop(desktop);
-    	}
-    	String menuItem = getRequestParam(request, MENU, null);
-    	if (menuItem != null)
-    	{
-	    	Menu menu = new Menu();
-	    	menu.setSubmenu(menuItem);
-	    	shortcut.setMenu(menu);
-    	}
+
+        if (getRequestParam(request, COMPONENT_CLASS, null) == null)
+        { // For applets or apps
+        	if (information.getIconList() == null)
+        		information.setIconList(new ArrayList<Icon>());
+        	if (information.getIconList().size() == 0)
+        	{
+    	    	Icon icon = new Icon();
+    	    	icon.setHref(getRequestParam(request, ICON, getPathToJars(request) + "images/icons/jbundle32.jpg"));
+    	    	information.getIconList().add(icon);
+        	}
+        	
+        	OfflineAllowed offlineAllowed = new OfflineAllowed();
+        	information.setOfflineAllowed(offlineAllowed);
+        	
+        	Shortcut shortcut = new Shortcut();
+        	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(request, ONLINE, null)))
+        		shortcut.setOnline(Online.TRUE);
+        	else
+        		shortcut.setOnline(Online.FALSE);	// Default
+        	information.setShortcut(shortcut);
+        	if (Boolean.TRUE.toString().equalsIgnoreCase(getRequestParam(request, DESKTOP, null)))
+        	{
+        		Desktop desktop = new Desktop();
+        		shortcut.setDesktop(desktop);
+        	}
+        	String menuItem = getRequestParam(request, MENU, null);
+        	if (menuItem != null)
+        	{
+    	    	Menu menu = new Menu();
+    	    	menu.setSubmenu(menuItem);
+    	    	shortcut.setMenu(menu);
+        	}
+        }
 	}
     
     /**
@@ -1058,7 +1062,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
 		_Package pack = new _Package();
 		choice.setPackage(pack);
 		pack.setPart(jar.getPart());
-		pack.setName(packagePath);
+		pack.setName(packagePath + ".*");
 		if (recursive == null)
 			recursive = Recursive.FALSE;
 		pack.setRecursive(recursive);
