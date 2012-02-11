@@ -14,7 +14,7 @@ public class HttpServiceActivator extends org.jbundle.util.webapp.base.HttpServi
 {
     public String getServletClass(BundleContext context)
     {
-        return OsgiJnlpServlet.class.getName();
+        return OsgiWebStartServlet.class.getName();
     }
     /**
      * Get the Servlet context for this servlet.

@@ -111,7 +111,8 @@ import org.osgi.framework.Constants;
  * @author don
  *
  */
-public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
+public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
+{
 	private static final long serialVersionUID = 1L;
 
     public static final String JNLP_MIME_TYPE = "application/x-java-jnlp-file";
@@ -164,7 +165,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * Constructor.
      * @param context
      */
-    public OsgiJnlpServlet() {
+    public OsgiWebStartServlet() {
     	super();
     }
     
@@ -172,7 +173,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
      * Constructor.
      * @param context
      */
-    public OsgiJnlpServlet(Object context, String servicePid, Dictionary<String, String> properties) {
+    public OsgiWebStartServlet(Object context, String servicePid, Dictionary<String, String> properties) {
     	this();
     	init(context, servicePid, properties);
     }
@@ -191,8 +192,8 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     BundleChangeListener listener = null;
     public class BundleChangeListener implements BundleListener
     {
-        OsgiJnlpServlet servlet = null;
-        public BundleChangeListener(OsgiJnlpServlet servlet)
+        OsgiWebStartServlet servlet = null;
+        public BundleChangeListener(OsgiWebStartServlet servlet)
         {
             this.servlet = servlet;
         }
@@ -1163,7 +1164,7 @@ public class OsgiJnlpServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/ {
     {
         if (name == null)
             return false;
-        if (name.startsWith(getPackageFromName(OsgiJnlpServlet.class.getName())))
+        if (name.startsWith(getPackageFromName(OsgiWebStartServlet.class.getName())))
             return true;
         return false;
     }
