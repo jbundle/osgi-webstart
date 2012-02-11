@@ -498,7 +498,12 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 return "";
         String pathToJars = request.getRequestURI();
         String path = request.getPathInfo();
-        if (pathToJars.endsWith(path))
+        if (path == null)
+        {
+            if (!pathToJars.endsWith("/"))
+                pathToJars = pathToJars + "/"; // Root
+        }
+        else if (pathToJars.endsWith(path))
             pathToJars = pathToJars.substring(0, pathToJars.length() - path.length() + 1);  // Keep the trailing '/'
         int idx = pathToJars.indexOf(codebaseParam);
         if (idx != -1)
