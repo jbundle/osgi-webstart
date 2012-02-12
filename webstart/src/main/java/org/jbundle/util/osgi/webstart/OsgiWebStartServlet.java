@@ -379,7 +379,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     protected File getJnlpFile(HttpServletRequest request)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(getCodebase(request)).append(getHref(request)); // + '?' + request.getQueryString();
+        sb.append(getCodebase(request)).append(getHref(request) + '?' + request.getQueryString());
         String hash = Integer.toString(sb.toString().hashCode()).replace('-', 'a') + ".jnlp";
         return getBundleContext().getDataFile(hash);
     }
@@ -409,7 +409,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         Set<Bundle> bundles = new HashSet<Bundle>();    // Inital empty Bundle list
 
         jnlp.setCodebase(getCodebase(request));
-		jnlp.setHref(getHref(request));
+		jnlp.setHref(getHref(request) + '?' + request.getQueryString());
 		jnlp.setSpec("1.0+");
 		
 		setInformation(jnlp, bundle, mainClass, request);
@@ -486,7 +486,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if (respath.indexOf(codebase) != -1)
                 idx = respath.indexOf(codebase) + codebase.length() - 1;
         String href = respath.substring(idx + 1);    // Exclude /
-        href = href + '?' + request.getQueryString();
         return href;
     }
     /**
