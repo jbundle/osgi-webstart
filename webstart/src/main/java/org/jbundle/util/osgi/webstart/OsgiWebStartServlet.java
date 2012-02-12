@@ -121,7 +121,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     // Servlet params
     public static final String MAIN_CLASS = "mainClass";
     public static final String APPLET_CLASS = "appletClass";
-    public static final String COMPONENT_CLASS = "componentClass";
     
     public static final String VERSION = "version";
     public static final String OTHER_PACKAGES = "otherPackages";
@@ -235,7 +234,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         if ((getRequestParam(request, MAIN_CLASS, null) != null)
                 || (getRequestParam(request, APPLET_CLASS, null) != null)
-                || (getRequestParam(request, COMPONENT_CLASS, null) != null)
+                || (getRequestParam(request, OTHER_PACKAGES, null) != null)
                 || (getRequestParam(request, PROPERTIES_FILE, null) != null))
             if (!request.getRequestURI().toUpperCase().endsWith(".HTML"))
                 if (!request.getRequestURI().toUpperCase().endsWith(".HTM"))
@@ -395,10 +394,14 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 		String mainClass = getRequestParam(request, MAIN_CLASS, null);
 		if (mainClass == null)
 		    mainClass = getRequestParam(request, APPLET_CLASS, null);
-        if (mainClass == null)
-            mainClass = getRequestParam(request, COMPONENT_CLASS, null);
+        String packageName = ClassFinderActivator.getPackageName(mainClass, false);
+        if (packageName == null)
+        {
+            packageName = getRequestParam(request, OTHER_PACKAGES, null);
+            if (packageName.indexOf(',') != -1)
+                packageName = packageName.substring(0, packageName.indexOf(','));
+        }
 		String version = getRequestParam(request, VERSION, null);
-		String packageName = ClassFinderActivator.getPackageName(mainClass, false);
 		Bundle bundle = findBundle(packageName, version);
 		if (bundle == null)
 			return Changes.UNKNOWN;
@@ -409,11 +412,11 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 		jnlp.setHref(getHref(request));
 		jnlp.setSpec("1.0+");
 		
-		setInformation(jnlp, bundle, request);
+		setInformation(jnlp, bundle, mainClass, request);
     	Security security = new Security();
     	jnlp.setSecurity(security);
 
-        if (getRequestParam(request, COMPONENT_CLASS, null) == null)
+        if (mainClass != null)
             setJ2se(jnlp, bundle, request); // For applets or apps
 		
         String regexInclude = getRequestParam(request, INCLUDE, INCLUDE_DEFAULT);
@@ -423,7 +426,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         Changes bundleChanged = Changes.UNKNOWN;
         bundleChanged = addProperties(request, response, jnlp, bundleChanged);
 
-		Main main = getRequestParam(request, COMPONENT_CLASS, null) == null ? Main.TRUE : Main.FALSE;
+		Main main = (mainClass != null) ? Main.TRUE : Main.FALSE;
 		bundleChanged = addBundle(request, jnlp, bundle, main, forceScanBundle, bundleChanged, pathToJars);
 		isNewBundle(bundle, bundles);	// Add only once
 		
@@ -442,7 +445,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 		else if (getRequestParam(request, APPLET_CLASS, null) != null)
 			setAppletDesc(jnlp, mainClass, bundle, request);
         else
-            setComponentDesc(jnlp, mainClass, request);
+            setComponentDesc(jnlp, request);
 		return bundleChanged;
     }
     
@@ -532,7 +535,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * Set up the jnlp information fields.
      * @param jnlp
      */
-    public void setInformation(Jnlp jnlp, Bundle bundle, HttpServletRequest request)
+    public void setInformation(Jnlp jnlp, Bundle bundle, String mainClass, HttpServletRequest request)
 	{
     	if (jnlp.getInformationList() == null)
     		jnlp.setInformationList(new ArrayList<Information>());
@@ -585,7 +588,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 	    	information.getDescriptionList().add(description);
     	}
 
-        if (getRequestParam(request, COMPONENT_CLASS, null) == null)
+        if (mainClass != null)
         { // For applets or apps
         	if (information.getIconList() == null)
         		information.setIconList(new ArrayList<Icon>());
@@ -1154,7 +1157,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @param jnlp
      * @param mainClass
      */
-    public void setComponentDesc(Jnlp jnlp, String mainClass, HttpServletRequest request)
+    public void setComponentDesc(Jnlp jnlp, HttpServletRequest request)
     {
         if (jnlp.getComponentDesc() == null)
             jnlp.setComponentDesc(new ComponentDesc());
