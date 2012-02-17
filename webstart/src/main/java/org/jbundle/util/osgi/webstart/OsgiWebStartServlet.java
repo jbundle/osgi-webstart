@@ -434,26 +434,23 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         boolean containsUniqueParams = false;
         // sb.append(getCodebase(request)); // Don't use the codebase
-        sbBase.append(getHref(request));    // Do use the base url
+        sbBase.append(getHref(request)).append('/');    // Do use the base url
         // sb.append(request.getQueryString());
         Enumeration<String> e = request.getParameterNames();
         while (e.hasMoreElements())
         {
             String paramName = e.nextElement();
             if (isCachableParam(paramName))
-                sbBase.append(paramName).append(request.getParameter(paramName));
+                sbBase.append('&').append(paramName).append('=').append(request.getParameter(paramName));
             else
                 containsUniqueParams = true;
-            sbUnique.append(paramName).append(request.getParameter(paramName));
+            sbUnique.append('&').append(paramName).append('=').append(request.getParameter(paramName));
         }
-        String mainPackage = this.getRequestParam(request, MAIN_CLASS, null);
+        String mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, MAIN_CLASS, null), false);
         if (mainPackage == null)
-            mainPackage = this.getRequestParam(request, APPLET_CLASS, null);
+            mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, APPLET_CLASS, null), false);
         if (mainPackage != null)
-        {
             sbBase.append("mainPackage").append(mainPackage);
-            sbUnique.append("mainPackage").append(mainPackage);
-        }
         String hash = Integer.toString(sbBase.toString().hashCode()).replace('-', 'a');
         sbBase.delete(0, sbBase.length());
         sbBase.append(BASE_CACHE_FILE_PREFIX).append(hash).append(".jnlp");
@@ -549,6 +546,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      */
     private String getCodebase(HttpServletRequest request)
     {
+        String contextPath = this.getServletContext().getContextPath();
         String urlprefix = getUrlPrefix(request);
         String respath = request.getRequestURI();
         if (respath == null)
@@ -559,7 +557,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if (respath.indexOf(codebaseParam) != -1)
                 idx = respath.indexOf(codebaseParam) + codebaseParam.length() - 1;
         String codebase = respath.substring(0, idx + 1); // Include /
-        codebase = urlprefix + request.getContextPath() + codebase;
+        codebase = urlprefix + request.getContextPath() + contextPath + codebase;
         return codebase;
     }
     
@@ -1674,6 +1672,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         PROPERTIES_FILE,
         COMPONENTS,
         EXCLUDE_COMPONENTS,
+        Constants.BUNDLE_ACTIVATIONPOLICY,
     };
     
     /**
@@ -1781,6 +1780,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
            String value = null;
            if (!propertiesOnly)
                value = super.getParameter(name);
+           if (PROPERTIES_FILE.equals(name))
+               if (propertiesPath != null)
+                   if (propertiesPath.equals(value))
+                       value = null;    // Don't return the name of the properties
            if (value == null)
                return properties.getProperty(name);
            return value;
@@ -1816,6 +1819,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
               tempArray[0] = (String)properties.get(key);
               map.put((String)key, tempArray);
           }
+          map.remove(PROPERTIES_FILE);    // Don't return the name of my properties file - no recursion
           return map.keys();
       }
       public void setPropertiesOnly(boolean propertiesOnly)
