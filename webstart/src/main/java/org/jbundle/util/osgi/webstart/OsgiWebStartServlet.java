@@ -346,15 +346,14 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 		}
 	    return false;
 	}
-
-    public boolean sendCacheIfCurrent(HttpServletRequest request, HttpServletResponse response, File file)
-        throws IOException
-    {
-        if (file.exists())
-            if (checkBundleChangesAndSend(request, response, file))  // Send if jnlp is exactly the same
-                return true;   // Returned the cached jnlp or a cache up-to-date response
-        return false;
-    }
+    /**
+     * Write this jnlp to this cache file.
+     * @param marshaller
+     * @param jnlp
+     * @param file
+     * @throws IOException
+     * @throws JiBXException
+     */
     public void cacheThisJnlp(IMarshallingContext marshaller, Jnlp jnlp, File file)
             throws IOException, JiBXException
     {       // Cache this jnlp
@@ -369,8 +368,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @return
      * @throws IOException
      */
-    public boolean checkBundleChangesAndSend(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
+    public boolean sendCacheIfCurrent(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
     {
+        if (!file.exists())
+            return false;
         Date lastModified = new Date(file.lastModified());
         if ((lastBundleChange == null)
             || (lastBundleChange.after(lastModified)))
@@ -540,29 +541,26 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     }
     
     /**
-     * Get the codebase from the request path.
+     * Get the full codebase (including host and port) from the request path.
+     * By default, this is the servlet path (without the trailing '/')
+     * To change this, supply a 'codebase' parameter with your intended base path.
      * @param request
      * @return
      */
     private String getCodebase(HttpServletRequest request)
     {
-        String contextPath = this.getServletContext().getContextPath();
         String urlprefix = getUrlPrefix(request);
-        String respath = request.getRequestURI();
-        if (respath == null)
-        	respath = "";
-        String codebaseParam = getRequestParam(request, CODEBASE, null);
-        int idx = respath.lastIndexOf('/');
-        if (codebaseParam != null)
-            if (respath.indexOf(codebaseParam) != -1)
-                idx = respath.indexOf(codebaseParam) + codebaseParam.length() - 1;
-        String codebase = respath.substring(0, idx + 1); // Include /
-        codebase = urlprefix + request.getContextPath() + contextPath + codebase;
-        return codebase;
+        String servletPath = request.getServletPath();
+        String codebase = this.getRequestParam(request, CODEBASE, null);
+        if ((codebase == null) || (codebase.length() == 0))
+            return urlprefix + servletPath;  // If they don't have a codebase, jars are served relative to the servlet path
+        return urlprefix + codebase;
     }
     
     /**
-     * Get the jnlp href from the request path.
+     * Get the jnlp href prefix to this servlet.
+     * If a codebase was specified, this must
+     * end up starting at the root servlet path.
      * @param request
      * @return
      */
@@ -570,38 +568,40 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         String respath = request.getRequestURI();
         if (respath == null)
-        	respath = "";
-        String codebase = getRequestParam(request, CODEBASE, null);
-        int idx = respath.lastIndexOf('/');
-        if (codebase != null)
-            if (respath.indexOf(codebase) != -1)
-                idx = respath.indexOf(codebase) + codebase.length() - 1;
-        String href = respath.substring(idx + 1);    // Exclude /
-        return href;
+        	return "";
+        String codebase = this.getRequestParam(request, CODEBASE, null);
+        if ((codebase == null) || (codebase.length() == 0))
+            return "";  // If they don't have a codebase, jars are served relative to the servlet path
+        return getRelativePath(respath, codebase);
     }
     /**
      * Get the path to the jar files (root of context path if codebase specified).
+     * This is the start of the relative (to codebase) url to the jar files.
+     * Typically this is blank '', but if a codebase was specified, this must
+     * end up pointing to the root servlet path.
      * @param request
      * @return
      */
     private String getPathToJars(HttpServletRequest request)
     {
-        String codebaseParam = getRequestParam(request, CODEBASE, null);
-        if ((codebaseParam == null) || (codebaseParam.length() == 0))
-                return "";
-        String pathToJars = request.getRequestURI();
-        String path = request.getPathInfo();
-        if (path == null)
-        {
-            if (!pathToJars.endsWith("/"))
-                pathToJars = pathToJars + "/"; // Root
-        }
-        else if (pathToJars.endsWith(path))
-            pathToJars = pathToJars.substring(0, pathToJars.length() - path.length() + 1);  // Keep the trailing '/'
-        int idx = pathToJars.indexOf(codebaseParam);
-        if (idx != -1)
-            pathToJars = pathToJars.substring(idx + 1);
-        return pathToJars;
+        String servletPath = request.getServletPath();
+        if ((servletPath == null) || (servletPath.length() == 0))
+            return "";  // If their servlet is at the root, they don't need to use a codebase
+        String codebase = this.getRequestParam(request, CODEBASE, null);
+        if ((codebase == null) || (codebase.length() == 0))
+            return "";  // If they don't have a codebase, jars are served relative to the servlet path
+        String path = getRelativePath(servletPath, codebase);
+        if (!path.endsWith("/"))
+            path = path + "/";
+        return path;
+    }
+    private String getRelativePath(String servletPath, String rootPathToFix)
+    {
+        if (servletPath.startsWith(rootPathToFix))
+            rootPathToFix = servletPath.substring(rootPathToFix.length());
+        if (rootPathToFix.startsWith("/"))
+            rootPathToFix = rootPathToFix.substring(1);
+        return rootPathToFix;
     }
     /**
      *  This code is heavily inspired by the stuff in HttpUtils.getRequestURL
