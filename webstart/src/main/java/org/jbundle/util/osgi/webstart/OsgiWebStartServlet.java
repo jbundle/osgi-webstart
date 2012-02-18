@@ -123,6 +123,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     // Servlet params
     public static final String MAIN_CLASS = "mainClass";
     public static final String APPLET_CLASS = "appletClass";
+    public static final String APPLET = "applet";   // Same as applet class
     
     public static final String VERSION = "version";
     public static final String OTHER_PACKAGES = "otherPackages";
@@ -242,6 +243,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         if ((getRequestParam(request, MAIN_CLASS, null) != null)
                 || (getRequestParam(request, APPLET_CLASS, null) != null)
+                || (getRequestParam(request, APPLET, null) != null)
                 || (getRequestParam(request, OTHER_PACKAGES, null) != null)
                 || (getRequestParam(request, PROPERTIES_FILE, null) != null))
             if (!request.getRequestURI().toUpperCase().endsWith(".HTML"))
@@ -450,6 +452,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         String mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, MAIN_CLASS, null), false);
         if (mainPackage == null)
             mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, APPLET_CLASS, null), false);
+        if (mainPackage == null)
+            mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, APPLET, null), false);
         if (mainPackage != null)
             sbBase.append("mainPackage").append(mainPackage);
         String hash = Integer.toString(sbBase.toString().hashCode()).replace('-', 'a');
@@ -473,6 +477,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         String mainClass = getRequestParam(request, MAIN_CLASS, null);
 		if (mainClass == null)
 		    mainClass = getRequestParam(request, APPLET_CLASS, null);
+        if (mainClass == null)
+            mainClass = getRequestParam(request, APPLET, null);
         String packageName = ClassFinderActivator.getPackageName(mainClass, false);
         if (packageName == null)
         {
@@ -534,6 +540,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     			setApplicationDesc(jnlp, mainClass, request);
     		else if (getRequestParam(request, APPLET_CLASS, null) != null)
     			setAppletDesc(jnlp, mainClass, bundle, request);
+            else if (getRequestParam(request, APPLET, null) != null)
+                setAppletDesc(jnlp, mainClass, bundle, request);
             else
                 setComponentDesc(jnlp, request);
         }
@@ -1268,7 +1276,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         if (name == null)
             return false;
-        if (name.startsWith(getPackageFromName(OsgiWebStartServlet.class.getName())))
+        if (name.startsWith(OsgiWebStartServlet.class.getPackage().getName()))
             return true;
         return false;
     }
