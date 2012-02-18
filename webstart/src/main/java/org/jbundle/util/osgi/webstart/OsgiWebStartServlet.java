@@ -102,9 +102,9 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 
 /**
- * OSGi to Jnlp translation Servlet.
+ * OSGi to Web Start translation Servlet.
  * Note: Is it not required that this inherits from JnlpDownloadServlet,
- * I was hoping to using some of the code, but most of the useful stuff is private.
+ * I was hoping to using some of that code, but most of the useful stuff is private.
  * I do call JnlpDownloadServlet methods if I don't know what to do with the call.
  * Note: This is designed to override the JnlpDownloadServlet. I just a little 
  * apprehensive about the licensing if I wrap the (sun) code in an OSGi wrapper. 
@@ -595,6 +595,12 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             path = path + "/";
         return path;
     }
+    /**
+     * Calculate the relative path of this path given the servlet path.
+     * @param servletPath
+     * @param rootPathToFix
+     * @return The path relative to the given path
+     */
     private String getRelativePath(String servletPath, String rootPathToFix)
     {
         if (servletPath.startsWith(rootPathToFix))
@@ -843,7 +849,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 	}
 	public static final String MANIFEST_DIR = "META-INF/";
 	public static final String MANIFEST_PATH = MANIFEST_DIR + "MANIFEST.MF";
-    public static int ONE_SEC_IN_MS = 1000;
+    public static final int ONE_SEC_IN_MS = 1000;
 	
 	/**
 	 * Create a jar for this bundle and move all the classes to the new jar.
