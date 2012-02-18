@@ -487,15 +487,12 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 packageName = packageName.substring(0, packageName.indexOf(','));
         }
 		String version = getRequestParam(request, VERSION, null);
-		Bundle bundle = findBundle(packageName, version);
+		Bundle bundle = findBundle(packageName, version); // TODO performance - Try not to call this for UNIQUE_ONLY
 		if (bundle == null)
 		    return BundleChangeStatus.UNKNOWN;
 
-        Set<Bundle> bundles = new HashSet<Bundle>();    // Initial empty Bundle list
-
         if (forceScanBundle)
             getResource(jnlp, true);   // Clear the resource entries and create a new one
-        // **NOTE** - I Can really speed things up by using the old resource entries rather than scanning again
 
         if ((cachableParamsOnly == TagsToAdd.UNIQUE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
         {   // Unique params
@@ -508,7 +505,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         	jnlp.setSecurity(security);
     
             if (mainClass != null)
-                setJ2se(jnlp, bundle, request); // For applets or apps
+                setJ2se(jnlp, request); // For applets or apps
 		
             addProperties(request, response, jnlp);
         }
@@ -516,6 +513,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         if ((cachableParamsOnly == TagsToAdd.CACHEABLE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
         {   // base params
             String pathToJars = getPathToJars(request);
+            Set<Bundle> bundles = new HashSet<Bundle>();    // Initial empty Bundle list
             
     		Main main = (mainClass != null) ? Main.TRUE : Main.FALSE;
     		bundleChangeStatus = addBundle(request, jnlp, bundle, main, forceScanBundle, bundleChangeStatus, pathToJars);
@@ -731,7 +729,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * Add the j2se lines.
      * @param jnlp
      */
-    public void setJ2se(Jnlp jnlp, Bundle bundle, HttpServletRequest request)
+    public void setJ2se(Jnlp jnlp, HttpServletRequest request)
 	{
 		Choice choice = getResource(jnlp, false);	// Clear the entries and create a new one
 		Java java = new Java();
@@ -853,6 +851,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 	 */
 	public static String getBundleProperty(Bundle bundle, String property)
 	{
+	    if (bundle == null)
+	        return null;
 		return (String)bundle.getHeaders().get(property);
 	}
 	public static final String MANIFEST_DIR = "META-INF/";
