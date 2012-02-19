@@ -42,6 +42,7 @@ mainClass - The java class with the main method
 appletClass - The main applet class
 version - The bundle version to deploy
 otherPackages - Comma separated list of other packages to include (if you use &lt;DynamicImport-Package&gt;)
+applet - The main applet class (Same as appletClass, except displays default applet html)
 (Note: All packages in the target bundle will be included)
 template - Path name to a starting jnlp file
     
