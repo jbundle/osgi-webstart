@@ -243,12 +243,12 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         if ((getRequestParam(request, MAIN_CLASS, null) != null)
                 || (getRequestParam(request, APPLET_CLASS, null) != null)
-                || (getRequestParam(request, APPLET, null) != null)
                 || (getRequestParam(request, OTHER_PACKAGES, null) != null)
                 || (getRequestParam(request, PROPERTIES_FILE, null) != null))
             if (!request.getRequestURI().toUpperCase().endsWith(".HTML"))
                 if (!request.getRequestURI().toUpperCase().endsWith(".HTM"))
-                    return true;
+                    if (getRequestParam(request, APPLET, null) == null) // Applet removes the 'applet' param
+                        return true;
         return false;
     }
     
@@ -1317,6 +1317,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     public boolean sendDataFile(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
     	String path = request.getPathInfo();
+        if (getRequestParam(request, APPLET, null) != null)
+            return this.sendResourceFile(DEFAULT_APPLET_PATH, response);   // Special case, ?applet= means send applet.html
     	if (path == null)
     		return false;
     	path = path.substring(path.lastIndexOf("/") + 1);  // Jars are placed at the root of the cache directory
@@ -1329,6 +1331,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     	}
     	return this.checkCacheAndSend(request, response, file, false);
     }
+    public static final String DEFAULT_APPLET_PATH = "/docs/applet.html";
 
 	/**
 	 * Get the package name from the jar entry path.

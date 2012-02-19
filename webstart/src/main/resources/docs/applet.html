@@ -21,10 +21,29 @@ function getParam( name )
 <body>
 <script src="http://java.com/js/deployJava.js"></script>
 
-<script> 
-params = "";
-if (window.location.href.indexOf("?") != -1)
-	params = window.location.href.substring(window.location.href.indexOf("?"));
+<script>
+path = location.pathname;
+if (path.indexOf('.') != -1)
+{   // webstart servlet can't have '.htm(l)' extension
+	exten = path.substring(path.indexOf('.'));
+	exten = exten.toUpperCase();
+	if (exten == ".HTM")
+		path = path.substring(0, path.length - 4);
+    if (exten == ".HTML")
+        path = path.substring(0, path.length - 5);
+}
+params = location.search;
+if (getParam("applet") != "")
+{
+	if (getParam("appletClass") == "")
+		params = params + "&" + "appletClass=" + getParam("applet");
+	start = params.indexOf("applet=");
+	end = params.indexOf("&", start)
+	if (end != -1)
+		params = params.substring(0, start) + params.substring(end + 1);
+    else
+        params = params.substring(0, start);
+}
 width = getParam("width");
 if (width == "")
 	width = "100%";
@@ -35,7 +54,7 @@ name = getParam("name");
 if (name == "")
 	name = "jbundle applet";
 var attributes = {width: width, height: height, name: name} ; 
-var parameters = {jnlp_href: './applet' + params, draggable:'true'} ; 
+var parameters = {jnlp_href: path + params, draggable:'true'} ; 
 deployJava.runApplet(attributes, parameters, '1.6'); 
 
 document.write("<br/><center><h2>" + name + "</h2></center><br/>");
