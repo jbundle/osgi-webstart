@@ -452,8 +452,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         String mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, MAIN_CLASS, null), false);
         if (mainPackage == null)
             mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, APPLET_CLASS, null), false);
-        if (mainPackage == null)
-            mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, APPLET, null), false);
         if (mainPackage != null)
             sbBase.append("mainPackage").append(mainPackage);
         String hash = Integer.toString(sbBase.toString().hashCode()).replace('-', 'a');
@@ -477,8 +475,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         String mainClass = getRequestParam(request, MAIN_CLASS, null);
 		if (mainClass == null)
 		    mainClass = getRequestParam(request, APPLET_CLASS, null);
-        if (mainClass == null)
-            mainClass = getRequestParam(request, APPLET, null);
         String packageName = ClassFinderActivator.getPackageName(mainClass, false);
         if (packageName == null)
         {
@@ -486,13 +482,19 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if (packageName.indexOf(',') != -1)
                 packageName = packageName.substring(0, packageName.indexOf(','));
         }
-		String version = getRequestParam(request, VERSION, null);
-		Bundle bundle = findBundle(packageName, version); // TODO performance - Try not to call this for UNIQUE_ONLY
-		if (bundle == null)
-		    return BundleChangeStatus.UNKNOWN;
-
         if (forceScanBundle)
             getResource(jnlp, true);   // Clear the resource entries and create a new one
+        
+        Bundle bundle = null;
+        if ((cachableParamsOnly == TagsToAdd.CACHEABLE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
+        {   // base params
+            String version = getRequestParam(request, VERSION, null);
+    		bundle = findBundle(packageName, version);
+    		if (bundle == null)
+    		    return BundleChangeStatus.UNKNOWN;
+
+    		setCachableInformation(jnlp, bundle, request);
+        }
 
         if ((cachableParamsOnly == TagsToAdd.UNIQUE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
         {   // Unique params
@@ -500,7 +502,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     		jnlp.setHref(getHref(request) + '?' + request.getQueryString());
     		jnlp.setSpec("1.0+");
 		
-    		setInformation(jnlp, bundle, mainClass, request);
+    		setUniqueInformation(jnlp, mainClass, request);
         	Security security = new Security();
         	jnlp.setSecurity(security);
     
@@ -537,9 +539,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if (getRequestParam(request, MAIN_CLASS, null) != null)
     			setApplicationDesc(jnlp, mainClass, request);
     		else if (getRequestParam(request, APPLET_CLASS, null) != null)
-    			setAppletDesc(jnlp, mainClass, bundle, request);
-            else if (getRequestParam(request, APPLET, null) != null)
-                setAppletDesc(jnlp, mainClass, bundle, request);
+    			setAppletDesc(jnlp, mainClass, request);
             else
                 setComponentDesc(jnlp, request);
         }
@@ -637,58 +637,105 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * Set up the jnlp information fields.
      * @param jnlp
      */
-    public void setInformation(Jnlp jnlp, Bundle bundle, String mainClass, HttpServletRequest request)
+    public void setCachableInformation(Jnlp jnlp, Bundle bundle, HttpServletRequest request)
+    {
+        Information information = this.getInformation(jnlp);
+        Title title = new Title();
+        if (getBundleProperty(bundle, Constants.BUNDLE_NAME) != null)
+            title.setTitle(getBundleProperty(bundle, Constants.BUNDLE_NAME));
+        else if (getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME) != null)
+            title.setTitle(getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME));
+        else
+            title.setTitle("Jnlp Application");
+        information.setTitle(title);        
+        
+        Vendor vendor = new Vendor();
+        if (getBundleProperty(bundle, Constants.BUNDLE_VENDOR) != null)
+            vendor.setVendor(getBundleProperty(bundle, Constants.BUNDLE_VENDOR));
+        else
+            vendor.setVendor("jbundle.org");
+        information.setVendor(vendor);
+        
+        Homepage homepage = new Homepage();
+        if (getBundleProperty(bundle, Constants.BUNDLE_DOCURL) != null)
+            homepage.setHref(getBundleProperty(bundle, Constants.BUNDLE_DOCURL));
+        else
+            homepage.setHref("http://www.jbundle.org");
+        information.setHomepage(homepage);
+        
+        if (getBundleProperty(bundle, Constants.BUNDLE_DESCRIPTION) != null)
+            this.setJnlpDescription(information, Kind.ONELINE, getBundleProperty(bundle, Constants.BUNDLE_DESCRIPTION));
+        else
+            this.setJnlpDescription(information, Kind.ONELINE, "Jnlp Application");
+
+        if (getBundleProperty(bundle, Constants.BUNDLE_NAME) != null)
+            this.setJnlpDescription(information, Kind.SHORT, getBundleProperty(bundle, Constants.BUNDLE_NAME));
+        else if (getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME) != null)
+            this.setJnlpDescription(information, Kind.SHORT, getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME));
+        else
+            this.setJnlpDescription(information, Kind.SHORT, "Jnlp Application");
+    }
+    /**
+     * Set the one-line description
+     * @param information
+     * @param desc
+     */
+    public void setJnlpDescription(Information information, Kind kind, String desc)
+    {
+        Description description = getJnlpDescription(information, kind);
+        description.setString(desc);
+    }
+    /**
+     * Set the one-line description
+     * @param information
+     * @param desc
+     */
+    public Description getJnlpDescription(Information information, Kind kind)
+    {
+        if (information.getDescriptionList() == null)
+            information.setDescriptionList(new ArrayList<Description>());
+        for (int index = 0; index < information.getDescriptionList().size() ; index++)
+        {
+            Description description = information.getDescriptionList().get(index);
+            if (description.getKind() == kind)
+                return description;
+        }
+        Description description = new Description();
+        description.setKind(kind);
+        information.getDescriptionList().add(description);
+        return description;
+    }
+    /**
+     * Set up the jnlp information fields.
+     * @param jnlp
+     */
+    public void setUniqueInformation(Jnlp jnlp, String mainClass, HttpServletRequest request)
 	{
-    	if (jnlp.getInformationList() == null)
-    		jnlp.setInformationList(new ArrayList<Information>());
-    	List<Information> informationList = jnlp.getInformationList();
-    	if (informationList.size() == 0)
-    		informationList.add(new Information());
-    	Information information = informationList.get(0);
+    	Information information = this.getInformation(jnlp);
     	
-    	Title title = new Title();
     	if (getRequestParam(request, TITLE, null) != null)
-    		title.setTitle(getRequestParam(request, TITLE, null));
-    	else if (getBundleProperty(bundle, Constants.BUNDLE_NAME) != null)
-    		title.setTitle(getBundleProperty(bundle, Constants.BUNDLE_NAME));
-    	else if (getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME) != null)
-    		title.setTitle(getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME));
-    	else
-    		title.setTitle("Jnlp Application");
-    	information.setTitle(title);
-    	
-    	Vendor vendor = new Vendor();
-    	if (getRequestParam(request, VENDOR, null) != null)
-        	vendor.setVendor(getRequestParam(request, VENDOR, null));
-    	else if (getBundleProperty(bundle, Constants.BUNDLE_VENDOR) != null)
-    		vendor.setVendor(getBundleProperty(bundle, Constants.BUNDLE_VENDOR));
-    	else
-    		vendor.setVendor("jbundle.org");
-    	information.setVendor(vendor);
-    	
-    	Homepage homepage = new Homepage();
-    	if (getRequestParam(request, HOME_PAGE, null) != null)
-    		homepage.setHref(getRequestParam(request, HOME_PAGE, null));
-    	else if (getBundleProperty(bundle, Constants.BUNDLE_DOCURL) != null)
-    		homepage.setHref(getBundleProperty(bundle, Constants.BUNDLE_DOCURL));
-    	else
-    		homepage.setHref("http://www.jbundle.org");
-    	information.setHomepage(homepage);
-    	
-    	if (information.getDescriptionList() == null)
-    		information.setDescriptionList(new ArrayList<Description>());
-    	if (information.getDescriptionList().size() == 0)
     	{
-	    	Description description = new Description();
-	    	description.setKind(Kind.ONELINE);
-	    	if (getRequestParam(request, DESCRIPTION, null) != null)
-	    		description.setString(getRequestParam(request, DESCRIPTION, null));
-	    	else if (getBundleProperty(bundle, Constants.BUNDLE_DESCRIPTION) != null)
-	    		description.setString(getBundleProperty(bundle, Constants.BUNDLE_DESCRIPTION));
-	    	else
-	    		description.setString("Jnlp Application");
-	    	information.getDescriptionList().add(description);
+            Title title = new Title();
+    		title.setTitle(getRequestParam(request, TITLE, null));
+    		information.setTitle(title);
     	}
+    	
+    	if (getRequestParam(request, VENDOR, null) != null)
+    	{
+            Vendor vendor = new Vendor();
+        	vendor.setVendor(getRequestParam(request, VENDOR, null));
+        	information.setVendor(vendor);
+    	}
+    	
+    	if (getRequestParam(request, HOME_PAGE, null) != null)
+    	{
+            Homepage homepage = new Homepage();
+    		homepage.setHref(getRequestParam(request, HOME_PAGE, null));
+    		information.setHomepage(homepage);
+    	}
+    	
+        if (getRequestParam(request, DESCRIPTION, null) != null)
+        	this.setJnlpDescription(information, Kind.ONELINE, getRequestParam(request, DESCRIPTION, null));
 
         if (mainClass != null)
         { // For applets or apps
@@ -724,6 +771,20 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         	}
         }
 	}
+    /**
+     * Set up the jnlp information tag.
+     * @param jnlp
+     */
+    public Information getInformation(Jnlp jnlp)
+    {
+        if (jnlp.getInformationList() == null)
+            jnlp.setInformationList(new ArrayList<Information>());
+        List<Information> informationList = jnlp.getInformationList();
+        if (informationList.size() == 0)
+            informationList.add(new Information());
+        Information information = informationList.get(0);
+        return information;
+    }
     
     /**
      * Add the j2se lines.
@@ -1218,17 +1279,13 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @param jnlp
      * @param mainClass
      */
-    public void setAppletDesc(Jnlp jnlp, String mainClass, Bundle bundle, HttpServletRequest request)
+    public void setAppletDesc(Jnlp jnlp, String mainClass, HttpServletRequest request)
     {
         String appletName = null;
         if (getRequestParam(request, TITLE, null) != null)
             appletName = getRequestParam(request, TITLE, null);
-        else if (getBundleProperty(bundle, Constants.BUNDLE_NAME) != null)
-            appletName = getBundleProperty(bundle, Constants.BUNDLE_NAME);
-        else if (getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME) != null)
-            appletName = getBundleProperty(bundle, Constants.BUNDLE_SYMBOLICNAME);
         else
-            appletName = "Jnlp Application";
+            appletName = this.getJnlpDescription(this.getInformation(jnlp), Kind.SHORT).getString();
     	if (jnlp.getAppletDesc() == null)
     		jnlp.setAppletDesc(new AppletDesc());
     	AppletDesc appletDesc = jnlp.getAppletDesc();
