@@ -389,27 +389,20 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      */
     public boolean checkCacheAndSend(HttpServletRequest request, HttpServletResponse response, File file, boolean checkFileDate) throws IOException
     {
-        String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
-        Date lastModified = new Date(file.lastModified());
-        try {
-            if(requestIfModifiedSince!=null){
-                Date requestDate = getDateFromHttpDate(requestIfModifiedSince);
-                if (file != null)
-                    if (!requestDate.before(lastModified))
-                    {   // Not modified since last time
-                        response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
-                        response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
-                        return true;    // Success - use your cached copy
-                    }
-            }
-        } catch (ParseException e) {
-            // Fall through
-        }
-        // If they want it again, send them my cached copy
         if ((file == null) || (!file.exists()))
             return false;   // Error - cache doesn't exist
+
+        if (this.isCurrent(request, file))
+        {   // Not modified since last time
+            response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
+            response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+            return true;    // Success - use your cached copy
+        }
+        
+        Date lastModified = new Date(file.lastModified());
         response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
 
+        // If they want it again, send them my cached copy
         InputStream inStream = new FileInputStream(file);
         OutputStream writer = response.getOutputStream();
         copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
@@ -417,13 +410,36 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         writer.close();
         if (checkFileDate)
         {
-            Date lastMod = new Date(file.lastModified());
             if ((lastBundleChange != null)
-                && (lastBundleChange.after(lastMod)))
+                && (lastBundleChange.after(lastModified)))
                 file.setLastModified(lastBundleChange.getTime());   // Make sure this file is up-to-date for the next checkBundleChanges call
             return true;   // Returned the cached jnlp or a cache up-to-date response
         }
         return true;    // Success - I returned the cached copy
+    }
+    /**
+     * Return http response that the cache is up-to-date.
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    public boolean isCurrent(HttpServletRequest request, File file)
+    {
+        if ((file == null) || (!file.exists()))
+            return false;   // Error - cache doesn't exist
+        String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
+        Date lastModified = new Date(file.lastModified());
+        try {
+            if (requestIfModifiedSince!=null) {
+                Date requestDate = getDateFromHttpDate(requestIfModifiedSince);
+                    if (!requestDate.before(lastModified))
+                        return true;   // Not modified since last time
+            }
+        } catch (ParseException e) {
+            // Fall through
+        }
+        return false;
     }
     /**
      * Get the jnlp cache file name.
