@@ -292,9 +292,14 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
                 inStream.close();
                 
-                bundleStatus = setupJnlp(jnlp, request, response, false, tagsToCache); // Compare with the current jnlp file
-                if (bundleStatus == BundleChangeStatus.PARTIAL)
-                    setupJnlp(jnlp, request, response, true, tagsToCache);  // Something changed, need to rescan everything
+                if (this.isCurrent(request, jnlpBaseCacheFile))
+                    bundleStatus = BundleChangeStatus.NONE;  // Cacheable section is already up-to-date
+                else
+                {
+                    bundleStatus = setupJnlp(jnlp, request, response, false, tagsToCache); // Compare with the current jnlp file
+                    if (bundleStatus == BundleChangeStatus.PARTIAL)
+                        setupJnlp(jnlp, request, response, true, tagsToCache);  // Something changed, need to rescan everything
+                }
 			}
 			else
 			{
