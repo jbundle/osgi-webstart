@@ -114,6 +114,7 @@ import org.osgi.framework.Constants;
 public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 {
 	private static final long serialVersionUID = 1L;
+	public static boolean DEBUG = false;
 
     public static final String JNLP_MIME_TYPE = "application/x-java-jnlp-file";
     public static final String OUTPUT_ENCODING = "UTF-8";
@@ -343,8 +344,17 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             Date lastModified = new Date(jnlpBaseCacheFile.lastModified());
             response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
             
-            PrintWriter writer = response.getWriter();
+            Writer writer = response.getWriter();
             marshaller.marshalDocument(jnlp, OUTPUT_ENCODING, null, writer);
+            
+            if (DEBUG)
+            {
+                writer = new StringWriter();
+                marshaller.marshalDocument(jnlp, OUTPUT_ENCODING, null, writer);
+                String string = ((StringWriter)writer).toString();
+                System.out.println(string);
+            }
+
             lastBundleChange = lastModified;     // Use this cached file until bundles change
 
             return true;
