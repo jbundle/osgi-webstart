@@ -17,6 +17,10 @@
   <packaging>pom</packaging>
   <name>jbundle-util-osgi-webstart-reactor</name>
 
+  <properties>
+    <projectName>jbundle-util-osgi-webstart</projectName>
+  </properties>
+
   <scm>
     <url>https://github.com/jbundle/osgi-webstart</url>
     <connection>scm:git:git://github.com/jbundle/osgi-webstart.git</connection>
