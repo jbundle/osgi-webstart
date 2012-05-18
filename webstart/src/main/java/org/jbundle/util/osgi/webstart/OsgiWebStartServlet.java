@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -294,13 +296,16 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 inStream.close();
                 
                 if (this.isCurrent(request, jnlpBaseCacheFile))
+                {
                     bundleStatus = BundleChangeStatus.NONE;  // Cacheable section is already up-to-date
+                }
                 else
                 {
                     bundleStatus = setupJnlp(jnlp, request, response, false, tagsToCache); // Compare with the current jnlp file
                     if (bundleStatus == BundleChangeStatus.PARTIAL)
                         setupJnlp(jnlp, request, response, true, tagsToCache);  // Something changed, need to rescan everything
                 }
+                jnlp.setCodebase(getCodebase(request));     // codebase is ALWAYS the source
 			}
 			else
 			{
@@ -406,7 +411,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     {
         if ((file == null) || (!file.exists()))
             return false;   // Error - cache doesn't exist
-
+        
         if (this.isCurrent(request, file))
         {   // Not modified since last time
             response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
@@ -417,8 +422,12 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         Date lastModified = new Date(file.lastModified());
         response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
 
-        // If they want it again, send them my cached copy
-        InputStream inStream = new FileInputStream(file);
+        String newCodebase = fixCodebase(request, file);
+        InputStream inStream = null;
+        if (newCodebase != null)
+            inStream = new StringBufferInputStream(newCodebase);
+        else
+            inStream = new FileInputStream(file);   // If they want it again, send them my cached copy
         OutputStream writer = response.getOutputStream();
         copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
         inStream.close();
@@ -456,6 +465,60 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         }
         return false;
     }
+    /**
+     * Does this cached file contain the same codebase?
+     * If not, fix the codebase and return the new jnlp string.
+     * If so, return null.
+     * @param request
+     * @param file
+     * @return
+     */
+    String CODEBASE_NAME = "codebase=\"";
+    public String fixCodebase(HttpServletRequest request, File file)
+    {
+        String requestCodebase = getCodebase(request);
+        try {
+            // If they want it again, send them my cached copy
+            Reader inStream = new FileReader(file);
+            StringWriter writer = new StringWriter();
+            copyStream(inStream, writer, true);
+            StringBuffer jnlpString = writer.getBuffer();
+            inStream.close();
+            writer.close();
+            if (jnlpString == null)
+                return null;
+            int start = jnlpString.indexOf(CODEBASE_NAME);
+            if (start == -1)
+                return null;
+            start = start + CODEBASE_NAME.length();
+            int end = jnlpString.indexOf("\"", start);
+            if (end == -1)
+                return null;
+            if (jnlpString.substring(start, end).equalsIgnoreCase(requestCodebase))
+                return null;    // same codebase = good
+            jnlpString.replace(start, end, requestCodebase);
+            return jnlpString.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * Is this a main (applet or application) jnlp?
+     * @param request
+     * @return true if it is a main jnlp file
+     */
+    public boolean isMainJnlp(HttpServletRequest request)
+    {
+        if (this.getRequestParam(request, MAIN_CLASS, null) != null)
+            return true;
+        if (this.getRequestParam(request, APPLET_CLASS, null)!= null)
+            return true;
+        return false;   // Resource only jnlp
+    }
+
     /**
      * Get the jnlp cache file name.
      * @param request
