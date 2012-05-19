@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -423,15 +422,22 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
 
         String newCodebase = fixCodebase(request, file);
-        InputStream inStream = null;
         if (newCodebase != null)
-            inStream = new StringBufferInputStream(newCodebase);
+        {
+            Reader inStream = new StringReader(newCodebase);
+            Writer writer = response.getWriter();
+            copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
+            inStream.close();
+            writer.close();
+        }
         else
-            inStream = new FileInputStream(file);   // If they want it again, send them my cached copy
-        OutputStream writer = response.getOutputStream();
-        copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
-        inStream.close();
-        writer.close();
+        {
+            InputStream inStream = new FileInputStream(file);   // If they want it again, send them my cached copy
+            OutputStream writer = response.getOutputStream();
+            copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
+            inStream.close();
+            writer.close();
+        }
         if (checkFileDate)
         {
             if ((lastBundleChange != null)
