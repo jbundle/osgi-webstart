@@ -159,16 +159,16 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     Date lastBundleChange = null;
 
     enum BundleChangeStatus {
-        UNKNOWN,
-        NONE,
-        PARTIAL,
-        ALL
+        UNKNOWN,    // Unknown
+        NONE,       // Cached bundle matches request
+        PARTIAL,    // 
+        ALL         // Request is completely different from cached jnlp
     };
     
     enum TagsToAdd {
-        CACHEABLE_ONLY,
-        UNIQUE_ONLY,
-        ALL
+        CACHEABLE_ONLY, // Only add the cacheable tags
+        UNIQUE_ONLY,    // Only add the unique tags
+        ALL             // Add all the tags
     };
 
     /**
