@@ -465,7 +465,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     public CacheFileStatus getCacheFileStatus(HttpServletRequest request, File file)
     {
         if ((file == null) || (!file.exists()))
-            return CacheFileStatus.DIRTY;   // Error - cache doesn't exist
+            return CacheFileStatus.DIRTY;   // Cache doesn't exist
         String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
         Date lastModified = new Date(file.lastModified());
         try {
@@ -479,8 +479,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         }
         if ((lastBundleChange == null)
                 || (lastBundleChange.after(lastModified)))
-                    return CacheFileStatus.UNCHANGED;
-        return CacheFileStatus.DIRTY;
+                    return CacheFileStatus.UNCHANGED;  // Bundles haven't changed since jnlp was last set up
+        return CacheFileStatus.DIRTY;       // Jnlp file has definitely changed
     }
     /**
      * Does this cached file contain the same codebase?
