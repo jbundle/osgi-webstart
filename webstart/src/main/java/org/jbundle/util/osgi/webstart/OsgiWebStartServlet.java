@@ -280,18 +280,18 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 			
 			StringBuilder sbBase = new StringBuilder();
             StringBuilder sbUnique = new StringBuilder();
-			boolean containsUniqueParams = this.getJnlpCacheFilenames(request, sbBase, sbUnique);
+			this.getJnlpCacheFilenames(request, sbBase, sbUnique);
             File jnlpBaseCacheFile = getBundleContext().getDataFile(sbBase.toString());
-            File jnlpUniqueCacheFile = containsUniqueParams ? getBundleContext().getDataFile(sbUnique.toString()) : null;
+            File jnlpUniqueCacheFile = (!sbUnique.equals(sbBase)) ? getBundleContext().getDataFile(sbUnique.toString()) : jnlpBaseCacheFile;
 
-            if (sendCacheIfCurrent(request, response, containsUniqueParams ? jnlpUniqueCacheFile : jnlpBaseCacheFile))
+            if (sendCacheIfCurrent(request, response, jnlpUniqueCacheFile))
                 return true;   // Returned the cached jnlp or a cache up-to-date response
 			
             IMarshallingContext marshaller = jc.createMarshallingContext();
             marshaller.setIndent(4);
             
             BundleChangeStatus bundleStatus = BundleChangeStatus.UNKNOWN;
-            TagsToAdd tagsToCache = containsUniqueParams ? TagsToAdd.CACHEABLE_ONLY : TagsToAdd.ALL;  // If no unique tags, cache everything
+            TagsToAdd tagsToCache = (jnlpBaseCacheFile != jnlpUniqueCacheFile) ? TagsToAdd.CACHEABLE_ONLY : TagsToAdd.ALL;  // If no unique tags, cache everything
 
             if (jnlpBaseCacheFile.exists())
 			{    // Start from the cache file
@@ -335,7 +335,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if ((bundleStatus == BundleChangeStatus.PARTIAL) || (bundleStatus == BundleChangeStatus.ALL))
 			    this.cacheThisJnlp(marshaller, jnlp, jnlpBaseCacheFile); // Template changed, re-cache it
 
-            if (!containsUniqueParams)
+            if (jnlpBaseCacheFile == jnlpUniqueCacheFile)
             {
                 if (bundleStatus == BundleChangeStatus.NONE)
                     if (checkCacheAndSend(request, response, jnlpBaseCacheFile, true))
@@ -564,7 +564,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         if (mainPackage == null)
             mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, APPLET_CLASS, null), false);
         if (mainPackage != null)
-            sbBase.append("mainPackage").append(mainPackage);
+        {
+            sbBase.append('&').append("mainPackage").append('=').append(mainPackage);
+            sbUnique.append('&').append("mainPackage").append('=').append(mainPackage);
+        }
         String hash = Integer.toString(sbBase.toString().hashCode()).replace('-', 'a');
         sbBase.delete(0, sbBase.length());
         sbBase.append(BASE_CACHE_FILE_PREFIX).append(hash).append(".jnlp");
