@@ -158,6 +158,9 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 
     Date lastBundleChange = null;
 
+    /**
+     * Status of the bundles for this jnlp
+     */
     enum BundleChangeStatus {
         UNKNOWN,    // Unknown
         NONE,       // Cached bundle matches request
@@ -165,12 +168,18 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         ALL         // Request is completely different from cached jnlp
     };
     
-    enum TagsToAdd {
+    /**
+     * XML Elements to change in the jnlp
+     */
+    enum ElementsToChange {
         CACHEABLE_ONLY, // Only add the cacheable tags
         UNIQUE_ONLY,    // Only add the unique tags
         ALL             // Add all the tags
     };
 
+    /**
+     * Current cache file status
+     */
     enum CacheFileStatus {
         CURRENT,    // Status matches jnlp file
         UNCHANGED,  // Bundles haven't changed since jnlp was last set up
@@ -291,7 +300,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             marshaller.setIndent(4);
             
             BundleChangeStatus bundleStatus = BundleChangeStatus.UNKNOWN;
-            TagsToAdd tagsToCache = (jnlpBaseCacheFile != jnlpUniqueCacheFile) ? TagsToAdd.CACHEABLE_ONLY : TagsToAdd.ALL;  // If no unique tags, cache everything
+            ElementsToChange elementsToChange = (jnlpBaseCacheFile != jnlpUniqueCacheFile) ? ElementsToChange.CACHEABLE_ONLY : ElementsToChange.ALL;  // If no unique tags, cache everything
 
             if (jnlpBaseCacheFile.exists())
 			{    // Start from the cache file
@@ -300,16 +309,16 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
                 inStream.close();
                 
-                CacheFileStatus baseCacheStatus = getCacheFileStatus(request, jnlpBaseCacheFile);
-                if (baseCacheStatus == CacheFileStatus.CURRENT)
+                CacheFileStatus baseCacheFileStatus = getCacheFileStatus(request, jnlpBaseCacheFile);
+                if (baseCacheFileStatus == CacheFileStatus.CURRENT)
                 {
                     bundleStatus = BundleChangeStatus.NONE;  // Cacheable section is already up-to-date
                 }
                 else
                 {
-                    bundleStatus = setupJnlp(jnlp, request, response, false, tagsToCache, baseCacheStatus); // Compare with the current jnlp file
+                    bundleStatus = setupJnlp(jnlp, request, response, false, elementsToChange, baseCacheFileStatus); // Compare with the current jnlp file
                     if (bundleStatus == BundleChangeStatus.PARTIAL)
-                        setupJnlp(jnlp, request, response, true, tagsToCache, CacheFileStatus.DIRTY);  // Something changed, need to rescan everything
+                        setupJnlp(jnlp, request, response, true, elementsToChange, CacheFileStatus.DIRTY);  // Something changed, need to rescan everything
                 }
                 jnlp.setCodebase(getCodebase(request));     // codebase is ALWAYS the source
 			}
@@ -325,7 +334,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 }
                 else
                     jnlp = new Jnlp();  // Start from an empty file
-			    bundleStatus = setupJnlp(jnlp, request, response, true, tagsToCache, CacheFileStatus.DIRTY); // Create the base jnlp file
+			    bundleStatus = setupJnlp(jnlp, request, response, true, elementsToChange, CacheFileStatus.DIRTY); // Create the base jnlp file
 			}
             if (bundleStatus == BundleChangeStatus.UNKNOWN) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
@@ -343,7 +352,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             }
             else
             {
-                setupJnlp(jnlp, request, response, false, TagsToAdd.UNIQUE_ONLY, CacheFileStatus.DIRTY);  // Add the unique params - this is fast
+                setupJnlp(jnlp, request, response, false, ElementsToChange.UNIQUE_ONLY, CacheFileStatus.DIRTY);  // Add the unique params - this is fast
                 if (bundleStatus == BundleChangeStatus.NONE)
                 {
                     if (!jnlpUniqueCacheFile.exists())
@@ -456,11 +465,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         return true;    // Success - I returned the cached copy
     }
     /**
-     * Return http response that the cache is up-to-date.
+     * Is the cache file up-to-date.
      * @param request
-     * @param response
-     * @return
-     * @throws IOException
+     * @param file
+     * @return CURRENT - Same as last http request, UNCHANGED since last request (from other client?), DIRTY - changed
      */
     public CacheFileStatus getCacheFileStatus(HttpServletRequest request, File file)
     {
@@ -578,11 +586,15 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     }
     /**
      * Populate the Jnlp xml.
-     * @param jnlp
-     * @param request
+     * @param jnlp The jnlp to modify
+     * @param request The http request
+     * @param response The http response
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
+     * @param elementsToChange Which xml elements should I change?
+     * @param baseCacheStatus The current cache file status
+     * @return How much have I changed this jnlp?
      */
-    protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, TagsToAdd cachableParamsOnly, CacheFileStatus baseCacheStatus)
+    protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, ElementsToChange elementsToChange, CacheFileStatus baseCacheStatus)
     {
         BundleChangeStatus bundleChangeStatus = BundleChangeStatus.UNKNOWN;
 
@@ -600,7 +612,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             getResource(jnlp, true);   // Clear the resource entries and create a new one
         
         Bundle bundle = null;
-        if ((cachableParamsOnly == TagsToAdd.CACHEABLE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
+        if ((elementsToChange == ElementsToChange.CACHEABLE_ONLY) || (elementsToChange == ElementsToChange.ALL))
         {   // base params
             String version = getRequestParam(request, VERSION, null);
             
@@ -617,7 +629,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     		setCachableInformation(jnlp, bundle, request);
         }
 
-        if ((cachableParamsOnly == TagsToAdd.UNIQUE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
+        if ((elementsToChange == ElementsToChange.UNIQUE_ONLY) || (elementsToChange == ElementsToChange.ALL))
         {   // Unique params
             jnlp.setCodebase(getCodebase(request));
     		jnlp.setHref(getHref(request) + '?' + request.getQueryString());
@@ -633,7 +645,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             addProperties(request, response, jnlp);
         }
 
-        if ((cachableParamsOnly == TagsToAdd.CACHEABLE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
+        if ((elementsToChange == ElementsToChange.CACHEABLE_ONLY) || (elementsToChange == ElementsToChange.ALL))
         {   // base params
             String pathToJars = getPathToJars(request);
             Set<Bundle> bundles = new HashSet<Bundle>();    // Initial empty Bundle list
@@ -655,7 +667,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     		bundleChangeStatus = addComponents(request, response, jnlp, components, bundles, bundleChangeStatus, pathToJars);
         }
         
-        if ((cachableParamsOnly == TagsToAdd.UNIQUE_ONLY) || (cachableParamsOnly == TagsToAdd.ALL))
+        if ((elementsToChange == ElementsToChange.UNIQUE_ONLY) || (elementsToChange == ElementsToChange.ALL))
         {   // Unique params
             if (getRequestParam(request, MAIN_CLASS, null) != null)
     			setApplicationDesc(jnlp, mainClass, request);
