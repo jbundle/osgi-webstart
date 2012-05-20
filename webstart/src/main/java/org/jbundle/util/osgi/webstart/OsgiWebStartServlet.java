@@ -171,7 +171,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         ALL             // Add all the tags
     };
 
-    enum CacheStatus {
+    enum CacheFileStatus {
         CURRENT,    // Status matches jnlp file
         UNCHANGED,  // Bundles haven't changed since jnlp was last set up
         DIRTY       // Jnlp file has definitely changed
@@ -300,8 +300,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
                 inStream.close();
                 
-                CacheStatus baseCacheStatus = isCurrent(request, jnlpBaseCacheFile);
-                if (baseCacheStatus == CacheStatus.CURRENT)
+                CacheFileStatus baseCacheStatus = getCacheFileStatus(request, jnlpBaseCacheFile);
+                if (baseCacheStatus == CacheFileStatus.CURRENT)
                 {
                     bundleStatus = BundleChangeStatus.NONE;  // Cacheable section is already up-to-date
                 }
@@ -309,7 +309,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 {
                     bundleStatus = setupJnlp(jnlp, request, response, false, tagsToCache, baseCacheStatus); // Compare with the current jnlp file
                     if (bundleStatus == BundleChangeStatus.PARTIAL)
-                        setupJnlp(jnlp, request, response, true, tagsToCache, CacheStatus.DIRTY);  // Something changed, need to rescan everything
+                        setupJnlp(jnlp, request, response, true, tagsToCache, CacheFileStatus.DIRTY);  // Something changed, need to rescan everything
                 }
                 jnlp.setCodebase(getCodebase(request));     // codebase is ALWAYS the source
 			}
@@ -325,7 +325,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 }
                 else
                     jnlp = new Jnlp();  // Start from an empty file
-			    bundleStatus = setupJnlp(jnlp, request, response, true, tagsToCache, CacheStatus.DIRTY); // Create the base jnlp file
+			    bundleStatus = setupJnlp(jnlp, request, response, true, tagsToCache, CacheFileStatus.DIRTY); // Create the base jnlp file
 			}
             if (bundleStatus == BundleChangeStatus.UNKNOWN) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
@@ -343,7 +343,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             }
             else
             {
-                setupJnlp(jnlp, request, response, false, TagsToAdd.UNIQUE_ONLY, CacheStatus.DIRTY);  // Add the unique params - this is fast
+                setupJnlp(jnlp, request, response, false, TagsToAdd.UNIQUE_ONLY, CacheFileStatus.DIRTY);  // Add the unique params - this is fast
                 if (bundleStatus == BundleChangeStatus.NONE)
                 {
                     if (!jnlpUniqueCacheFile.exists())
@@ -419,7 +419,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         if ((file == null) || (!file.exists()))
             return false;   // Error - cache doesn't exist
         
-        if (isCurrent(request, file) == CacheStatus.CURRENT)
+        if (getCacheFileStatus(request, file) == CacheFileStatus.CURRENT)
         {   // Not modified since last time
             response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
             response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
@@ -462,25 +462,25 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @return
      * @throws IOException
      */
-    public CacheStatus isCurrent(HttpServletRequest request, File file)
+    public CacheFileStatus getCacheFileStatus(HttpServletRequest request, File file)
     {
         if ((file == null) || (!file.exists()))
-            return CacheStatus.DIRTY;   // Error - cache doesn't exist
+            return CacheFileStatus.DIRTY;   // Error - cache doesn't exist
         String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
         Date lastModified = new Date(file.lastModified());
         try {
             if (requestIfModifiedSince!=null) {
                 Date requestDate = getDateFromHttpDate(requestIfModifiedSince);
                     if (!requestDate.before(lastModified))
-                        return CacheStatus.CURRENT;   // Not modified since last time
+                        return CacheFileStatus.CURRENT;   // Not modified since last time
             }
         } catch (ParseException e) {
             // Fall through
         }
         if ((lastBundleChange == null)
                 || (lastBundleChange.after(lastModified)))
-                    return CacheStatus.UNCHANGED;
-        return CacheStatus.DIRTY;
+                    return CacheFileStatus.UNCHANGED;
+        return CacheFileStatus.DIRTY;
     }
     /**
      * Does this cached file contain the same codebase?
@@ -582,7 +582,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @param request
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
      */
-    protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, TagsToAdd cachableParamsOnly, CacheStatus baseCacheStatus)
+    protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, TagsToAdd cachableParamsOnly, CacheFileStatus baseCacheStatus)
     {
         BundleChangeStatus bundleChangeStatus = BundleChangeStatus.UNKNOWN;
 
@@ -604,7 +604,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         {   // base params
             String version = getRequestParam(request, VERSION, null);
             
-            if (baseCacheStatus == CacheStatus.UNCHANGED)
+            if (baseCacheStatus == CacheFileStatus.UNCHANGED)
             {   // if bundles haven't changed, try to see if the cache is okay for this request
 //+                if (updateRequestInformation(jnlp, request))
 //+                    return;
