@@ -293,14 +293,14 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             File jnlpBaseCacheFile = getBundleContext().getDataFile(sbBase.toString());
             File jnlpUniqueCacheFile = (!sbUnique.equals(sbBase)) ? getBundleContext().getDataFile(sbUnique.toString()) : jnlpBaseCacheFile;
 
-            if (sendCacheIfCurrent(request, response, jnlpUniqueCacheFile))
+            if (sendJnlpCacheIfCurrent(request, response, jnlpUniqueCacheFile))
                 return true;   // Returned the cached jnlp or a cache up-to-date response
 			
             IMarshallingContext marshaller = jc.createMarshallingContext();
             marshaller.setIndent(4);
             
             BundleChangeStatus bundleStatus = BundleChangeStatus.UNKNOWN;
-            ElementsToChange elementsToChange = (jnlpBaseCacheFile != jnlpUniqueCacheFile) ? ElementsToChange.CACHEABLE_ONLY : ElementsToChange.ALL;  // If no unique tags, cache everything
+            ElementsToChange elementsToChange = (jnlpBaseCacheFile == jnlpUniqueCacheFile) ? ElementsToChange.ALL : ElementsToChange.CACHEABLE_ONLY;  // If no unique tags, change everything
 
             if (jnlpBaseCacheFile.exists())
 			{    // Start from the cache file
@@ -347,7 +347,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if (jnlpBaseCacheFile == jnlpUniqueCacheFile)
             {
                 if (bundleStatus == BundleChangeStatus.NONE)
-                    if (checkCacheAndSend(request, response, jnlpBaseCacheFile, true))
+                    if (checkCacheAndSend(request, response, jnlpBaseCacheFile, true, true))
                         return true;   // Returned the cached jnlp or a cache up-to-date response
             }
             else
@@ -406,7 +406,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @return
      * @throws IOException
      */
-    public boolean sendCacheIfCurrent(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
+    public boolean sendJnlpCacheIfCurrent(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
     {
         if (!file.exists())
             return false;
@@ -414,16 +414,16 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         if ((lastBundleChange == null)
             || (lastBundleChange.after(lastModified)))
                 return false;
-        return checkCacheAndSend(request, response, file, false);
+        return checkCacheAndSend(request, response, file, false, true);
     }
     /**
-     * Return http response that the cache is up-to-date.
+     * Return http response that the cache file is up-to-date.
      * @param request
      * @param response
      * @return
      * @throws IOException
      */
-    public boolean checkCacheAndSend(HttpServletRequest request, HttpServletResponse response, File file, boolean checkFileDate) throws IOException
+    public boolean checkCacheAndSend(HttpServletRequest request, HttpServletResponse response, File file, boolean checkFileDate, boolean fixCodebase) throws IOException
     {
         if ((file == null) || (!file.exists()))
             return false;   // Error - cache doesn't exist
@@ -438,19 +438,21 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         Date lastModified = new Date(file.lastModified());
         response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
 
-        String newCodebase = fixCodebase(request, file);
-        if (newCodebase != null)
+        String newCodebase = null;
+        if (fixCodebase)
+            newCodebase = fixCodebase(request, file);
+        if (newCodebase == null)
         {
-            Reader inStream = new StringReader(newCodebase);
-            Writer writer = response.getWriter();
+            InputStream inStream = new FileInputStream(file);   // If they want it again, send them my cached copy
+            OutputStream writer = response.getOutputStream();
             copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
             inStream.close();
             writer.close();
         }
         else
         {
-            InputStream inStream = new FileInputStream(file);   // If they want it again, send them my cached copy
-            OutputStream writer = response.getOutputStream();
+            Reader inStream = new StringReader(newCodebase);
+            Writer writer = response.getWriter();
             copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
             inStream.close();
             writer.close();
@@ -460,7 +462,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             if ((lastBundleChange != null)
                 && (lastBundleChange.after(lastModified)))
                 file.setLastModified(lastBundleChange.getTime());   // Make sure this file is up-to-date for the next checkBundleChanges call
-            return true;   // Returned the cached jnlp or a cache up-to-date response
+            return true;   // I returned the cached jnlp or a cache up-to-date response
         }
         return true;    // Success - I returned the cached copy
     }
@@ -576,13 +578,19 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             sbBase.append('&').append("mainPackage").append('=').append(mainPackage);
             sbUnique.append('&').append("mainPackage").append('=').append(mainPackage);
         }
-        String hash = Integer.toString(sbBase.toString().hashCode()).replace('-', 'a');
-        sbBase.delete(0, sbBase.length());
-        sbBase.append(BASE_CACHE_FILE_PREFIX).append(hash).append(".jnlp");
-        hash = Integer.toString(sbUnique.toString().hashCode()).replace('-', 'a');
-        sbUnique.delete(0, sbUnique.length());
-        sbUnique.append(UNIQUE_CACHE_FILE_PREFIX).append(hash).append(".jnlp");
+        getHashFileName(sbBase, BASE_CACHE_FILE_PREFIX);
+        getHashFileName(sbUnique, UNIQUE_CACHE_FILE_PREFIX);
         return containsUniqueParams;
+    }
+    /**
+     * Calculate the cache file name from this url.
+     */
+    StringBuilder getHashFileName(StringBuilder sbURL, String filePrefix)
+    {
+        String hash = Integer.toString(sbURL.toString().hashCode()).replace('-', 'a');
+        sbURL.delete(0, sbURL.length());
+        sbURL.append(filePrefix).append(hash).append(".jnlp");
+        return sbURL;
     }
     /**
      * Populate the Jnlp xml.
@@ -591,10 +599,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @param response The http response
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @param elementsToChange Which xml elements should I change?
-     * @param baseCacheStatus The current cache file status
+     * @param baseCacheFileStatus The current cache file status
      * @return How much have I changed this jnlp?
      */
-    protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, ElementsToChange elementsToChange, CacheFileStatus baseCacheStatus)
+    protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, ElementsToChange elementsToChange, CacheFileStatus baseCacheFileStatus)
     {
         BundleChangeStatus bundleChangeStatus = BundleChangeStatus.UNKNOWN;
 
@@ -616,7 +624,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         {   // base params
             String version = getRequestParam(request, VERSION, null);
             
-            if (baseCacheStatus == CacheFileStatus.UNCHANGED)
+            if (baseCacheFileStatus == CacheFileStatus.UNCHANGED)
             {   // if bundles haven't changed, try to see if the cache is okay for this request
 //+                if (updateRequestInformation(jnlp, request))
 //+                    return;
@@ -1519,7 +1527,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 //            response.sendError(HttpServletResponse.SC_NOT_FOUND);   // Return a 'file not found' error
     		return false;
     	}
-    	return this.checkCacheAndSend(request, response, file, false);
+    	return this.checkCacheAndSend(request, response, file, false, false);
     }
     public static final String DEFAULT_APPLET_PATH = "/docs/applet.html";
 
