@@ -278,9 +278,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 		response.setContentType(JNLP_MIME_TYPE);
 		
 	    try {
-			IBindingFactory jc = BindingDirectory.getFactory(Jnlp.class);
-			Jnlp jnlp = null;
-			
 			StringBuilder sbBase = new StringBuilder();
             StringBuilder sbUnique = new StringBuilder();
 			this.getJnlpCacheFilenames(request, sbBase, sbUnique);
@@ -293,8 +290,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 if (sendJnlpCacheIfCurrent(request, response, jnlpUniqueCacheFile))
                     return true;   // Returned the cached jnlp or a 'http cache up-to-date' response
 			
+            IBindingFactory jc = BindingDirectory.getFactory(Jnlp.class);
             IMarshallingContext marshaller = jc.createMarshallingContext();
             marshaller.setIndent(4);
+            Jnlp jnlp = null;
             
             BundleChangeStatus bundleChangeStatus = BundleChangeStatus.UNKNOWN;
 
@@ -447,7 +446,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             OutputStream writer = response.getOutputStream();
             copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
             inStream.close();
-//            writer.close();
+//            writer.close();   // Don't close http connection
             if (DEBUG)
                 if (jnlpFile)
                     debugWriteStream(new FileInputStream(file));
@@ -458,7 +457,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             Writer writer = response.getWriter();
             copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
             inStream.close();
-//            writer.close();
+//            writer.close();   // Don't close http connection
             if (DEBUG)
                 debugWriteStream(new StringReader(newCodebase));
         }
