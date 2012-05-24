@@ -494,8 +494,8 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         }
         if ((lastBundleChange == null)
             || (lastBundleChange.after(lastModified)))
-                return ElementsToChange.NONE;  // Bundles haven't changed since jnlp was last set up
-        return ElementsToChange.CACHEABLE;       // Jnlp file has definitely changed
+                return ElementsToChange.CACHEABLE;       // Jnlp file has definitely changed
+        return ElementsToChange.NONE;  // Bundles haven't changed since jnlp was last set up
     }
     /**
      * Does this cached file contain the same codebase?
