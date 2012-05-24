@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.SimpleTimeZone;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -564,12 +566,22 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         // sbBase.append(getHref(request)).append('/');    // Don't use the base url
         // sb.append(request.getQueryString());
         Enumeration<String> e = request.getParameterNames();
+        SortedSet<String> names = new TreeSet<String>();
         while (e.hasMoreElements())
+        {	// Sort the params
+        	names.add(e.nextElement());
+        }
+        for (String paramName : names)
         {
-            String paramName = e.nextElement();
             if (isCachableParam(paramName))
-                sbBase.append('&').append(paramName).append('=').append(request.getParameter(paramName));
-            sbUnique.append('&').append(paramName).append('=').append(request.getParameter(paramName));
+            {
+            	if (sbBase.length() > 0)
+            		sbBase.append('&');
+                sbBase.append(paramName).append('=').append(request.getParameter(paramName));
+            }
+        	if (sbUnique.length() > 0)
+        		sbUnique.append('&');
+            sbUnique.append(paramName).append('=').append(request.getParameter(paramName));
         }
         String mainPackage = ClassFinderActivator.getPackageName(this.getRequestParam(request, MAIN_CLASS, null), false);
         if (mainPackage == null)
