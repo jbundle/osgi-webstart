@@ -3,31 +3,23 @@
  */
 package org.jbundle.util.osgi.webstart;
 
-import static java.util.jar.JarFile.MANIFEST_NAME;
-
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -36,21 +28,11 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.SimpleTimeZone;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
-import java.util.jar.Pack200;
-import java.util.jar.Pack200.Packer;
-import java.util.jar.Pack200.Unpacker;
-import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -60,11 +42,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.jbundle.util.osgi.ClassFinder;
-import org.jbundle.util.osgi.ClassService;
 import org.jbundle.util.osgi.finder.ClassFinderActivator;
 import org.jbundle.util.osgi.finder.ClassServiceUtility;
-import org.jbundle.util.webapp.base.BaseOsgiServlet;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IMarshallingContext;
@@ -100,25 +79,16 @@ import org.jibx.schema.net.java.jnlp_6_0.Vendor;
 import org.jibx.schema.net.java.jnlp_6_0._Package;
 import org.jibx.schema.net.java.jnlp_6_0._Package.Recursive;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 
 /**
  * OSGi to Web Start translation Servlet.
- * Note: Is it not required that this inherits from JnlpDownloadServlet,
- * I was hoping to using some of that code, but most of the useful stuff is private.
- * I do call JnlpDownloadServlet methods if I don't know what to do with the call.
- * Note: This is designed to override the JnlpDownloadServlet. I just a little 
- * apprehensive about the licensing if I wrap the (sun) code in an OSGi wrapper. 
- * @author don
+ * @author doncorley <don@tourgeek.com>
  *
  */
-public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
+public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet*/
 {
 	private static final long serialVersionUID = 1L;
-	public static boolean DEBUG = false;
 
     public static final String JNLP_MIME_TYPE = "application/x-java-jnlp-file";
     public static final String OUTPUT_ENCODING = "UTF-8";
@@ -135,6 +105,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     public static final String TEMPLATE = "template";
     
     // Optional params
+    public static final String CODEBASE = "codebase";
     public static final String TITLE = "title";
     public static final String VENDOR = "vendor";
     public static final String HOME_PAGE = "homePage";
@@ -150,7 +121,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     public static final String HEIGHT = "height";
     public static final String INCLUDE = "include";
     public static final String EXCLUDE = "exclude";
-    public static final String CODEBASE = "codebase";
     public static final String PROPERTIES_FILE = "webStartPropertiesFile";
     public static final String COMPONENTS = "webStartComponents";   // Jnlp component property files
     public static final String EXCLUDE_COMPONENTS = "excludeComponents";    // Exclude the bundles from these component files
@@ -158,8 +128,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     
     public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
     public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*|javax\\..*|org\\.xml\\.sax.*|org\\.w3c\\.dom.*|org\\.omg\\..*";
-
-    Date lastBundleChange = null;
 
     /**
      * Status of the bundles for this jnlp
@@ -204,34 +172,13 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      */
     public void init(Object context, String servicePid, Dictionary<String, String> properties) {
     	super.init(context, servicePid, properties);
-    	
-        lastBundleChange = new Date();
-    	listener = new BundleChangeListener(this);
-    	this.getBundleContext().addBundleListener(listener);
     }
     
-    BundleChangeListener listener = null;
-    public class BundleChangeListener implements BundleListener
-    {
-        OsgiWebStartServlet servlet = null;
-        public BundleChangeListener(OsgiWebStartServlet servlet)
-        {
-            this.servlet = servlet;
-        }
-        @Override
-        public void bundleChanged(BundleEvent event) {
-            if (event.getType() == BundleEvent.UPDATED)
-                servlet.lastBundleChange = new Date();   // Probably a better way to do this
-        }
-    }    
     /**
      * Free my resources.
      */
     public void free()
     {
-        if (getBundleContext() != null)
-            if (listener != null)
-                getBundleContext().removeBundleListener(listener);
         super.free();
     }
     /**
@@ -289,7 +236,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             removeCacheFileIfStale(request, jnlpUniqueCacheFile);
 
             if (jnlpUniqueCacheFile.exists())
-                if (sendJnlpCacheIfCurrent(request, response, jnlpUniqueCacheFile))
+                if (sendCacheIfCurrent(request, response, jnlpUniqueCacheFile))
                     return true;   // Returned the cached jnlp or a 'http cache up-to-date' response
 			
             IBindingFactory jc = BindingDirectory.getFactory(Jnlp.class);
@@ -383,163 +330,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         Writer fileWriter = new FileWriter(file);
         marshaller.marshalDocument(jnlp, OUTPUT_ENCODING, null, fileWriter);   // Cache jnlp
         fileWriter.close();
-    }
-    /**
-     * If there have not been any bundle changes, return the cached jnlp file.
-     * @param request
-     * @param file to check
-     * @return true if removed (stale)
-     */
-    public boolean removeCacheFileIfStale(HttpServletRequest request, File file) throws IOException
-    {
-        if (!file.exists())
-            return true;
-        Date lastModified = new Date(file.lastModified());
-        if ((lastBundleChange == null)
-            || (lastBundleChange.after(lastModified)))
-                return file.delete();
-        return false;   // File is not stale
-    }
-    /**
-     * If there have not been any bundle changes, return the cached jnlp file.
-     * @param request
-     * @param response
-     * @return true if send a response
-     * @throws IOException
-     */
-    public boolean sendJnlpCacheIfCurrent(HttpServletRequest request, HttpServletResponse response, File file) throws IOException
-    {
-        if (!file.exists())
-            return false;
-        Date lastModified = new Date(file.lastModified());
-        if ((lastBundleChange == null)
-            || (lastBundleChange.after(lastModified)))
-                return false;
-        return checkCacheAndSend(request, response, file, false, true);
-    }
-    /**
-     * Return http response that the cache file is up-to-date.
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
-    public boolean checkCacheAndSend(HttpServletRequest request, HttpServletResponse response, File file, boolean checkFileDate, boolean jnlpFile) throws IOException
-    {
-        if ((file == null) || (!file.exists()))
-            return false;   // Error - cache doesn't exist
-        
-        if (!hasFileChanged(request, file, false))
-        {   // Not modified since last time
-            response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
-            response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
-            return true;    // Success - use your cached copy
-        }
-        
-        Date lastModified = new Date(file.lastModified());
-        response.addHeader(LAST_MODIFIED, getHttpDate(lastModified));
-
-        String newCodebase = null;
-        if (jnlpFile)
-            newCodebase = fixCodebase(request, file);
-        if (newCodebase == null)
-        {
-            InputStream inStream = new FileInputStream(file);   // If they want it again, send them my cached copy
-            OutputStream writer = response.getOutputStream();
-            copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
-            inStream.close();
-//            writer.close();   // Don't close http connection
-            if (DEBUG)
-                if (jnlpFile)
-                    debugWriteStream(new FileInputStream(file));
-        }
-        else
-        {
-            Reader inStream = new StringReader(newCodebase);
-            Writer writer = response.getWriter();
-            copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things
-            inStream.close();
-//            writer.close();   // Don't close http connection
-            if (DEBUG)
-                debugWriteStream(new StringReader(newCodebase));
-        }
-        if (checkFileDate)
-        {
-            if ((lastBundleChange != null)
-                && (lastBundleChange.after(lastModified)))
-                    file.setLastModified(lastBundleChange.getTime());   // Make sure this file is up-to-date for the next checkBundleChanges call
-            return true;   // I returned the cached jnlp or a cache up-to-date response
-        }
-        return true;    // Success - I returned the cached copy
-    }
-    /**
-     * Is the cache file up-to-date.
-     * @param request
-     * @param file
-     * @return CURRENT - Same as last http request, UNCHANGED since last request (from other client?), DIRTY - changed
-     */
-    public boolean hasFileChanged(HttpServletRequest request, File jnlpBaseCacheFile, boolean checkBundleChanges)
-    {
-        if ((jnlpBaseCacheFile == null) || (!jnlpBaseCacheFile.exists()))
-            return true;   // Cache doesn't exist
-        Date lastModified = new Date(jnlpBaseCacheFile.lastModified());
-        String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
-        try {
-            if (requestIfModifiedSince != null) 
-            {
-                Date requestDate = getDateFromHttpDate(requestIfModifiedSince);
-                if (!requestDate.before(lastModified))
-                    return false;   // Not modified since last time
-            }
-        } catch (ParseException e) {
-            // Fall through
-        }
-        if (!checkBundleChanges)
-        	return true;	// The http cache is out-of-date
-    	if ((lastBundleChange == null)
-    			|| (lastBundleChange.after(lastModified)))
-            return true;       // Jnlp file has definitely changed
-        return false;  // Bundles haven't changed since jnlp was last set up
-    }
-    /**
-     * Does this cached file contain the same codebase?
-     * If not, fix the codebase and return the new jnlp string.
-     * If so, return null.
-     * @param request
-     * @param file
-     * @return
-     */
-    String CODEBASE_NAME = CODEBASE + "=\"";
-    public String fixCodebase(HttpServletRequest request, File file)
-    {
-        String requestCodebase = getJnlpCodebase(request);
-        try {
-            // If they want it again, send them my cached copy
-            Reader inStream = new FileReader(file);
-            StringWriter writer = new StringWriter();
-            copyStream(inStream, writer, true);
-            StringBuffer jnlpString = writer.getBuffer();
-            inStream.close();
-            writer.close();
-            if (jnlpString == null)
-                return null;
-            int start = jnlpString.indexOf(CODEBASE_NAME);
-            if (start == -1)
-                return null;
-            start = start + CODEBASE_NAME.length();
-            int end = jnlpString.indexOf("\"", start);
-            if (end == -1)
-                return null;
-            if (jnlpString.substring(start, end).equalsIgnoreCase(requestCodebase))
-                return null;    // same codebase = good
-            jnlpString.replace(start, end, requestCodebase);
-            return jnlpString.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
     /**
      * Is this a main (applet or application) jnlp?
@@ -697,23 +487,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         
 		return bundleChangeStatus;
     }
-    
-    /**
-     * Get the full codebase (including host and port) from the request path.
-     * By default, this is the servlet path (without the trailing '/')
-     * To change this, supply a 'codebase' parameter with your intended base path.
-     * @param request
-     * @return
-     */
-    private String getJnlpCodebase(HttpServletRequest request)
-    {
-        String urlprefix = getUrlPrefix(request);
-        String codebase = this.getRequestParam(request, CODEBASE, null);
-        if ((codebase == null) || (codebase.length() == 0))
-            codebase = "/";
-        return urlprefix + codebase;
-    }
-    
+        
     /**
      * Get the jnlp href prefix to this servlet.
      * If a codebase was specified, this must
@@ -768,24 +542,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             rootPathToFix = rootPathToFix.substring(1);
         return rootPathToFix;
     }
-    /**
-     *  This code is heavily inspired by the stuff in HttpUtils.getRequestURL
-     */
-    private String getUrlPrefix(HttpServletRequest request) {
-        StringBuffer url = new StringBuffer();
-        String scheme = request.getScheme();
-        int port = request.getServerPort();
-        url.append(scheme);		// http, https
-        url.append("://");
-        url.append(request.getServerName());
-        if ((scheme.equals("http") && port != 80)
-	    || (scheme.equals("https") && port != 443)) {
-            url.append(':');
-            url.append(request.getServerPort());
-        }
-        return url.toString();
-    }
-
     /**
      * Set up the jnlp information fields.
      * @param jnlp
@@ -955,30 +711,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             java.setMaxHeapSize(getRequestParam(request, MAX_HEAP_SIZE, null));
 	}
     
-    /**
-     * Call the osgi utility to find the bundle for this package and version.
-     * @param packageName
-     * @param versionRange
-     * @return
-     */
-	public Bundle findBundle(String packageName, String versionRange)
-	{
-		ClassService classService = ClassServiceUtility.getClassService();
-		if (classService == null)
-			return null;	// Never
-		ClassFinder classFinder = classService.getClassFinder(getBundleContext());
-		if (classFinder == null)
-			return null;
-		Bundle bundle = (Bundle)classFinder.findBundle(null, getBundleContext(), packageName, versionRange);
-		if (bundle == null)
-		{
-	        Object resource = classFinder.deployThisResource(packageName, versionRange, false);    // Deploy, but do not start the bundle
-	        if (resource != null)
-	        	bundle = (Bundle)classFinder.findBundle(resource, getBundleContext(), packageName, versionRange);
-		}
-		return bundle;
-	}
-	
 	/**
 	 * Has the bundle been added yet?
 	 * @param bundle
@@ -1056,299 +788,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
 		}
 		return bundleChanged;
 	}
-	
-	/**
-	 * Get this bundle header property.
-	 * @param bundle
-	 * @param property
-	 * @return
-	 */
-	public static String getBundleProperty(Bundle bundle, String property)
-	{
-	    if (bundle == null)
-	        return null;
-		return (String)bundle.getHeaders().get(property);
-	}
-	public static final String MANIFEST_DIR = "META-INF/";
-	public static final String MANIFEST_PATH = MANIFEST_DIR + "MANIFEST.MF";
-    public static final int ONE_SEC_IN_MS = 1000;
-	
-	/**
-	 * Create a jar for this bundle and move all the classes to the new jar.
-	 * Note: I followed the same logic as in the java jar tool.
-	 * @param bundle
-	 * @param filename
-	 * @param forceScanBundle Scan the bundle for package names even if the cache is current
-	 * @param pack Also do a pack gzip on the jar.
-	 * @return All the package names in the bundle or null if I am using the cached jar.
-	 */
-	public String[] moveBundleToJar(Bundle bundle, String filename, boolean forceScanBundle, boolean pack)
-	{
-        File fileOut = getBundleContext().getDataFile(filename);
-        boolean createNewJar = true;
-        if (fileOut.exists())
-            if (bundle.getLastModified() <= (fileOut.lastModified() + ONE_SEC_IN_MS))   // File sys is usually accurate to sec 
-            {
-                createNewJar = false;
-                if (!forceScanBundle)
-                    return null;    // Use cached jar file
-            }
-        
-        Set<String> packages = new HashSet<String>();
-		try {
-			Manifest manifest = null;
-			String path = MANIFEST_PATH;
-			URL url = bundle.getEntry(path);
-			JarOutputStream zos = null;
-			if (createNewJar)
-			{
-    			InputStream in = null;
-    			if (url != null)
-    			{
-    				try {
-    					in = url.openStream();
-    				} catch (Exception e) {
-    					e.printStackTrace();
-    				}
-    			}
-    			if (in != null)
-    			{
-                    manifest = new Manifest(new BufferedInputStream(in));
-                } else {
-                    manifest = new Manifest();
-                }
-    			
-    			FileOutputStream out = new FileOutputStream(fileOut);
-    			
-    	        zos = new JarOutputStream(out);
-    	        if (manifest != null) {
-    	            JarEntry e = new JarEntry(MANIFEST_DIR);
-    	            e.setTime(System.currentTimeMillis());
-    	            e.setSize(0);
-    	            e.setCrc(0);
-    	            zos.putNextEntry(e);
-    	            e = new JarEntry(MANIFEST_NAME);
-    	            e.setTime(System.currentTimeMillis());
-    	            zos.putNextEntry(e);
-    	            manifest.write(zos);
-    	            zos.closeEntry();
-    	        }
-			}
-			String paths = "/";
-			String filePattern = "*";
-			@SuppressWarnings("unchecked")
-			Enumeration<URL> entries = bundle.findEntries(paths, filePattern, true);
-			while (entries.hasMoreElements())
-			{
-				url = entries.nextElement();
-				String name = url.getPath();
-				if (name.startsWith("/"))
-					name = name.substring(1);
-    		    name = entryName(name);
-    	        if (name.equals("") || name.equals("."))
-    	            continue;
-    	        if ((name.equalsIgnoreCase(MANIFEST_DIR)) || (name.equalsIgnoreCase(MANIFEST_PATH)))
-            		continue;
-                boolean isDir = name.endsWith("/");
-    	        if (createNewJar)
-    	        {
-        	        long size = isDir ? 0 : -1; // ***????****  file.length();
-        	        JarEntry e = new JarEntry(name);
-        	        e.setTime(fileOut.lastModified()); //???
-        	        if (size == 0) {
-        	            e.setMethod(JarEntry.STORED);
-        	            e.setSize(0);
-        	            e.setCrc(0);
-        	        }
-        	        zos.putNextEntry(e);
-        	        if (!isDir) {
-        		        InputStream inStream = url.openStream();
-        		        copyStream(inStream, zos, false);
-        	            inStream.close();
-        	        }
-        	        zos.closeEntry();
-    	        }
-    	        
-    	        if (!isDir)
-    	            if (!(name.toUpperCase().startsWith(MANIFEST_DIR)))
-    	        		packages.add(getPackageFromName(name));
-			}
-			if (zos != null)
-			    zos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-        if ((createNewJar) && (pack))
-		    this.packJar(fileOut.getPath(), false);   // I use that original jar for debugging
-		
-		return packages.toArray(EMPTY_ARRAY);
-	}
-	/**
-	 * Pack and gzip this jar file.
-	 * Note: Most of this code comes from the oracle (thanks!) sample at:
-	 * http://docs.oracle.com/javase/1.5.0/docs/api/java/util/jar/Pack200.html
-	 * Note: I pack and then unpack to recreate the original jar since pack messes up the magic number.
-	 * @param jarFileName
-	 */
-	public void packJar(String jarFileName, boolean modifyOriginalJar)
-	{
-	    String packFileName = jarFileName + ".pack";
-	    Packer packer = Pack200.newPacker();
-
-	    // Initialize the state by setting the desired properties
-	    Map<String,String> p = packer.properties();
-	    // take more time choosing codings for better compression
-	    p.put(Packer.EFFORT, "7");  // default is "5"
-	    // use largest-possible archive segments (>10% better compression).
-	    p.put(Packer.SEGMENT_LIMIT, "-1");
-	    // reorder files for better compression.
-	    p.put(Packer.KEEP_FILE_ORDER, Packer.FALSE);
-	    // smear modification times to a single value.
-	    p.put(Packer.MODIFICATION_TIME, Packer.LATEST);
-	    // ignore all JAR deflation requests,
-	    // transmitting a single request to use "store" mode.
-	    p.put(Packer.DEFLATE_HINT, Packer.FALSE);
-	    // discard debug attributes
-	    p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
-	    // throw an error if an attribute is unrecognized
-	    p.put(Packer.UNKNOWN_ATTRIBUTE, Packer.ERROR);
-	    // pass one class file uncompressed:
-	    p.put(Packer.PASS_FILE_PFX+0, "mutants/Rogue.class");
-	    try {
-	        JarFile jarFile = new JarFile(jarFileName);
-	        FileOutputStream fos = new FileOutputStream(packFileName);
-	        // Call the packer
-	        packer.pack(jarFile, fos);
-	        jarFile.close();
-	        fos.close();
-	        
-	        File f = new File(packFileName);
-	        String reJaredFileName = jarFileName;
-	        if (!modifyOriginalJar)
-	            reJaredFileName = reJaredFileName + ".temp";
-	        FileOutputStream fostream = new FileOutputStream(reJaredFileName);
-	        JarOutputStream jostream = new JarOutputStream(fostream);
-	        Unpacker unpacker = Pack200.newUnpacker();
-	        // Call the unpacker
-	        unpacker.unpack(f, jostream);
-	        // Must explicitly close the output.
-	        jostream.close();
-	        // Need to repack it so the new magic number will be correct
-            jarFile = new JarFile(reJaredFileName);
-            fos = new FileOutputStream(packFileName);
-            // Call the packer
-            packer.pack(jarFile, fos);
-            jarFile.close();
-            fos.close();	        
-            if (!modifyOriginalJar)
-            {
-                File reJaredFile = new File(reJaredFileName);
-                reJaredFile.delete();   // Delete the temp jar file
-            }
-	    } catch (IOException ioe) {
-	        ioe.printStackTrace();
-	    }
-	    
-	    this.gzipFile(packFileName);
-	    // Delete the pack file
-        File packFile = new File(packFileName);
-        packFile.delete();
-	}
-	/**
-	 * GZip this pack file.
-	 * @param pathName
-	 */
-	public void gzipFile(String pathName)
-	{
-	    try {
-            InputStream inStream = new FileInputStream(pathName);
-            // serialize the pack file
-            FileOutputStream fos = new  FileOutputStream(pathName + ".gz");
-            GZIPOutputStream outStream = new GZIPOutputStream(fos);
-            
-            copyStream(inStream, outStream, false);
-            
-            inStream.close();
-            outStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
-	/**
-	 * Unpack bundle files and add them to the destination directory.
-	 * @param bundle
-	 * @param rootPathInJar
-	 * @param destDir
-	 */
-	public static void transferBundleFiles(Bundle bundle, String rootPathInJar, String destDir)
-	{
-		if ((!destDir.endsWith("/")) && (!destDir.endsWith(File.separator)))
-			destDir = destDir + File.separator;
-	    Enumeration<?> paths = bundle.findEntries(rootPathInJar, "*", true);
-	    if (paths != null)
-	    {
-	    	while (paths.hasMoreElements())
-	    	{
-				URL url = (URL)paths.nextElement();
-				String fileName = url.getFile();
-				if ((!fileName.endsWith("/")) && (!fileName.endsWith(File.separator)))
-				{
-					int startLocalPath = fileName.indexOf(rootPathInJar) + rootPathInJar.length();
-					if (startLocalPath > 0)
-					{	// Always
-						fileName = fileName.substring(startLocalPath);
-						if ((fileName.startsWith("/")) || (fileName.startsWith(File.separator)))
-							fileName = fileName.substring(1);
-						fileName = destDir + fileName;
-	                	File file = new File(fileName);
-	                	file = file.getParentFile();
-	                	if (!file.exists())
-	                		file.mkdirs();
-						try {
-							FileOutputStream outStream = new FileOutputStream(fileName);
-							copyStream(url.openStream(), outStream, false);
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-	    	}
-	    }
-	}
-
-	/**
-	 * Very similar to the code in jar tool.
-	 * @param name
-	 * @return
-	 */
-    private String entryName(String name) {
-        name = name.replace(File.separatorChar, '/');
-        String matchPath = "";
-        /* Need to add code to consolidate paths
-        for (String path : paths) {
-            if (name.startsWith(path)
-                && (path.length() > matchPath.length())) {
-                matchPath = path;
-            }
-        }
-        */
-        name = name.substring(matchPath.length());
-
-        if (name.startsWith("/")) {
-            name = name.substring(1);
-        } else if (name.startsWith("./")) {
-            name = name.substring(2);
-        }
-        return name;
-    }
-	public static final String[] EMPTY_ARRAY = new String[0];
 	
 	/**
 	 * Add jar information to jnlp.
@@ -1543,111 +982,6 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     }
     public static final String DEFAULT_APPLET_PATH = "/docs/applet.html";
 
-	/**
-	 * Get the package name from the jar entry path.
-	 * @param name
-	 * @return
-	 */
-	public static String getPackageFromName(String name)
-	{
-		if (name.lastIndexOf('/') != -1)
-			name = name.substring(0, name.lastIndexOf('/'));
-		if (name.startsWith("/"))
-			name = name.substring(1);
-		return name.replace('/', '.');		
-	}
-	
-	/**
-	 * Get the version number from the import properties.
-	 * @param properties
-	 * @return
-	 */
-    public static String getVersion(String[] properties)
-    {
-		if (properties.length > 0)
-		{
-			for (String property : properties)
-			{
-				if (property.startsWith(Constants.VERSION_ATTRIBUTE))
-				{
-					String[] props = property.split("\\ |\\[|\\]|\\(|\\)|\\=|\\\"");
-					for (int i = 1; i < props.length; i++)
-					{
-						if (props[i].length() > 0)
-							return props[i];
-					}
-				}
-			}
-		}
-    	return null;
-    }
-    
-    /**
-     * Split the import properties.
-     * @param value
-     * @return
-     */
-    static public String[] parseImport(String value) {
-    	return value.split(";");
-    }
-    
-    /**
-     * Split the import header properties.
-     * @param value
-     * @return
-     */
-    static public String[] parseHeader(String value, String regexInclude, String regexExclude) {
-
-        if (value == null)
-    		return EMPTY_ARRAY;
-    	String[] properties = value.split(",");
-    	for (int i = 0; i < properties.length; i++)
-    	{
-    		if (properties[i].indexOf(Constants.VERSION_ATTRIBUTE + "=") != -1)
-    		{	// Version may have been split because it has commas
-    			for (int j = i + 1; j < properties.length; j++)
-    			{
-    	    		if (!properties[j].endsWith("\""))
-    	    			break;
-	    			properties[i] = properties[i] + "," + properties[j];	// Version	
-	    			properties[j] = "";
-    			}
-    		}
-    		if (regexExclude != null)
-    		    if (properties[i].matches(regexExclude))
-    		        properties[i] = "";
-            if (regexInclude != null)
-                if (!properties[i].matches(regexInclude))
-                    properties[i] = "";
-    	}
-    	return properties;
-    }
-
-    private static SimpleDateFormat httpDateFormat = null;
-    static {
-        httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-        httpDateFormat.setCalendar(Calendar.getInstance(new SimpleTimeZone(0, "GMT")));
-    }
-     
-    public synchronized static String getHttpDate(Date date){
-    return httpDateFormat.format(date);
-    }
-     
-    public synchronized static Date getDateFromHttpDate(String date) throws ParseException{
-    return httpDateFormat.parse(date);
-    }
-    public static final String IF_MODIFIED_SINCE = "If-Modified-Since";
-    public static final String LAST_MODIFIED = "Last-Modified";
-     
-    /**
-     * Convenience method.
-     * Note: You will have to cast the class or override this in your actual OSGi servlet.
-     */
-    public BundleContext getBundleContext()
-    {
-        return (BundleContext)super.getBundleContext();
-    }
-
     // Note: Since this is a servlet, don't access or change these outside a synchronized method
     private String cachedPropertiesPath = null;
     private Properties cachedProperties = null;
@@ -1815,6 +1149,14 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         return bundleChanged;
     }
     
+    /**
+     * Add the component bundles
+     * @param request
+     * @param response
+     * @param comp
+     * @param bundles
+     * @return
+     */
     public String addComponentBundles(HttpServletRequest request, HttpServletResponse response, String comp, Set<Bundle> bundles)
     {
         Jnlp jnlp = this.getJnlpFromProperties(request, response, comp);
@@ -1851,6 +1193,13 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         return /* jnlp.getCodebase() + */ jnlp.getHref();   // The component path
     }
 
+    /**
+     * Get the jnlp from the properties in this request.
+     * @param request
+     * @param response
+     * @param comp
+     * @return
+     */
     public Jnlp getJnlpFromProperties(HttpServletRequest request, HttpServletResponse response, String comp)
     {
         HttpServletRequest compreq = this.readIfPropertiesFile(request, comp, true);
@@ -1907,6 +1256,80 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         Constants.BUNDLE_ACTIVATIONPOLICY,
     };
     
+    /**
+     * Does this cached file contain the same codebase?
+     * If not, fix the codebase and return the new jnlp string.
+     * If so, return null.
+     * @param request
+     * @param file
+     * @return
+     */
+    String CODEBASE_NAME = CODEBASE + "=\"";
+    public String fixCachedFile(HttpServletRequest request, File file)
+    {
+        String requestCodebase = getJnlpCodebase(request);
+        try {
+            // If they want it again, send them my cached copy
+            Reader inStream = new FileReader(file);
+            StringWriter writer = new StringWriter();
+            copyStream(inStream, writer, true);
+            StringBuffer jnlpString = writer.getBuffer();
+            inStream.close();
+            writer.close();
+            if (jnlpString == null)
+                return null;
+            int start = jnlpString.indexOf(CODEBASE_NAME);
+            if (start == -1)
+                return null;
+            start = start + CODEBASE_NAME.length();
+            int end = jnlpString.indexOf("\"", start);
+            if (end == -1)
+                return null;
+            if (jnlpString.substring(start, end).equalsIgnoreCase(requestCodebase))
+                return null;    // same codebase = good
+            jnlpString.replace(start, end, requestCodebase);
+            return jnlpString.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Get the full codebase (including host and port) from the request path.
+     * By default, this is the servlet path (without the trailing '/')
+     * To change this, supply a 'codebase' parameter with your intended base path.
+     * @param request
+     * @return
+     */
+    protected String getJnlpCodebase(HttpServletRequest request)
+    {
+        String urlprefix = getUrlPrefix(request);
+        String codebase = this.getRequestParam(request, CODEBASE, null);
+        if ((codebase == null) || (codebase.length() == 0))
+            codebase = "/";
+        return urlprefix + codebase;
+    }
+    /**
+     *  This code is heavily inspired by the stuff in HttpUtils.getRequestURL
+     */
+    protected String getUrlPrefix(HttpServletRequest request) {
+        StringBuffer url = new StringBuffer();
+        String scheme = request.getScheme();
+        int port = request.getServerPort();
+        url.append(scheme);		// http, https
+        url.append("://");
+        url.append(request.getServerName());
+        if ((scheme.equals("http") && port != 80)
+	    || (scheme.equals("https") && port != 443)) {
+            url.append(':');
+            url.append(request.getServerPort());
+        }
+        return url.toString();
+    }
+
     /**
      * A response wrapper that redirects the output to this printwriter.
      * @author don
@@ -2086,20 +1509,17 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
           return propertiesPath;
       }
     }
+    /**
+     * 
+     * @param marshaller
+     * @param jnlp
+     * @throws JiBXException
+     */
     public void debugWriteJnlp(IMarshallingContext marshaller, Jnlp jnlp) throws JiBXException
     {
         Writer writer = new StringWriter();
         marshaller.marshalDocument(jnlp, OUTPUT_ENCODING, null, writer);
         String string = ((StringWriter)writer).toString();
         System.out.println(string);
-    }
-    public void debugWriteStream(InputStream inStream) throws IOException
-    {
-        copyStream(inStream, System.out, true); // Ignore errors, as browsers do weird things                
-    }
-    public void debugWriteStream(Reader inStream) throws IOException
-    {
-        Writer writer = new OutputStreamWriter(System.out);
-        copyStream(inStream, writer, true); // Ignore errors, as browsers do weird things                
     }
 }
