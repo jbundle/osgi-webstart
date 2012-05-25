@@ -307,7 +307,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
                 jnlp = (Jnlp)unmarshaller.unmarshalDocument(inStream, OUTPUT_ENCODING);
                 inStream.close();
                 
-                ElementsToChange elementsToChange = getCacheElementsToChange(request, jnlpBaseCacheFile);
+                ElementsToChange elementsToChange = hasFileChanged(request, jnlpBaseCacheFile, true) ? ElementsToChange.CACHEABLE : ElementsToChange.NONE;
                 if (elementsToChange == ElementsToChange.NONE)
                 {
                     bundleChangeStatus = BundleChangeStatus.NONE;  // Cacheable section is already up-to-date
@@ -429,7 +429,7 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
         if ((file == null) || (!file.exists()))
             return false;   // Error - cache doesn't exist
         
-        if (getCacheElementsToChange(request, file) == ElementsToChange.NONE)
+        if (!hasFileChanged(request, file, false))
         {   // Not modified since last time
             response.setHeader(LAST_MODIFIED, request.getHeader(IF_MODIFIED_SINCE));
             response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
@@ -478,10 +478,10 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * @param file
      * @return CURRENT - Same as last http request, UNCHANGED since last request (from other client?), DIRTY - changed
      */
-    public ElementsToChange getCacheElementsToChange(HttpServletRequest request, File jnlpBaseCacheFile)
+    public boolean hasFileChanged(HttpServletRequest request, File jnlpBaseCacheFile, boolean checkBundleChanges)
     {
         if ((jnlpBaseCacheFile == null) || (!jnlpBaseCacheFile.exists()))
-            return ElementsToChange.CACHEABLE;   // Cache doesn't exist
+            return true;   // Cache doesn't exist
         Date lastModified = new Date(jnlpBaseCacheFile.lastModified());
         String requestIfModifiedSince = request.getHeader(IF_MODIFIED_SINCE);
         try {
@@ -489,15 +489,17 @@ public class OsgiWebStartServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
             {
                 Date requestDate = getDateFromHttpDate(requestIfModifiedSince);
                 if (!requestDate.before(lastModified))
-                    return ElementsToChange.NONE;   // Not modified since last time
+                    return false;   // Not modified since last time
             }
         } catch (ParseException e) {
             // Fall through
         }
-        if ((lastBundleChange == null)
-            || (lastBundleChange.after(lastModified)))
-                return ElementsToChange.CACHEABLE;       // Jnlp file has definitely changed
-        return ElementsToChange.NONE;  // Bundles haven't changed since jnlp was last set up
+        if (!checkBundleChanges)
+        	return true;	// The http cache is out-of-date
+    	if ((lastBundleChange == null)
+    			|| (lastBundleChange.after(lastModified)))
+            return true;       // Jnlp file has definitely changed
+        return false;  // Bundles haven't changed since jnlp was last set up
     }
     /**
      * Does this cached file contain the same codebase?
