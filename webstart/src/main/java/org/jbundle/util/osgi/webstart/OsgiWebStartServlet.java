@@ -83,8 +83,10 @@ import org.osgi.framework.Constants;
 
 /**
  * OSGi to Web Start translation Servlet.
+ * This servlet delivers osgi applets as webstart applets.
+ * For instructions,
+ * @see http://www.jbundle.org/osgi-webstart
  * @author doncorley <don@tourgeek.com>
- *
  */
 public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet*/
 {
