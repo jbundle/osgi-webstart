@@ -521,9 +521,11 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
         if ((servletPath == null) || (servletPath.length() == 0))
             return "";  // If their servlet is at the root, they don't need to use a codebase
         String codebase = this.getRequestParam(request, CODEBASE, null);
+        String path = null;
         if ((codebase == null) || (codebase.length() == 0))
-            return "";  // If they don't have a codebase, jars are served relative to the servlet path
-        String path = getRelativePath(servletPath, codebase);
+            path = servletPath;  // If they don't have a codebase, jars are served relative to the servlet path
+        else
+        	path = getRelativePath(servletPath, codebase);
         if (!path.endsWith("/"))
             path = path + "/";
         return path;
