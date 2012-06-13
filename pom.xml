@@ -12,7 +12,7 @@
 
   <groupId>org.jbundle.util.osgi</groupId>
   <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
-  <version>1.5.3</version>
+  <version>1.5.4-SNAPSHOT</version>
 
   <packaging>pom</packaging>
   <name>jbundle-util-osgi-webstart-reactor</name>
