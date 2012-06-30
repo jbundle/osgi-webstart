@@ -9,7 +9,6 @@
     <version>1.6.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.jbundle.util.osgi</groupId>
   <artifactId>jbundle-util-osgi-pkg-reactor</artifactId>
 
   <packaging>pom</packaging>
