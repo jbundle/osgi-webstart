@@ -29,6 +29,10 @@
 
   <modules>
     <module>webstart</module>
+    <module>util</module>
+    <module>browser</module>
+    <module>js</module>
+    <module>dojo</module>
     <module>pkg</module>
   </modules>
 </project>

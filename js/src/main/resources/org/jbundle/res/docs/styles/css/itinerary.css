@@ -1,0 +1,77 @@
+<!-- This line specifies the parameters for the overall text contained in the
+body of the HTML document; specifically the font used along with alternates,
+the point size and the color of the base text written as a hex value. -->
+
+BODY {
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	background: url("images/backgrounds/background.gif") maroon;
+	text-align: justify;
+}
+
+P {
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	text-align: justify;
+}
+
+P B {
+	color: green;
+}
+
+P I	{
+	color: white
+}
+
+P.smallprint	{
+	font-size: x-small
+}
+
+A	{
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+TD {
+	font-family: helvetica, arial, san-serif;
+}
+
+H1	{
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	text-align: center;
+}
+
+H2	{
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	text-align: center;
+}
+
+H3	{
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	text-align: center;
+}
+
+H4	{
+	font-family: helvetica, arial, san-serif;
+	font-weight: bold;
+	text-align: left;
+}
+
+H4 B {
+	color: silver;
+}
+
+.navButton { background-color: #C0C0C0; font-family: Helvetica,Arial,sans-serif }
+.navButton SPAN
+{
+border-width: 2;
+border-style: outset;
+padding-left: 0.3em;
+padding-right: 0.3em;
+font-size: small;
+}
+.navButton SPAN A { text-decoration: none; color: #000000 }
