@@ -7,17 +7,17 @@ isDebug: false,
 preventBackButtonFix: false
 };
 </script>
-<script djConfig="parseOnLoad: true" src="styles/js/dojo/dojo.js" type="text/javascript"></script>
+<script djConfig="parseOnLoad: true" src="../../docs/styles/js/dojo/dojo.js" type="text/javascript"></script>
 
-<script type="text/javascript" src="styles/js/jbundle/main.js"></script>
-<script type="text/javascript" src="styles/js/jbundle/java.js"></script>
-<script type="text/javascript" src="styles/js/jbundle/back.js"></script>
+<script type="text/javascript" src="../../docs/styles/js/jbundle/main.js"></script>
+<script type="text/javascript" src="../../docs/styles/js/jbundle/java.js"></script>
+<script type="text/javascript" src="../../docs/styles/js/jbundle/back.js"></script>
 
 <style type="text/css">
-        @import "styles/js/dijit/themes/tundra/tundra.css";
+        @import "../../docs/styles/js/dijit/themes/tundra/tundra.css";
 </style>
-<link title="basicstyle" href="styles/css/style.css" type="text/css" rel="stylesheet" />
-<link rel="shortcut icon" href="images/com/favicon.ico" type="image/x-icon" />
+<link title="basicstyle" href="../../docs/styles/css/style.css" type="text/css" rel="stylesheet" />
+<link rel="shortcut icon" href="images/icons/jbundle16.jpg" type="image/x-icon" />
 
 <script type="text/javascript">
 dojo.require("dojo.back");
@@ -28,75 +28,15 @@ dojo.require("jbundle.java");
 <meta name="description" content="" />
 </head>
 
-
-
-
-
-
-
-
 <body marginwidth="0" marginheight="0" class="tundra">
-<script type="text/javascript">dojo.back.init();</script>
-<!-- No menu displayed -->
 <center>
+
+<script type="text/javascript">dojo.back.init();</script>
 <script src="http://java.com/js/deployJava.js" type="text/javascript"></script>
-
-<!-- script type="text/javascript">
-var attributes={code:'org.jbundle.Main',codebase:'http://localhost:8181/',width:'100%',height:'98%',name:'app'} ;
-var parameters = {userid:"1",
-url:"http://localhost:8181/app",
-baseURL:"http://localhost:8181/",
-domain:"localhost",
-webStartPropertiesFile:"/org/jbundle/res/webstart/tourapp.properties",
-name:"app", 
-hash:location.hash,
-draggable:true,jnlp_href: 'http://localhost:8181/app?datatype=jnlpapplet&amp;applet=org.jbundle.Main&amp;userid=1&amp;url=http%3A%2F%2Flocalhost%3A8181%2Fapp&amp;baseURL=http%3A%2F%2Flocalhost%3A8181%2F&amp;domain=localhost&amp;webStartPropertiesFile=%2Forg%2Fjbundle%2Fres%2Fwebstart%2Ftourapp.properties'} ; 
-deployJava.runApplet(attributes, parameters, '1.6'); 
-</script -->
-
-
-
 <script type="text/javascript">
 path = location.pathname;
 jbundle.java.runAppletWithCommand(location.search, location.hash);
 </script>
-<!-- 
-if (path.indexOf('.') != -1)
-{   // webstart servlet can't have '.htm(l)' extension
-	exten = path.substring(path.indexOf('.'));
-	exten = exten.toUpperCase();
-	if (exten == ".HTM")
-		path = path.substring(0, path.length - 4);
-    if (exten == ".HTML")
-        path = path.substring(0, path.length - 5);
-}
-params = location.search;
-if (getParam("applet") != "")
-{
-	if (getParam("appletClass") == "")
-		params = params + "&" + "appletClass=" + getParam("applet");
-	start = params.indexOf("applet=");
-	end = params.indexOf("&", start)
-	if (end != -1)
-		params = params.substring(0, start) + params.substring(end + 1);
-    else
-        params = params.substring(0, start);
-}
-width = getParam("width");
-if (width == "")
-	width = "100%";
-height = getParam("height");
-if (height == "")
-	height = "95%";
-name = getParam("name");
-if (name == "")
-	name = "app";
-var attributes = {width: width, height: height, name: name} ; 
-var parameters = {jnlp_href: path + params, draggable:'true', name: name, hash: location.hash} ; 
-deployJava.runApplet(attributes, parameters, '1.6'); 
-
-document.write("<br/><center><h2>" + name + "</h2></center><br/>");
-</script -->
 
 </center>
 </body>
