@@ -15,7 +15,7 @@
     <jar href="SwingInterop.jar" size="20600" download="eager" />
   </resources>
   <applet-desc width="960" height="720"
-       main-class="swinginterop.SwingInterop"
+       main-class="org.jbundle.javafx.example.SwingInterop"
        name="SwingInterop" />
   <update check="background"/>
 </jnlp>

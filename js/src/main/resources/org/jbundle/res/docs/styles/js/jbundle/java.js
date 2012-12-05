@@ -126,10 +126,12 @@ jbundle.java = {
 	// Display a applet with this command in the content area.
 	// Returns true if successful
 	// --NOTE-- For this work, you must include deployJava.js in mainstyles-ajax
-	displayApplet: function(command)
+	displayApplet: function(command, version)
 	{
 		if (!command)
 			return false;
+		if (version == null)
+			version = '1.6';
 		var params = jbundle.java.commandToProperties(command);
 
 		var domToAppendTo = document.getElementById("content-area");
@@ -144,7 +146,7 @@ jbundle.java = {
 		
 		jbundle.java.prepareWindowForApplet(true);
 		
-		var html = jbundle.java.getAppletHtml(attributes, params, '1.6');
+		var html = jbundle.java.getAppletHtml(attributes, params, version);
 		domToAppendTo.innerHTML = html;
 		jbundle.java.pushBrowserHistory(command);
 		return true;
@@ -262,7 +264,7 @@ jbundle.java = {
     /**
      * Similar to deployJava, except I pass the complete command.
      */
-    runAppletWithCommand: function(command, hash) {
+    runAppletWithCommand: function(command, hash, version) {
 		if ((hash != null) && (hash.length > 0))
 		{
 			if (command == null)
@@ -271,6 +273,8 @@ jbundle.java = {
 		}
 		if (!command)
 			return false;
+		if (version == null)
+			version = '1.6';
 		var params = jbundle.java.commandToProperties(command);
 
 		var attributes = jbundle.java.getAppletAttributes(params);
@@ -279,7 +283,7 @@ jbundle.java = {
 			params['jnlp_href'] = jnlp;
 		
 		jbundle.java.prepareWindowForApplet(true);	// Set java flag to 'true'
-		deployJava.runApplet(attributes, params, '1.6');
+		deployJava.runApplet(attributes, params, version);
 		return true;
     },
     /**
