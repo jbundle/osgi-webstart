@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jbundle.util.osgi</groupId>
+    <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
+    <version>1.6.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>org.jbundle.res.dojo</artifactId>
+  <!-- version>${dojoVersion}</version -->
+
+  <name>jbundle-util-osgi-webstart-dojo - dojo project</name>
+  <description>dojo toolkit osgi package</description>
+  
+  <properties>
+    <jbundlePackageExport>
+      *;version=${project.version},
+    </jbundlePackageExport>
+  </properties>
+
+  <packaging>bundle</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>move-dojo-resources</id> <!--  Copy dojo resources before packaging starts. -->
+						<phase>process-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>org.dojotoolkit</groupId>
+							<artifactId>dojo</artifactId>
+							<version>${dojoVersion}</version>
+							<type>zip</type>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+						</artifactItem>
+					</artifactItems>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${project.build.finalName}/org/jbundle/res
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/dojo-${dojoVersion}
+									</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>${project.build.directory}/${project.build.finalName}</directory>
+				<targetPath/>
+			</resource>
+		</resources>
+	</build>
+
+</project>
+

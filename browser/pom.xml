@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
+    <groupId>org.jbundle.util.osgi</groupId>
+    <version>1.6.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>org.jbundle.util.osgi.webstart.browser</artifactId>
+
+	<name>jbundle-util-osgi-webstart-browser - java to javascript link</name>
+	<description>java to javascript link</description>
+
+	<packaging>bundle</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jbundle.util.osgi</groupId>
+			<artifactId>org.jbundle.util.osgi.webstart.util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- This is safe because the webstart plugin is always here in the sdk - The runtime code always checks  -->
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>plugin</artifactId>
+			<version>${pluginVersion}</version>
+			<scope>system</scope>
+			<systemPath>${java.home}/lib/plugin.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>javax.jnlp</groupId>
+			<artifactId>javaws</artifactId>
+			<version>${javawsVersion}</version>
+			<scope>system</scope>
+			<systemPath>${java.home}/lib/javaws.jar</systemPath>
+		</dependency>
+	</dependencies>
+
+</project>
+
