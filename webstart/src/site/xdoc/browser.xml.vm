@@ -1,0 +1,68 @@
+﻿<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>OSGi to Web Start Web Bundle</title>
+    <author email="don@donandann.com">Don Corley</author>
+  </properties>
+
+  <!-- Optional HEAD element, which is copied as is into the XHTML <head> element -->
+<!-- head>
+<meta />
+</head  -->
+
+  <body>
+
+     <section name="Web Browser Integration">
+
+<p>
+The OSGi to web-start bundle offers web browser integration also.
+</p>
+<p>
+Your application can update when the user clicks the browser forward and back button and the browser URL can
+automatically update when your application changes to a different screen. This means that a user can bookmark a
+location in your application and return to the same screen later. 
+</p>
+<p>
+All you have to do is use the jsapplet.html template and implement the following methods in your Applet class:<br/>
+<code>
+    public void doJavaBrowserBack(String command)<br/>
+    public void doJavaBrowserForward(String command)<br/>
+    public void doJavaBrowserHashChange(String command)<br/>
+</code>
+The browser will call your application with the part of the url starting with the hash '#' mark, so you can update your
+application accordingly.
+</p>
+<p>
+You can control the browser's behavior by adding the BrowserManager to your code. To make your code work when it is not
+in a browser, use the following template:<br/>
+<code>
+        try   { // Add browser connection if running as an applet<br/>
+            Class.forName("netscape.javascript.JSObject"); // Test if this exists<br/>
+            Map<String,Object> mapInitialCommand = ... initial commands for the browser to add to the url.<br/>
+            BrowserManager bm = new BrowserManager(this, mapInitialCommand);    // This will throw an exception if there is no browser.<br/>
+            this.setBrowserManager(bm);<br/>
+        } catch (Exception ex)  { // Ignore if no browser error<br/>
+        }<br/>
+</code>
+</p>
+<p>
+If your javascript is keeping track of it's history, you can manipulate the history stack or directly calling javascript
+by calling the following methods:<br/>
+<code>
+    public void pushBrowserHistory(String command, String title)<br/>
+    public void popBrowserHistory(int commandsToPop, boolean bCommandHandledByJava, String title)<br/>
+    public void callJavascript(String command, String args[])<br/>
+</code>
+</p>
+<p>
+Try it yourself. Here is a <a href="http://localhost:8181/webstart/docs/jsapplet.html#?record=com.mycompany.sample.addressbook.db.AddressBook&amp;otherPackages=com.mycompany.sample.addressbook.db&amp;webStartPropertiesFile=/org/jbundle/res/webstart/app.properties">simple example</a>.
+Try to navigate through the screens and use the browser's back back to return to the
+previous screen. Try bookingmarking a page and see if you can return to the same place in the application.
+</p>
+    </section>
+
+  </body>
+
+</document>

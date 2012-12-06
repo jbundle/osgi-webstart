@@ -40,17 +40,17 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>org.jbundle.util.osgi.js</artifactId>
+			<artifactId>org.jbundle.res.docs.styles</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>org.jbundle.util.osgi.browser</artifactId>
+			<artifactId>org.jbundle.util.osgi.webstart.browser</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>org.jbundle.util.osgi.dojo</artifactId>
+			<artifactId>org.jbundle.res.dojo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

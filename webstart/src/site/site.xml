@@ -36,7 +36,8 @@ under the License.
       <item name="Example" href="example.html"/>
       <item name="Usage" href="usage.html"/>
       <item name="Installation" href="install.html"/>
-    </menu>
+      <item name="Browser use" href="browser.html"/>
+      </menu>
 
     <menu name="JBundle Projects">
       <item name="App framework" href="/jbundle"/>
