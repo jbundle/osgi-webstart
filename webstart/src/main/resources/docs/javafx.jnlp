@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="6.0" xmlns:jfx="http://javafx.com" href="SwingInterop_browser.jnlp">
+<!-- JNLP File for Biorhythm Demo Application -->
+<jnlp spec="6.0" xmlns:jfx="http://javafx.com" href="javafx.jnlp">
   <information>
     <title>Sample app: SwingInterop</title>
     <vendor>Oracle</vendor>
@@ -7,15 +8,15 @@
     <offline-allowed/>
   </information>
   <security>
-      <all-permissions/>
   </security>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="org.jbundle.javafx.example.helloworld-1.0.0-SNAPSHOT.jar" download="eager" />
     <jfx:javafx-runtime version="2.0+" href="http://javafx.com/jfx-20.exe"/>
-    <jar href="SwingInterop.jar" size="20600" download="eager" />
   </resources>
   <applet-desc width="960" height="720"
-       main-class="org.jbundle.javafx.example.SwingInterop"
+       main-class="org.jbundle.javafx.example.helloworld.HelloWorldJavaFX"
        name="SwingInterop" />
   <update check="background"/>
 </jnlp>
+
