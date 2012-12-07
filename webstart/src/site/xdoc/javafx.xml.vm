@@ -1,0 +1,37 @@
+﻿<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>OSGi to Web Start Web Bundle</title>
+    <author email="don@donandann.com">Don Corley</author>
+  </properties>
+
+  <!-- Optional HEAD element, which is copied as is into the XHTML <head> element -->
+<!-- head>
+<meta />
+</head  -->
+
+  <body>
+
+     <section name="JavaFX deployment examples">
+        <p>
+        The OSGi to Web start bundle is perfect for deploying JavaFX modules. JavaFX modules are the same as any other
+        java program. They only need a slight change in the jnlp to make them work. You can supply your own jnlp template, or use this one:
+        </p>
+        <p>
+        Try this <a href="http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&template=/docs/javafx.jnlp">simple JavaFX program</a>.
+        </p>
+        <p>
+        </p>
+        <p>
+        </p>
+        <p>
+        </p>
+        <p>
+        </p>
+    </section>
+
+  </body>
+
+</document>

@@ -60,12 +60,15 @@ import org.jibx.schema.net.java.jnlp_6_0.Extension;
 import org.jibx.schema.net.java.jnlp_6_0.Homepage;
 import org.jibx.schema.net.java.jnlp_6_0.Icon;
 import org.jibx.schema.net.java.jnlp_6_0.Information;
+import org.jibx.schema.net.java.jnlp_6_0.J2se;
 import org.jibx.schema.net.java.jnlp_6_0.Jar;
 import org.jibx.schema.net.java.jnlp_6_0.Jar.Download;
 import org.jibx.schema.net.java.jnlp_6_0.Jar.Main;
 import org.jibx.schema.net.java.jnlp_6_0.Java;
+import org.jibx.schema.net.java.jnlp_6_0.JavafxRuntime;
 import org.jibx.schema.net.java.jnlp_6_0.Jnlp;
 import org.jibx.schema.net.java.jnlp_6_0.Menu;
+import org.jibx.schema.net.java.jnlp_6_0.Nativelib;
 import org.jibx.schema.net.java.jnlp_6_0.OfflineAllowed;
 import org.jibx.schema.net.java.jnlp_6_0.Param;
 import org.jibx.schema.net.java.jnlp_6_0.Property;
@@ -425,7 +428,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
                 packageName = packageName.substring(0, packageName.indexOf(','));
         }
         if (forceScanBundle)
-            getResource(jnlp, true);   // Clear the resource entries and create a new one
+            getResource(jnlp, true, null, null);   // Clear the resource entries and create a new one
         
         Bundle bundle = null;
         if ((elementsToChange == ElementsToChange.CACHEABLE) || (elementsToChange == ElementsToChange.ALL))
@@ -450,7 +453,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
         	jnlp.setSecurity(security);
     
             if (mainClass != null)
-                setJ2se(jnlp, request); // For applets or apps
+                setJava(jnlp, request); // For applets or apps
 		
             addProperties(request, response, jnlp);
         }
@@ -700,20 +703,46 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     }
     
     /**
-     * Add the j2se lines.
+     * Add the java lines.
      * @param jnlp
      */
-    public void setJ2se(Jnlp jnlp, HttpServletRequest request)
+    public void setJava(Jnlp jnlp, HttpServletRequest request)
 	{
-		Choice choice = getResource(jnlp, false);	// Clear the entries and create a new one
-		Java java = new Java();
-		choice.setJava(java);
-		java.setVersion(getRequestParam(request, JAVA_VERSION, "1.6+"));
+		Choice choice = getResource(jnlp, false, Java.class, null);	// Clear the entries and create a new one
+		Java java = choice.getJava();
+		if (java == null)
+		{
+		    if (getResource(jnlp, false, J2se.class, null).getJ2se() != null)
+		    {
+		        setJ2se(jnlp, request);   // Using legacy format
+		        return;
+		    }
+		    choice.setJava(java = new Java());
+		}
+		if ((java.getVersion() == null) || (getRequestParam(request, JAVA_VERSION, null) != null))
+		    java.setVersion(getRequestParam(request, JAVA_VERSION, "1.6+"));
 		if (getRequestParam(request, INITIAL_HEAP_SIZE, null) != null)
 		    java.setInitialHeapSize(getRequestParam(request, INITIAL_HEAP_SIZE, null));
         if (getRequestParam(request, MAX_HEAP_SIZE, null) != null)
             java.setMaxHeapSize(getRequestParam(request, MAX_HEAP_SIZE, null));
 	}
+    /**
+     * Add the j2se lines.
+     * @param jnlp
+     */
+    public void setJ2se(Jnlp jnlp, HttpServletRequest request)
+    {
+        Choice choice = getResource(jnlp, false, J2se.class, null); // Clear the entries and create a new one
+        J2se java = choice.getJ2se();
+        if (java == null)
+            choice.setJ2se(java = new J2se());
+        if ((java.getVersion() == null) || (getRequestParam(request, JAVA_VERSION, null) != null))
+            java.setVersion(getRequestParam(request, JAVA_VERSION, "1.6+"));
+        if (getRequestParam(request, INITIAL_HEAP_SIZE, null) != null)
+            java.setInitialHeapSize(getRequestParam(request, INITIAL_HEAP_SIZE, null));
+        if (getRequestParam(request, MAX_HEAP_SIZE, null) != null)
+            java.setMaxHeapSize(getRequestParam(request, MAX_HEAP_SIZE, null));
+    }
     
 	/**
 	 * Has the bundle been added yet?
@@ -808,7 +837,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     		main = Main.FALSE;
     	if (download == null)
     		download = Download.LAZY;
-		Choice choice = getResource(jnlp, false);
+		Choice choice = getResource(jnlp, false, null, null);
 		Jar jar = new Jar();
 		choice.setJar(jar);
 		jar.setHref(href);
@@ -828,7 +857,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      */
     public _Package addPackage(Jnlp jnlp, Jar jar, String packagePath, Recursive recursive)
     {
-		Choice choice = getResource(jnlp, false);
+		Choice choice = getResource(jnlp, false, null, null);
 		_Package pack = new _Package();
 		choice.setPackage(pack);
 		pack.setPart(jar.getPart());
@@ -939,7 +968,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      * @param jnlp
      * @return
      */
-    protected Choice getResource(Jnlp jnlp, boolean firstTime)
+    protected Choice getResource(Jnlp jnlp, boolean firstTime, Class<?> targetClass, String name)
     {
 		if (jnlp.getResourceList() == null)
 			jnlp.setResourceList(new ArrayList<Resources>());
@@ -950,14 +979,60 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
 		List<Choice> choiceList = resources.getChoiceList();
 		
 		if (firstTime)
-		for (int i = choiceList.size() - 1; i >= 0; i--)
-		{
-			choiceList.remove(i);
-		}
+    		for (int i = choiceList.size() - 1; i >= 0; i--)
+    		{
+    		    if ((choiceList.get(i).ifJar()) || (choiceList.get(i).ifPackage()))
+    		        choiceList.remove(i);
+    		}
 		
+        if (targetClass != null)
+            for (int i = choiceList.size() - 1; i >= 0; i--)
+            {
+                if (isClassMatch(choiceList.get(i), targetClass))
+                {
+                    Choice choice = choiceList.get(i);;
+                    if (name == null)
+                        return choice;
+                    if (choice.ifProperty())
+                        if (name.equals(choice.getProperty().getName()))
+                            return choice;
+                    if (choice.ifExtension())
+                        if (name.equals(choice.getExtension().getName()))
+                            return choice;
+                }
+            }
+        
 		Choice choice = new Choice();
 		choiceList.add(choice);
 		return choice;    	
+    }
+    /**
+     * Lame code.
+     * @param choice
+     * @param targetClass
+     * @return
+     */
+    public boolean isClassMatch(Choice choice, Class<?> targetClass)
+    {
+        if (targetClass == null)
+            return false;
+        if ((targetClass == Extension.class) && (choice.ifExtension()))
+            return true;
+        if ((targetClass == J2se.class) && (choice.ifJ2se()))
+            return true;
+        if ((targetClass == Jar.class) && (choice.ifJar()))
+            return true;
+        if ((targetClass == Java.class) && (choice.ifJava()))
+            return true;
+        if ((targetClass == JavafxRuntime.class) && (choice.ifJavafxRuntime()))
+            return true;
+        if ((targetClass == Nativelib.class) && (choice.ifNativelib()))
+            return true;
+        if ((targetClass == _Package.class) && (choice.ifPackage()))
+            return true;
+        if ((targetClass == Property.class) && (choice.ifProperty()))
+            return true;
+        return false;
     }
 
     /**
@@ -1058,8 +1133,6 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      */
     public void addProperties(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp)
     {
-        Choice choice = this.getResource(jnlp, false);
-        
         Properties properties = new Properties();
         String propertiesString = this.getRequestParam(request, PROPERTIES, null);
         if (propertiesString != null)
@@ -1086,10 +1159,12 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
         {
             key = (String)iterator.next();
             String value = (String)properties.get(key);
-            Property property = new Property();
+            Choice choice = this.getResource(jnlp, false, Property.class, key);
+            Property property = choice.getProperty();
+            if (property == null)
+                choice.setProperty(property = new Property());
             property.setName(key);
             property.setValue(value);
-            choice.setProperty(property);
         }
     }
     /**
@@ -1139,15 +1214,17 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
             String bundlePath = components.get(comp);
             if (bundlePath != null)
             {
-                Choice choice = this.getResource(jnlp, false);
-                Extension extension = new Extension();
+                Choice choice = this.getResource(jnlp, false, Extension.class, comp);
+                Extension extension = choice.getExtension();
+                if (extension == null)
+                    choice.setExtension(extension = new Extension());
                 extension.setName(comp);
                 String codebase = request.getParameter(CODEBASE);
                 if (codebase == null)
                     codebase = "/";
                 bundlePath = bundlePath + '&' + CODEBASE + '=' + codebase;
-                extension.setHref(bundlePath);
-                choice.setExtension(extension);
+                if (extension.getHref() == null)
+                    extension.setHref(bundlePath);
             }
         }
         return bundleChanged;
