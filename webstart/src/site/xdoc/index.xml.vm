@@ -44,6 +44,8 @@ updates the cached jnlp and java jar files when the OSGi bundles are updated.
 <li><a href="example.html">Example</a> (Under 2 minutes).</li>
 <li><a href="usage.html">Web Bundle Usage information.</a> (API and servlet parameters)</li>
 <li><a href="install.html">Installation.</a></li>
+<li><a href="browser.html">Browser integration.</a></li>
+<li><a href="javafx.html">JavaFX deployment.</a></li>
 </ul>
 </p>
 
