@@ -16,20 +16,36 @@
 
      <section name="JavaFX deployment examples">
         <p>
-        The OSGi to Web start bundle is perfect for deploying JavaFX modules. JavaFX modules are the same as any other
-        java program. They only need a slight change in the jnlp to make them work. You can supply your own jnlp template, or use this one:
+        The OSGi to Web start bundle is perfect for deploying JavaFX modules. Besides simplifying the deploy process, your jars are automatically packed and gziped
+        for quick downloads. JavaFX modules are the same as any other java program. All you have to do is place your JFXPanel in a JApplet.
+        You can supply your own jnlp template, or use this one:
         </p>
         <p>
-        Try this <a href="http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&template=/docs/javafx.jnlp">simple JavaFX program</a>.
+        <span style="color: red">Note</span>: Do your users a favor and don't ask for permission to access their local
+        resources. Java web start has a very secure sandbox that 99% of applications should be able to run in. Don't ask for
+        &lt;all permissions&gt; in your jnlp file. Also, no need to sign your jars. If you want secure delivery of your resources,
+        just deliver them using the https protocol.
         </p>
         <p>
+        For this example, we'll use a very simple javafx program. You can find it in java central at: 
+        java -classpath target/org.jbundle.javafx.example.helloworld-1.0.0-SNAPSHOT.jar:$JAVA_HOME/jre/lib/jfxrt.jar  org.jbundle.javafx.example.helloworld.HelloWorldJavaFX
         </p>
         <p>
+        Try this <a href="http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=/docs/javafx.jnlp">simple JavaFX program</a>.
         </p>
         <p>
+        If you want to deploy a JavaFX application that was not packaged with an OSGi manifest, just use the wrap protocol to automatically generate a manifest.<br/>
+        For example, if this was a regular java jar file, in karaf I would just type:<br/>
+        <code>install wrap:file:///home/don/workspace/workspace/jbundle/javafx/helloworld/target/org.jbundle.javafx.example.helloworld-1.0.0-SNAPSHOT.jar</code><br/>
+        and I'm ready to run the application from a browser with the same command that we used in the first example. 
         </p>
         <p>
+        Since the OSGi to webstart servlet has access to OSGi resources, you can package your startup parameters and/or jnlp template in your project's jar file.
+        For example take a look at the url on
+        <a href="http://localhost:8181/webstart/docs/applet.html?webStartPropertiesFile=org/jbundle/javafx/example/helloworld/javafx.properties">this sample</a>.
+        The applet's params come from the sample appplication's jar file.
         </p>
+
     </section>
 
   </body>
