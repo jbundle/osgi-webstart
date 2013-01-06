@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jbundle.util.osgi</groupId>
 		<artifactId>jbundle-util-osgi-pkg-reactor</artifactId>
-		<version>1.6.0-SNAPSHOT</version>
+		<version>1.6.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>org.jbundle.util.osgi.pkg.p2</artifactId>
@@ -13,7 +13,7 @@
 	<name>jbundle osgi p2 repository</name>
 
 	<properties>	<!-- Eclipse friendly version -->
-		<jbundleOsgiVersion>1.5.1</jbundleOsgiVersion>
+		<jbundleOsgiVersion>1.6.2</jbundleOsgiVersion>
 	</properties>
 
 	<build>
