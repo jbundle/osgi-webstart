@@ -27,6 +27,7 @@
 			<artifactId>plugin</artifactId>
 			<version>${pluginVersion}</version>
 			<scope>system</scope>
+			<optional>true</optional>
 			<systemPath>${java.home}/lib/plugin.jar</systemPath>
 		</dependency>
 		<dependency>
@@ -34,6 +35,7 @@
 			<artifactId>javaws</artifactId>
 			<version>${javawsVersion}</version>
 			<scope>system</scope>
+			<optional>true</optional>
 			<systemPath>${java.home}/lib/javaws.jar</systemPath>
 		</dependency>
 	</dependencies>
