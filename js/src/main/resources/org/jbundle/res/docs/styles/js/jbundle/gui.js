@@ -116,7 +116,11 @@ jbundle.gui = {
 				jbundle.util.lastCommand = command;	// Make sure it does the correct command.
 				jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
 			}
-			jbundle.remote.login(jbundle.getTaskSession(), user, password);
+			var props = {
+		  			user: user,
+					password: password
+				};
+			jbundle.remote.login(jbundle.getTaskSession(), props);
 		}
 		dlg0.hide();
 		if (submit)

@@ -63,12 +63,8 @@ jbundle.remote = {
 	/**
 	 * Create the remote task.
 	 */
-	createRemoteTask: function(user, password) {
+	createRemoteTask: function(props) {
 		var args = {};
-		var props = {
-  			user: user,
-			password: password
-		};
 		args.properties = dojo.toJson(props);
 
 		jbundle.remote.sendToAjax("createRemoteTask", args, jbundle.remote.handleCreateRemoteTask);
@@ -257,18 +253,16 @@ jbundle.remote = {
 	/**
 	 * Login.
 	 */
-	login: function(session, user, password) {
-		if (!user)
-			user = "";
-		if (!password)
-			password = "";
-		var args = {
-			target: session.getFullSessionID(),
-  			user: user,
-			password: password
-		};
+	login: function(session, props) {
+		if (!props)
+			props = {};
+		if (!props.user)
+			props.user = "";
+		if (!props.password)
+			props.password = "";
+		props.target = session.getFullSessionID(),
 
-		jbundle.remote.sendToAjax("login", args, jbundle.remote.handleLogin);
+		jbundle.remote.sendToAjax("login", props, jbundle.remote.handleLogin);
 	},
 	/**
 	 *

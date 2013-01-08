@@ -51,7 +51,16 @@ jbundle.util = {
 	  	jbundle.util.user = user;
 		jbundle.gui.handleCreateRemoteTaskLink = dojo.connect(jbundle.remote, "handleCreateRemoteTask", jbundle.util, "handleCreateRemoteTask");
 
-	  	jbundle.remote.createRemoteTask(user, password);
+		var props = {
+	  			user: user,
+				password: password
+			};
+		if (jbundle.java.getProperty(search, "systemname"))
+			props.systemname = jbundle.java.getProperty(search, "systemname");
+		else if (jbundle.java.getProperty(jbundle.java.getCommandFromHash(window.location.hash), "systemname"))
+			props.systemname = jbundle.java.getProperty(jbundle.java.getCommandFromHash(window.location.hash), "systemname");
+		
+	  	jbundle.remote.createRemoteTask(props);
 	  	
 	  	if (pathname)
 	  		if (jbundle.SERVER_PATH == "")
@@ -111,7 +120,10 @@ jbundle.util = {
 			jbundle.util.saveUser = null;	// Don't change cookie
 			jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
 			jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
-			jbundle.remote.login(jbundle.getTaskSession(), jbundle.util.user);
+			var props = {
+		  			user: jbundle.util.user
+				};
+			jbundle.remote.login(jbundle.getTaskSession(), props);
 		}
 		if (!jbundle.util.user)
 		{
@@ -138,16 +150,16 @@ jbundle.util = {
 		return session;
 	},
 	// Login
-	login: function(user, password)
+	login: function(props)
 	{
-		jbundle.remote.login(jbundle.getTaskSession(), user, password);
+		jbundle.remote.login(jbundle.getTaskSession(), props);
 	},
 	// Logout
 	logout: function()
 	{
 		jbundle.util.setCookie("userid", null);	// Clear cookie
 		jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
-		jbundle.remote.login(jbundle.getTaskSession(), null, null);
+		jbundle.remote.login(jbundle.getTaskSession(), null);
 
 		jbundle.util.lastCommand = "?menu=";
 		jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
@@ -305,7 +317,11 @@ jbundle.util = {
 				jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
 				jbundle.util.lastCommand = command;
 				jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
-				jbundle.remote.login(jbundle.getTaskSession(), user, password);
+				var props = {
+			  			user: user,
+						password: password
+					};
+				jbundle.remote.login(jbundle.getTaskSession(), props);
 			}
 			else
 			{
