@@ -476,6 +476,9 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     		
     		if (getRequestParam(request, OTHER_PACKAGES, null) != null)
     		    bundleChangeStatus = addDependentBundles(request, jnlp, getRequestParam(request, OTHER_PACKAGES, null).toString(), bundles, forceScanBundle, bundleChangeStatus, regexInclude, regexExclude, pathToJars);
+            if (getRequestParam(request, APPLET_CLASS, null) != null)
+                if (!getRequestParam(request, APPLET_CLASS, null).equals(getRequestParam(request, APPLET, null)))
+                    bundleChangeStatus = addDependentBundles(request, jnlp, ClassFinderActivator.getPackageName(getRequestParam(request, APPLET_CLASS, null), false), bundles, forceScanBundle, bundleChangeStatus, regexInclude, regexExclude, pathToJars);
             
     		bundleChangeStatus = addComponents(request, response, jnlp, components, bundles, bundleChangeStatus, pathToJars);
         }
