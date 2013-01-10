@@ -18,11 +18,11 @@ if (!jbundle.util)
  * Browser back support.
  */
 jbundle.java = {
-	    SERVLET_NAME: "webstart",          // The generic queue for remote sent transaction messages.
+	    SERVLET_NAME: "webstart",          // The default servlet name.
 	/**
 	 * This is called from the history state object when the state is popped by a browser back command.
-	 * I Call the java doJavaBrowserBack method.
-	 * @param command Is the command pushed onto the history stack.
+	 * This method calls the java doJavaBrowserBack method.
+	 * @param command Is the command popped off the history stack that java should execute.
 	 */
 	doJavaBrowserBack: function(command)
 	{
@@ -38,9 +38,9 @@ jbundle.java = {
 		jbundle.java.ignoreBack = false;
 	},
 	/**
-	 * This is called from the history state object when the state is popped by a browser back command.
-	 * I Call the java doJavaBrowserForward method.
-	 * @param command Is the command pushed onto the history stack.
+	 * This is called from the history state object when the state is popped by a browser forward command.
+	 * This method calls the java doJavaBrowserForward method.
+	 * @param command Is the command popped off the history stack that java should execute.
 	 */
 	doJavaBrowserForward: function(command)
 	{
@@ -52,8 +52,8 @@ jbundle.java = {
 			console.log("doJavaBrowserForward command =" + command);
 	},
 	/**
-	 * This is called from the history state object when the state is popped by a browser back command.
-	 * I Call the java doJavaBrowserForward method.
+	 * This is called from the history state object when the state is popped by a browser hash change.
+	 * This method calls the java doJavaBrowserHashChange method.
 	 * @param command Is the command pushed onto the history stack.
 	 */
 	doJavaBrowserHashChange: function(command)
