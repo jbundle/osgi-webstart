@@ -46,6 +46,7 @@ updates the cached jnlp and java jar files when the OSGi bundles are updated.
 <li><a href="install.html">Installation.</a></li>
 <li><a href="browser.html">Browser integration.</a></li>
 <li><a href="javafx.html">JavaFX deployment.</a></li>
+<li><a href="dev.html">Developers - Integrating your application with osgi-webstart.</a></li>
 </ul>
 </p>
 

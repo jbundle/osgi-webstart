@@ -29,7 +29,58 @@ with the web browser. Then you can respond to browser forward and back commands,
 in your java applet.
 </p>
 <p>
-To do - For now, look at the java.js javascript file and the jbundle thin BaseApplet class for an example of how this works.
+The browser manager java code is in an independent jar file. You can optionally install the code by checking the existence of
+javascript bridge by coding:<br/>
+<code>
+try   { // Add browser connection if running as an applet<br/>
+    Class.forName("netscape.javascript.JSObject"); // Test if this exists<br/>
+    Map&lt;String,Object&gt; mapInitialCommand = new HashMap&lt;String,Object&gt;();<br/>
+    // Add the parms that you expect for your initial screen<br/>
+    browserManager = new BrowserManager(this, mapInitialCommand);    // This will throw an exception if there is a no browser<br/>
+} catch (Exception ex)  { // Ignore if no browser<br/>
+}<br/>
+</code>  
+</p>
+<p>
+When you change screens, just call<br/>
+<code>
+browserManager.pushBrowserHistory(strHistory, browserTitle);<br/>
+</code>
+to add to the browser's history (and change the url hash).<br/>
+If you do a 'back' internally in your program, you can sync the web browser by typing:<br/>
+<code>
+bCommandHandledByJava = true;<br/>
+browserManager.popBrowserHistory(quanityToPop, bCommandHandledByJava, browserTitle);<br/>
+</code>
+</p>
+<p>
+On the callback side, your applet should implement the BrowserCallbacks interface:<br/>
+<code>
+public interface BrowserCallbacks<br/>
+{<br/>
+    /**<br/>
+     * The browser back button was pressed (Javascript called me).<br/>
+     * @param command The command that was popped from the browser history.<br/>
+     */<br/>
+    public void doJavaBrowserBack(String command);<br/>
+    /**<br/>
+     * The browser back button was pressed (Javascript called me).<br/>
+     * @param command The command that was popped from the browser history.<br/>
+     */<br/>
+    public void doJavaBrowserForward(String command);<br/>
+    /**<br/>
+     * The browser hash value changed (Javascript called me).<br/>
+     * @param command The command that was popped from the browser history.<br/>
+     */<br/>
+    public void doJavaBrowserHashChange(String command);<br/>
+}<br/>
+</code>
+These methods are called from javascript when a browser action occurs.
+</p>
+<p>
+For an example, take a look at the thin and thick framework in the <a href="http://www.jbundle.org">jbundle</a> project.
+Specifically, look at the java.js javascript file and the BaseApplet class from the jbundle class for an example
+of how this works.
 </p>
     </section>
 
