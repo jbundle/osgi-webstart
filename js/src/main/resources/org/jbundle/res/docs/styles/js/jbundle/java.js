@@ -21,7 +21,7 @@ jbundle.java = {
 	    SERVLET_NAME: "webstart",          // The default servlet name.
 	/**
 	 * This is called from the history state object when the state is popped by a browser back command.
-	 * This method calls the java doJavaBrowserBack method.
+	 * This method calls TO the java doJavaBrowserBack method.
 	 * @param command Is the command popped off the history stack that java should execute.
 	 */
 	doJavaBrowserBack: function(command)
@@ -39,7 +39,7 @@ jbundle.java = {
 	},
 	/**
 	 * This is called from the history state object when the state is popped by a browser forward command.
-	 * This method calls the java doJavaBrowserForward method.
+	 * This method calls TO the java doJavaBrowserForward method.
 	 * @param command Is the command popped off the history stack that java should execute.
 	 */
 	doJavaBrowserForward: function(command)
@@ -53,8 +53,8 @@ jbundle.java = {
 	},
 	/**
 	 * This is called from the history state object when the state is popped by a browser hash change.
-	 * This method calls the java doJavaBrowserHashChange method.
-	 * @param command Is the command pushed onto the history stack.
+	 * This method calls TO the java doJavaBrowserHashChange method.
+	 * @param command Is the command in the new hash that java should execute.
 	 */
 	doJavaBrowserHashChange: function(command)
 	{
@@ -79,7 +79,7 @@ jbundle.java = {
 			console.log("doJavaBrowserHashChange command =" + command);
 	},
 	/**
-	 * This is called from java to push a history object onto the stack.
+	 * This is called FROM java to push a history object onto the stack.
 	 * @param command Is the command to be pushed onto the history stack.
 	 */
 	pushBrowserHistory: function(command, title)
@@ -92,9 +92,10 @@ jbundle.java = {
 			console.log("pushBrowserHistory command =" + command + " title= " + title);
 	},
 	/**
-	 * This is called from java to pop history object(s) from the stack.
+	 * This is called FROM java to pop history object(s) from the stack.
 	 * Note: The global variable ignoreBack keeps me from notifying java of the change in the page.
 	 * @param count Is the number of commands to pop from the stack.
+	 * @param commandHandledByClient If true java already handled it.
 	 */
 	popBrowserHistory: function(count, commandHandledByClient, title)
 	{

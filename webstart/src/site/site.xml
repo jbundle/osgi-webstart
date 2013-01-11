@@ -38,7 +38,8 @@ under the License.
       <item name="Installation" href="install.html"/>
       <item name="Browser use" href="browser.html"/>
       <item name="JavaFX" href="javafx.html"/>
-      </menu>
+      <item name="Development" href="dev.html"/>
+    </menu>
 
     <menu name="JBundle Projects">
       <item name="App framework" href="/jbundle"/>
