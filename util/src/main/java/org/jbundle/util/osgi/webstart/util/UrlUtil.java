@@ -75,12 +75,29 @@ public class UrlUtil extends Object
         return properties;
     }
     /**
+     * Convert this properties map to a URL.
+     * @param properties
+     * @return
+     */
+    public static String propertiesToUrl(Map<String,Object> properties)
+    {
+        String command = null;
+        for (String key : properties.keySet())
+        {
+            if (properties.get(key) != null)
+                command = UrlUtil.addURLParam(command, key, properties.get(key).toString());
+        }
+        return command;
+    }
+    /**
      * Parse this URL formatted string into properties.
      * @properties The properties object to add the params to.
      * @args The URL to parse (formatted as: XYZ?key1=value1&key2=value2).
      */
     public static Map<String,Object> parseArgs(Map<String,Object> properties, String strURL)
     {
+        if (properties == null)
+            properties = new HashMap<String,Object>();
         int iIndex = 0;
         int iStartIndex = strURL.indexOf('?') + 1;  // Start of first param (0 if no ?)
         while ((iIndex = strURL.indexOf('=', iIndex)) != -1)

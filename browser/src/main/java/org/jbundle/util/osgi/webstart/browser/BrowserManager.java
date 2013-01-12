@@ -67,6 +67,7 @@ public class BrowserManager extends Object
     	if (title == null)
     		title = BLANK;
         args[1] = title;
+        //logger.info("pushBrowserHistory command: " + args[0] + " title " + args[1]);
         this.callJavascript("pushBrowserHistory", args);
 	}
 	/**
@@ -107,11 +108,12 @@ public class BrowserManager extends Object
 	public void popBrowserHistory(int commandsToPop, boolean bCommandHandledByJava, String title)
 	{
         String args[] = new String[3];
-    	args [0] = Integer.toString(commandsToPop);
-    	args [1] = Boolean.toString(bCommandHandledByJava);
+    	args[0] = Integer.toString(commandsToPop);
+    	args[1] = Boolean.toString(bCommandHandledByJava);
     	if (title == null)
     		title = BLANK;
-        args [2] = title;
+        args[2] = title;
+        //logger.info("popBrowserHistory commandsToPop: " + args[0] + " handledByJava: " + args[1] + " title: " + args[2]);
         this.callJavascript("popBrowserHistory", args);
 	}
 	/**
