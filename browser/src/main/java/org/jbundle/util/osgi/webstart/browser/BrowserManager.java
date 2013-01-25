@@ -100,7 +100,7 @@ public class BrowserManager extends Object
 	}
 	/**
 	 * Pop some commands from the browser's history.
-	 * Note: The browser will NOT call your java doJavaBrowserBack method, you need to do the navigation yourself.
+	 * Note: The browser will NOT call your java doBack method, you need to do the navigation yourself.
 	 * Note: If you pop more commands than you have on the stack, the browser will back up
 	 * into it's html page history and display the target web page.
 	 * @param commandsToPop The number of commands to pop from the history.

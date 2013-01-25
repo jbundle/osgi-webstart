@@ -27,9 +27,9 @@ location in your application and return to the same screen later.
 <p>
 All you have to do is use the jsapplet.html template and implement the following methods in your Applet class:<br/>
 <code>
-    public void doJavaBrowserBack(String command)<br/>
-    public void doJavaBrowserForward(String command)<br/>
-    public void doJavaBrowserHashChange(String command)<br/>
+    public void doBack(String command)<br/>
+    public void doForward(String command)<br/>
+    public void hashChange(String command)<br/>
 </code>
 The browser will call your application with the part of the url starting with the hash '#' mark, so you can update your
 application accordingly.

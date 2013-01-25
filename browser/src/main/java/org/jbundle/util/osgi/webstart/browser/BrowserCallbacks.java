@@ -17,15 +17,25 @@ public interface BrowserCallbacks
      * The browser back button was pressed (Javascript called me).
      * @param command The command that was popped from the browser history.
      */
-    public void doJavaBrowserBack(String command);
+    public void doBack(String command);
     /**
      * The browser back button was pressed (Javascript called me).
      * @param command The command that was popped from the browser history.
      */
-    public void doJavaBrowserForward(String command);
+    public void doForward(String command);
     /**
      * The browser hash value changed (Javascript called me).
      * @param command The command that was popped from the browser history.
      */
-    public void doJavaBrowserHashChange(String command);
+    public void hashChange(String command);
+    // NOTE: The following calls are here so I will be compatible with the javafx wrapper.
+//    public void hashChanged(String hashLoc);
+    /**
+     * Go to previous page in history
+     */
+    public void back();
+    /**
+     * Go to next page in history if there is one
+     */
+    public void forward();
 }

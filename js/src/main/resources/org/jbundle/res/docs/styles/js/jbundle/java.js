@@ -21,42 +21,42 @@ jbundle.java = {
 	    SERVLET_NAME: "webstart",          // The default servlet name.
 	/**
 	 * This is called from the history state object when the state is popped by a browser back command.
-	 * This method calls TO the java doJavaBrowserBack method.
+	 * This method calls TO the java doBack method.
 	 * @param command Is the command popped off the history stack that java should execute.
 	 */
-	doJavaBrowserBack: function(command)
+	doBack: function(command)
 	{
 		if (!jbundle.java.isJavaWindow())
 			jbundle.java.displayApplet(command);
 		if (jbundle.java.ignoreBack != true)
 		{
 			if (document.jbundle)
-				document.jbundle.doJavaBrowserBack(command);
+				document.jbundle.doBack(command);
 			if (jbundle.debug == true)
-				console.log("doJavaBrowserBack command =" + command);
+				console.log("doBack command =" + command);
 		}
 		jbundle.java.ignoreBack = false;
 	},
 	/**
 	 * This is called from the history state object when the state is popped by a browser forward command.
-	 * This method calls TO the java doJavaBrowserForward method.
+	 * This method calls TO the java doForward method.
 	 * @param command Is the command popped off the history stack that java should execute.
 	 */
-	doJavaBrowserForward: function(command)
+	doForward: function(command)
 	{
 		if (!jbundle.java.isJavaWindow())
 			jbundle.java.displayApplet(command);
 		else if (document.jbundle)
-			document.jbundle.doJavaBrowserForward(command);
+			document.jbundle.doForward(command);
 		if (jbundle.debug == true)
-			console.log("doJavaBrowserForward command =" + command);
+			console.log("doForward command =" + command);
 	},
 	/**
 	 * This is called from the history state object when the state is popped by a browser hash change.
-	 * This method calls TO the java doJavaBrowserHashChange method.
+	 * This method calls TO the java hashChange method.
 	 * @param command Is the command in the new hash that java should execute.
 	 */
-	doJavaBrowserHashChange: function(command)
+	hashChange: function(command)
 	{
 		if (jbundle.util)
 			if (jbundle.java.getProperty(command, "applet") == null)
@@ -69,14 +69,14 @@ jbundle.java = {
 		if (!jbundle.java.isJavaWindow())
 			jbundle.java.displayApplet(command);
 		else if (document.jbundle)
-			document.jbundle.doJavaBrowserHashChange(command);
+			document.jbundle.hashChange(command);
 		else if (jbundle.util)
 		{	// Must be an xsl command
 			jbundle.java.prepareWindowForApplet(false);
 			jbundle.util.doBrowserHashChange(command);
 		}
 		if (jbundle.debug == true)
-			console.log("doJavaBrowserHashChange command =" + command);
+			console.log("hashChange command =" + command);
 	},
 	/**
 	 * This is called FROM java to push a history object onto the stack.
@@ -428,8 +428,8 @@ jbundle.java = {
 	ignoreBack: false
 };
 
-jbundle.java.State.prototype.back = function() { jbundle.java.doJavaBrowserBack(this.changeUrl); };
-jbundle.java.State.prototype.forward = function() { jbundle.java.doJavaBrowserForward(this.changeUrl); };
+jbundle.java.State.prototype.back = function() { jbundle.java.doBack(this.changeUrl); };
+jbundle.java.State.prototype.forward = function() { jbundle.java.doForward(this.changeUrl); };
 
 /**
  * For java to call these, these must be at the root.

@@ -62,17 +62,17 @@ public interface BrowserCallbacks<br/>
      * The browser back button was pressed (Javascript called me).<br/>
      * @param command The command that was popped from the browser history.<br/>
      */<br/>
-    public void doJavaBrowserBack(String command);<br/>
+    public void doBack(String command);<br/>
     /**<br/>
      * The browser back button was pressed (Javascript called me).<br/>
      * @param command The command that was popped from the browser history.<br/>
      */<br/>
-    public void doJavaBrowserForward(String command);<br/>
+    public void doForward(String command);<br/>
     /**<br/>
      * The browser hash value changed (Javascript called me).<br/>
      * @param command The command that was popped from the browser history.<br/>
      */<br/>
-    public void doJavaBrowserHashChange(String command);<br/>
+    public void hashChange(String command);<br/>
 }<br/>
 </code>
 These methods are called from javascript when a browser action occurs.

@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JavaFX 2.0 Application</title>
+<script src="http://java.com/js/dtjava.js"></script>
+
+<script>
+	function getParam( name )
+	{ // Thanks netlobo
+	  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	  var regexS = "[\\?&]"+name+"=([^&#]*)";
+	  var regex = new RegExp( regexS );
+	  var results = regex.exec( window.location.href );
+	  if( results == null )
+	    return "";
+	  else
+	    return results[1];
+	}
+    function javafx() {
+    	path = location.pathname;
+    	if (path.indexOf('.') != -1)
+    	{   // webstart servlet can't have '.htm(l)' extension
+    	    exten = path.substring(path.indexOf('.'));
+    	    exten = exten.toUpperCase();
+    	    if (exten == ".HTM")
+    	        path = path.substring(0, path.length - 4);
+    	    if (exten == ".HTML")
+    	        path = path.substring(0, path.length - 5);
+    	}
+    	params = location.search;
+    	if (getParam("applet") != "")
+    	{
+    	    if (getParam("appletClass") == "")
+    	        params = params + "&" + "appletClass=" + getParam("applet");
+    	    start = params.indexOf("applet=");
+    	    end = params.indexOf("&", start)
+    	    if (end != -1)
+    	        params = params.substring(0, start) + params.substring(end + 1);
+    	    else
+    	        params = params.substring(0, start);
+    	}
+    	width = getParam("width");
+    	if (width == "")
+    	    width = "100%";
+    	height = getParam("height");
+    	if (height == "")
+    	    height = "95%";
+    	name = getParam("name");
+    	if (name == "")
+    	    name = "JavaFX Application";
+    	var app = {
+                id : 'java',
+                url : path + params,
+                placeholder : 'javafx-app-placeholder',
+                width : width,
+                height : height
+//                jnlp_content : 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGpubHAgc3BlYz0iMS4wIiB4bWxuczpqZng9Imh0dHA6Ly9qYXZhZnguY29tIiBocmVmPSJFbnNlbWJsZS5qbmxwIj4KICA8aW5mb3JtYXRpb24+CiAgICA8dGl0bGU+RW5zZW1ibGU8L3RpdGxlPgogICAgPHZlbmRvcj5kZW1vPC92ZW5kb3I+CiAgICA8ZGVzY3JpcHRpb24+U2FtcGxlIEphdmFGWCAyLjAgYXBwbGljYXRpb24uPC9kZXNjcmlwdGlvbj4KICAgIDxvZmZsaW5lLWFsbG93ZWQvPgogIDwvaW5mb3JtYXRpb24+CiAgPHJlc291cmNlcz4KICAgIDxqZng6amF2YWZ4LXJ1bnRpbWUgdmVyc2lvbj0iMi4yKyIgaHJlZj0iaHR0cDovL2phdmFkbC5zdW4uY29tL3dlYmFwcHMvZG93bmxvYWQvR2V0RmlsZS9qYXZhZngtbGF0ZXN0L3dpbmRvd3MtaTU4Ni9qYXZhZngyLmpubHAiLz4KICA8L3Jlc291cmNlcz4KICA8cmVzb3VyY2VzPgogICAgPGoyc2UgdmVyc2lvbj0iMS42KyIgaHJlZj0iaHR0cDovL2phdmEuc3VuLmNvbS9wcm9kdWN0cy9hdXRvZGwvajJzZSIvPgogICAgPGphciBocmVmPSJFbnNlbWJsZS5qYXIiIHNpemU9Ijg4NDgxODkiIGRvd25sb2FkPSJlYWdlciIgLz4KICA8L3Jlc291cmNlcz4KICA8YXBwbGV0LWRlc2MgIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBtYWluLWNsYXNzPSJjb20uamF2YWZ4Lm1haW4uTm9KYXZhRlhGYWxsYmFjayIgIG5hbWU9IkVuc2VtYmxlIiA+CiAgICA8cGFyYW0gbmFtZT0icmVxdWlyZWRGWFZlcnNpb24iIHZhbHVlPSIyLjIrIi8+CiAgPC9hcHBsZXQtZGVzYz4KICA8amZ4OmphdmFmeC1kZXNjICB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgbWFpbi1jbGFzcz0iZW5zZW1ibGUuRW5zZW1ibGUyIiAgbmFtZT0iRW5zZW1ibGUiIC8+CiAgPHVwZGF0ZSBjaGVjaz0iYmFja2dyb3VuZCIvPgo8L2pubHA+Cg=='
+            }
+//    	var app = {width: width, height: height, name: name} ;
+//    	var parameters = {jnlp_href: path + params, draggable:'true'} ;
+    	var platform = {javafx : '2.2+'};
+    	var callbacks = {};
+
+    	dtjava.embed(app, platform, callbacks);
+    }
+    <!-- Embed FX application into web page once page is loaded -->
+    dtjava.addOnloadCallback(javafx);
+</script>
+
+        <style>
+            html, body {  
+                margin: 0;  
+                overflow: hidden;  
+                padding: 0; 
+            }
+        </style>
+        <script>
+            function hashchanged(event) {
+                var applet = document.getElementById('java');
+                if (applet != null) {
+                    try {
+                        applet.hashChanged(location.hash);
+                    } catch (err) {
+                        console.log("JS Exception when trying to pass hash to JavaFX Applet: " + err);
+                    }
+                }
+            }
+        </script> 
+</head>
+<body onhashchange="hashchanged(event)"><div id='javafx-app-placeholder'></div></body>
+</html>

@@ -650,7 +650,7 @@ jbundle.util = {
 		return value;
 	},
 	// Non-history hash change
-	doHashChange: function(command)
+	hashChange: function(command)
 	{
 		jbundle.util.doCommand(this.command, true, false);
 	}
