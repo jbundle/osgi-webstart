@@ -81,6 +81,7 @@ import org.jibx.schema.net.java.jnlp_6_0.Title;
 import org.jibx.schema.net.java.jnlp_6_0.Vendor;
 import org.jibx.schema.net.java.jnlp_6_0._Package;
 import org.jibx.schema.net.java.jnlp_6_0._Package.Recursive;
+import org.jibx.schema.net.java.jnlp_6_0.JavafxDesc;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
@@ -881,6 +882,14 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     	if (jnlp.getApplicationDesc() == null)
     		jnlp.setApplicationDesc(new ApplicationDesc());
     	ApplicationDesc applicationDesc = jnlp.getApplicationDesc();
+        if ((applicationDesc.getMainClass() != null) && (jnlp.getJavafxDesc() != null))
+        {  // Special case - JavaFX jnlp definition
+            JavafxDesc javafxDesc = jnlp.getJavafxDesc();
+            javafxDesc.setHeight(getRequestParam(request, HEIGHT, "600"));
+            javafxDesc.setWidth(getRequestParam(request, WIDTH, "350"));
+            javafxDesc.setMainClass(mainClass);
+            mainClass = applicationDesc.getMainClass();  // Don't change the main class in the jnlp definition.
+        }
     	applicationDesc.setMainClass(mainClass);
     	
     	List<Argument> arguments = applicationDesc.getArgumentList();
@@ -917,6 +926,15 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     	if (jnlp.getAppletDesc() == null)
     		jnlp.setAppletDesc(new AppletDesc());
     	AppletDesc appletDesc = jnlp.getAppletDesc();
+    	if ((appletDesc.getMainClass() != null) && (jnlp.getJavafxDesc() != null))
+    	{  // Special case - JavaFX jnlp definition
+            JavafxDesc javafxDesc = jnlp.getJavafxDesc();
+            javafxDesc.setHeight(getRequestParam(request, HEIGHT, "600"));
+            javafxDesc.setWidth(getRequestParam(request, WIDTH, "350"));
+            javafxDesc.setMainClass(mainClass);
+            javafxDesc.setName(appletName);
+            mainClass = appletDesc.getMainClass();  // Don't change the main class in the jnlp definition.
+    	}
     	appletDesc.setMainClass(mainClass);
     	appletDesc.setName(appletName);
     	appletDesc.setWidth(getRequestParam(request, WIDTH, "350"));

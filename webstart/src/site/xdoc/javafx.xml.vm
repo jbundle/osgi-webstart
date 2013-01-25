@@ -25,12 +25,12 @@
         java -classpath target/org.jbundle.javafx.example.helloworld-1.0.0-SNAPSHOT.jar:$JAVA_HOME/jre/lib/jfxrt.jar  org.jbundle.javafx.example.helloworld.HelloWorldJavaFX
         </p>
         <p>
-        Try this <a href="http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafx.jnlp">simple JavaFX program</a>.
+        Try this <a href="http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafxapplet.jnlp">simple JavaFX program</a>.
         </p>
         <p>
         If you want to deploy a JavaFX application that was not packaged with an OSGi manifest, just use the wrap protocol to automatically generate a manifest.<br/>
         For example, if this was a regular java jar file, in karaf I would just type:<br/>
-        <code>install wrap:file:///home/don/workspace/workspace/jbundle/javafx/helloworld/target/org.jbundle.javafx.example.helloworld-1.0.0-SNAPSHOT.jar</code><br/>
+        <code>install wrap:file:///home/don/workspace/workspace/jbundle/javafx/helloworld/target/org.jbundle.javafx.example.helloworld-${project.version}.jar</code><br/>
         and I'm ready to run the application from a browser with the same command that we used in the first example. 
         </p>
         <p>
@@ -39,7 +39,13 @@
         <a href="http://localhost:8181/webstart/docs/applet.html?webStartPropertiesFile=org/jbundle/javafx/example/helloworld/javafx.properties">this sample</a>.
         The applet's params come from the sample appplication's jar file.
         </p>
-
+        <p>
+        You have several options when deploying your JavaFX applications. You can use the osgi-webstart javascript framework with a JavaFX jnlp applet template:<br/>
+        <code>http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafxapplet.jnlp</code><br/>
+        or you can launch your program as a JavaFX application:<br/>
+        <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFXApp</code></br>
+        this will use the default javafx template: docs/javafx.jnlp
+        </p>
     </section>
 
   </body>
