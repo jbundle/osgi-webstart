@@ -117,17 +117,29 @@ public class BrowserManager extends Object
         this.callJavascript("popBrowserHistory", args);
 	}
 	/**
+	 * Display this web page in browser.
+	 * Note: If this is successful, this applet will not be running anymore.
+	 * @param url
+	 */
+	public void doLink(String url)
+	{
+        String args[] = new String[1];
+        args[0] = url;
+        //logger.info("doLink command: " + args[0]);
+        this.callJavascript("doLink", args);	    
+	}
+	/**
 	 * Call javascript with this command.
 	 * @param command
 	 * @param args
 	 */
-	public void callJavascript(String command, String args[])
+	public Object callJavascript(String command, String args[])
 	{
 		try {
 	        JSObject win = JSObject.getWindow(m_applet);
-	        win.call(command, args);
+	        return win.call(command, args);
 		} catch (Exception ex) {
-			// Ignore any errors
+			return null; // Ignore any errors
 		}		
 	}
 }
