@@ -46,6 +46,20 @@
         <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFXApp</code></br>
         this will use the default javafx template: docs/javafx.jnlp
         </p>
+        <p>
+        Here's a more complicated example. We'll use the JavaFX ensemble example. I made a few minor adjustments to the app
+        so it will run in the Java sandbox.
+        First, install our example and it's dependencies:<br/>
+        <code>
+        osgi:install wrap:mvn:org.apache.lucene/lucene-grouping/3.2.0<br/>
+        osgi:install wrap:mvn:org.apache.lucene/lucene-core/3.2.0<br/>
+        osgi:install wrap:mvn:org.jbundle.javafx.example/org.jbundle.javafx.example.ensemble<br/>
+        </code>
+        Now, start this example in your browser: 
+        <a href="http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2">http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2</a>.
+        Ignore the warning and try the samples. A few of the examples will not work, because they try to access local resources which
+        is not allowed in the browser.
+        </p>
     </section>
 
   </body>
