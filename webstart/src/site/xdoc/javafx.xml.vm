@@ -47,7 +47,7 @@
         this will use the default javafx template: docs/javafx.jnlp
         </p>
         <p>
-        Here's a more complicated example. We'll use the JavaFX ensemble example. I made a few minor adjustments to the app
+        Here's a more complicated example. We'll use the JavaFX ensemble example. I made a <a href="https://github.com/jbundle/javafx/commit/106565f9f88dfde7162da1eb3354e98c0cc8aaed">few minor adjustments</a> to the app
         so it will run in the Java sandbox.
         First, install our example and it's dependencies:<br/>
         <code>

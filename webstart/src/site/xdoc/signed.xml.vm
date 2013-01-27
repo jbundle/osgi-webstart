@@ -1,0 +1,36 @@
+﻿<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>OSGi to Web Start Web Bundle</title>
+    <author email="don@donandann.com">Don Corley</author>
+  </properties>
+
+  <!-- Optional HEAD element, which is copied as is into the XHTML <head> element -->
+<!-- head>
+<meta />
+</head  -->
+
+  <body>
+
+     <section name="Note on signed jars">
+        <p>
+        Before I start, let me rant a little...<br/>
+        <b>Do not</b> sign your jars. This forces you to ask for permission to run and the user gets this scary warning:<br/>
+        <img src="images/javasecuritywarning.png" /><br/>
+        No user in their right mind would accept this.<br/>
+        Stay in the sandbox! Don't access files on the local computer and don't access web sites that didn't originate at the
+        application's site. <br/>
+        If you need to access web content, just add a proxy to your web server to deliver these pages to your user's application.<br/>
+        If you are worried about your applet getting hacked in-transit, just deliver it with https.<br/>
+        Okay?
+        </p>
+        <p>
+        If you must 
+        </p>
+    </section>
+
+  </body>
+
+</document>

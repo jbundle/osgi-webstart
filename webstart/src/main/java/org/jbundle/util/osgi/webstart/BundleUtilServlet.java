@@ -21,7 +21,10 @@ import java.util.jar.Manifest;
 import java.util.jar.Pack200;
 import java.util.jar.Pack200.Packer;
 import java.util.jar.Pack200.Unpacker;
+import java.util.zip.CRC32;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.jbundle.util.osgi.ClassFinder;
 import org.jbundle.util.osgi.ClassService;
@@ -36,7 +39,9 @@ import org.osgi.framework.Constants;
  */
 public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*/
 {
-	private static final long serialVersionUID = 1L;
+    public static final boolean REJAR_BEFORE_PACK = false;     // Unjarring and re-jarring without compression creates a smaller gzipped file - Disabled - does not reduce size
+
+    private static final long serialVersionUID = 1L;
 
 	public static final String MANIFEST_DIR = "META-INF/";
 	public static final String MANIFEST_PATH = MANIFEST_DIR + "MANIFEST.MF";
@@ -64,99 +69,133 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
                 if (!forceScanBundle)
                     return null;    // Use cached jar file
             }
-        
+
+        String[] packages = null;
+
+        boolean jarCreated = false;
+        if ((createNewJar) && (pack))
+        {
+            packages = this.jarFile(bundle, createNewJar, fileOut, !REJAR_BEFORE_PACK);   // jar WITHOUT compression, pack, and gzip.
+		    this.packGzipJar(fileOut.getPath(), true);
+		    if (REJAR_BEFORE_PACK)
+		        fileOut.delete();
+		    else
+		        jarCreated = true;
+        }
+		
+        if (!jarCreated)
+            packages = this.jarFile(bundle, createNewJar, fileOut, true);   // Jar with compression for non-gzip clients
+
+        return packages;
+	}
+	/**
+	 * Jar this bundle.
+     * @param bundle
+     * @param createNewJar - If false, don't create a jar, just scan the bundle
+     * @param fileout
+     * @param compressJar - If false, Don't compress the jar
+     * @return All the package names in the bundle or null if I am using the cached jar.
+	 */
+    public String[] jarFile(Bundle bundle, boolean createNewJar, File fileOut, boolean compressJar)
+    {
         Set<String> packages = new HashSet<String>();
-		try {
-			Manifest manifest = null;
-			String path = MANIFEST_PATH;
-			URL url = bundle.getEntry(path);
-			JarOutputStream zos = null;
-			if (createNewJar)
-			{
-    			InputStream in = null;
-    			if (url != null)
-    			{
-    				try {
-    					in = url.openStream();
-    				} catch (Exception e) {
-    					e.printStackTrace();
-    				}
-    			}
-    			if (in != null)
-    			{
+        try {
+            Manifest manifest = null;
+            String path = MANIFEST_PATH;
+            URL url = bundle.getEntry(path);
+            JarOutputStream zos = null;
+            if (createNewJar)
+            {
+                InputStream in = null;
+                if (url != null)
+                {
+                    try {
+                        in = url.openStream();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (in != null)
+                {
                     manifest = new Manifest(new BufferedInputStream(in));
                 } else {
                     manifest = new Manifest();
                 }
-    			
-    			FileOutputStream out = new FileOutputStream(fileOut);
-    			
-    	        zos = new JarOutputStream(out);
-    	        if (manifest != null) {
-    	            JarEntry e = new JarEntry(MANIFEST_DIR);
-    	            e.setTime(System.currentTimeMillis());
-    	            e.setSize(0);
-    	            e.setCrc(0);
-    	            zos.putNextEntry(e);
-    	            e = new JarEntry(MANIFEST_NAME);
-    	            e.setTime(System.currentTimeMillis());
-    	            zos.putNextEntry(e);
-    	            manifest.write(zos);
-    	            zos.closeEntry();
-    	        }
-			}
-			String paths = "/";
-			String filePattern = "*";
-			@SuppressWarnings("unchecked")
-			Enumeration<URL> entries = bundle.findEntries(paths, filePattern, true);
-			while (entries.hasMoreElements())
-			{
-				url = entries.nextElement();
-				String name = url.getPath();
-				if (name.startsWith("/"))
-					name = name.substring(1);
-    		    name = entryName(name);
-    	        if (name.equals("") || name.equals("."))
-    	            continue;
-    	        if ((name.equalsIgnoreCase(MANIFEST_DIR)) || (name.equalsIgnoreCase(MANIFEST_PATH)))
-            		continue;
+                
+                FileOutputStream out = new FileOutputStream(fileOut);
+                
+                zos = new JarOutputStream(out);
+                if (!compressJar) {
+                     zos.setMethod(ZipOutputStream.STORED);
+                }
+                if (manifest != null) {
+                    JarEntry e = new JarEntry(MANIFEST_DIR);
+                    e.setTime(System.currentTimeMillis());
+                    e.setSize(0);
+                    e.setCrc(0);
+                    zos.putNextEntry(e);
+                    e = new JarEntry(MANIFEST_NAME);
+                    e.setTime(System.currentTimeMillis());
+                    if (!compressJar) {
+                        crc32Manifest(e, manifest);
+                    }
+                    zos.putNextEntry(e);
+                    manifest.write(zos);
+                    zos.closeEntry();
+                }
+            }
+            String paths = "/";
+            String filePattern = "*";
+            @SuppressWarnings("unchecked")
+            Enumeration<URL> entries = bundle.findEntries(paths, filePattern, true);
+            while (entries.hasMoreElements())
+            {
+                url = entries.nextElement();
+                String name = url.getPath();
+                if (name.startsWith("/"))
+                    name = name.substring(1);
+                name = entryName(name);
+                if (name.equals("") || name.equals("."))
+                    continue;
+                if ((name.equalsIgnoreCase(MANIFEST_DIR)) || (name.equalsIgnoreCase(MANIFEST_PATH)))
+                    continue;
                 boolean isDir = name.endsWith("/");
-    	        if (createNewJar)
-    	        {
-        	        long size = isDir ? 0 : -1; // ***????****  file.length();
-        	        JarEntry e = new JarEntry(name);
-        	        e.setTime(fileOut.lastModified()); //???
-        	        if (size == 0) {
-        	            e.setMethod(JarEntry.STORED);
-        	            e.setSize(0);
-        	            e.setCrc(0);
-        	        }
-        	        zos.putNextEntry(e);
-        	        if (!isDir) {
-        		        InputStream inStream = url.openStream();
-        		        copyStream(inStream, zos, false);
-        	            inStream.close();
-        	        }
-        	        zos.closeEntry();
-    	        }
-    	        
-    	        if (!isDir)
-    	            if (!(name.toUpperCase().startsWith(MANIFEST_DIR)))
-    	        		packages.add(getPackageFromName(name));
-			}
-			if (zos != null)
-			    zos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-        if ((createNewJar) && (pack))
-		    this.packJar(fileOut.getPath(), false);   // I use that original jar for debugging
-		
-		return packages.toArray(EMPTY_ARRAY);
-	}
+                if (createNewJar)
+                {
+                    long size = isDir ? 0 : -1; // ***????****  file.length();
+                    JarEntry e = new JarEntry(name);
+                    e.setTime(fileOut.lastModified()); //???
+                    if (size == 0) {
+                        e.setMethod(ZipEntry.STORED);
+                        e.setSize(0);
+                        e.setCrc(0);
+                    } else if (!compressJar) {
+                        e.setMethod(ZipEntry.STORED);
+                        size = crc32File(e, url);
+                        e.setSize(size);
+                    }
+                    zos.putNextEntry(e);
+                    if (!isDir) {
+                        InputStream inStream = url.openStream();
+                        copyStream(inStream, zos, false);
+                        inStream.close();
+                    }
+                    zos.closeEntry();
+                }
+                
+                if (!isDir)
+                    if (!(name.toUpperCase().startsWith(MANIFEST_DIR)))
+                        packages.add(getPackageFromName(name));
+            }
+            if (zos != null)
+                zos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return packages.toArray(EMPTY_ARRAY);
+    }
 	/**
 	 * Pack and gzip this jar file.
 	 * Note: Most of this code comes from the oracle (thanks!) sample at:
@@ -164,7 +203,7 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
 	 * Note: I pack and then unpack to recreate the original jar since pack messes up the magic number.
 	 * @param jarFileName
 	 */
-	public void packJar(String jarFileName, boolean modifyOriginalJar)
+	public void packGzipJar(String jarFileName, boolean modifyOriginalJar)
 	{
 	    String packFileName = jarFileName + ".pack";
 	    Packer packer = Pack200.newPacker();
@@ -435,5 +474,64 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
     	}
     	return properties;
     }
+    // The following code was copied directly from tool.jar.
+    // Thanks Oracle!
+    CRC32 crc32 = new CRC32();
+   /*
+    * compute the crc32 of a file.  This is necessary when the ZipOutputStream
+    * is in STORED mode.
+    */
+   private void crc32Manifest(ZipEntry e, Manifest m) throws IOException {
+       crc32.reset();
+       CRC32OutputStream os = new CRC32OutputStream(crc32);
+       m.write(os);
+       e.setSize((long) os.n);
+       e.setCrc(crc32.getValue());
+   }
+   /*
+    * an OutputStream that doesn't send its output anywhere, (but could).
+    * It's here to find the CRC32 of a manifest, necessary for STORED only
+    * mode in ZIP.
+    */
+   final class CRC32OutputStream extends java.io.OutputStream {
+       CRC32 crc;
+       int n = 0;
+       CRC32OutputStream(CRC32 crc) {
+           this.crc = crc;
+       }
 
+       public void write(int r) throws IOException {
+           crc.update(r);
+           n++;
+       }
+
+       public void write(byte[] b) throws IOException {
+           crc.update(b, 0, b.length);
+           n += b.length;
+       }
+
+       public void write(byte[] b, int off, int len) throws IOException {
+           crc.update(b, off, len);
+           n += len - off;
+       }
+   }
+   /*
+    * compute the crc32 of a file.  This is necessary when the ZipOutputStream
+    * is in STORED mode.
+    */
+   private int crc32File(ZipEntry e, URL url) throws IOException {
+       InputStream is = new BufferedInputStream(url.openStream());
+       byte[] buf = new byte[1024];
+       crc32.reset();
+       int r = 0;
+       int len = 0;
+       while ((r = is.read(buf)) != -1) {
+           len += r;
+           crc32.update(buf, 0, r);
+       }
+       is.close();
+       e.setCrc(crc32.getValue());
+       is.close();
+       return len;
+   }
 }
