@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to Web Start Web Bundle</title>
+    <title>Auto Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -14,9 +14,9 @@
 
   <body>
 
-<section name="OSGi to Web Start usage">
+<section name="Auto Web Start usage">
 <p>
-Installing the OSGi to Web Start Web Bundle is pretty easy. This bundle has only a
+Installing the Auto Web Start Web Bundle is pretty easy. This bundle has only a
 few dependencies.<br/>
 Here are the instructions for several provisioning systems:
 </p>
@@ -38,7 +38,7 @@ span.comment {color:blue; font-style:italic}
 <source>
 <span class="response">g!</span> repos add ${project.organization.url}/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Adding the jbundle obr index simplifies installing bundles)</span><br/>
 <span class="response">g!</span> repos add http://www.jibx.org/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Adding the dependent jibx index)</span><br/>
-<span class="response">g!</span> deploy -s '${project.name}' <span class="comment">(Install and start the OSGi to Web Start Web Bundle)</span><br/>
+<span class="response">g!</span> deploy -s '${project.name}' <span class="comment">(Install and start the Auto Web Start Web Bundle)</span><br/>
 </source>
 </p>
 </subsection>

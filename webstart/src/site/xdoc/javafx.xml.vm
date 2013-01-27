@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to Web Start Web Bundle</title>
+    <title>Auto Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -16,7 +16,7 @@
 
      <section name="JavaFX deployment examples">
         <p>
-        The OSGi to Web start bundle is perfect for deploying JavaFX modules. Besides simplifying the deploy process, your jars are automatically packed and gziped
+        The Auto Web start bundle is perfect for deploying JavaFX modules. Besides simplifying the deploy process, your jars are automatically packed and gziped
         for quick downloads. JavaFX modules are the same as any other java program. All you have to do is place your JFXPanel in a JApplet.
         You can supply your own jnlp template, or use this one:
         </p>
@@ -34,13 +34,13 @@
         and I'm ready to run the application from a browser with the same command that we used in the first example. 
         </p>
         <p>
-        Since the OSGi to webstart servlet has access to OSGi resources, you can package your startup parameters and/or jnlp template in your project's jar file.
+        Since the Auto webstart servlet has access to OSGi resources, you can package your startup parameters and/or jnlp template in your project's jar file.
         For example take a look at the url on
         <a href="http://localhost:8181/webstart/docs/applet.html?webStartPropertiesFile=org/jbundle/javafx/example/helloworld/javafx.properties">this sample</a>.
         The applet's params come from the sample appplication's jar file.
         </p>
         <p>
-        You have several options when deploying your JavaFX applications. You can use the osgi-webstart javascript framework with a JavaFX jnlp applet template:<br/>
+        You have several options when deploying your JavaFX applications. You can use the auto-webstart javascript framework with a JavaFX jnlp applet template:<br/>
         <code>http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafxapplet.jnlp</code><br/>
         or you can launch your program as a JavaFX application:<br/>
         <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFXApp</code></br>

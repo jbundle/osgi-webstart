@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to Web Start Web Bundle</title>
+    <title>Auto Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -14,9 +14,9 @@
 
   <body>
 
-<section name="OSGi to Web Start usage">
+<section name="Auto Web Start usage">
 <p>
-Using the OSGi to Web Start Web Bundle is easy. The only required parameter is the main class name.
+Using the Auto Web Start Web Bundle is easy. The only required parameter is the main class name.
 All of the other information that Web Start needs come from the OSGi bundles.
 </p>
 <p>
@@ -29,7 +29,7 @@ All of the other information that Web Start needs come from the OSGi bundles.
 
 <subsection name="Web Bundle parameters">
 <p>
-Here are the url parameter that you supply so the OSGi to Web Start Web Bundle can create the
+Here are the url parameter that you supply so the Auto Web Start Web Bundle can create the
 correct JNLP and jar files for your web application or applet. Any unknown params are passed
 down to the application or applet.<br/>
 Your url should look something like this:<br/>
@@ -80,7 +80,7 @@ org.jbundle.util.osgi.webstart.contextpath - The url path to deploy the web bund
 
 <subsection name="Web Start Applet">
 <p>
-The OSGi to Web Start Web Bundle can also create a Web Start Applet. Just supply the main class
+The Auto Web Start Web Bundle can also create a Web Start Applet. Just supply the main class
 name in the appletClass parameter rather than the mainClass parameter.
 </p>
 <p>

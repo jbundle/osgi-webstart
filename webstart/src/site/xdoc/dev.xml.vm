@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to Web Start Web Bundle</title>
+    <title>Auto Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -14,7 +14,7 @@
 
   <body>
 
-<section name="OSGi to Web Start Java Applet Development">
+<section name="Auto Web Start Java Applet Development">
 <p>
 Developing applets to run in a browser is easy. Just write your applet the way you usually would,
 just extend Applet or JApplet. For example, to deploy this very simple applet, I need to deploy it to my

@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to Web Start Web Bundle</title>
+    <title>Auto Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -17,7 +17,7 @@
      <section name="Web Browser Integration">
 
 <p>
-The OSGi to web-start bundle offers web browser integration also.
+The Auto webstart bundle offers web browser integration also.
 </p>
 <p>
 Your application can update when the user clicks the browser forward and back button and the browser URL can

@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
   <properties>
-    <title>OSGi to Web Start Web Bundle</title>
+    <title>Auto Web Start Web Bundle</title>
     <author email="don@donandann.com">Don Corley</author>
   </properties>
 
@@ -16,7 +16,7 @@
 
      <section name="Description">
 
-  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>OSGi to Web Start Web Bundle</strong> automatically allows your OSGi
+  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>Auto Web Start Web Bundle</strong> automatically allows your OSGi
   applications to run as Web Start applets or applications.</p>
 
 <p>
@@ -33,7 +33,7 @@ All you have to do is specify the main java class in your url. For example:<br/>
 <a href="http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
 is all you would need to type to launch the OSGi Biorhythm program from a web browser.
-The OSGi to Web Start Web Bundle takes care of all the Web Start configuration. It even automatically
+The Auto Web Start Web Bundle takes care of all the Web Start configuration. It even automatically
 updates the cached jnlp and java jar files when the OSGi bundles are updated.
 </p>
 
@@ -46,13 +46,13 @@ updates the cached jnlp and java jar files when the OSGi bundles are updated.
 <li><a href="install.html">Installation.</a></li>
 <li><a href="browser.html">Browser integration.</a></li>
 <li><a href="javafx.html">JavaFX deployment.</a></li>
-<li><a href="dev.html">Developers - Integrating your application with osgi-webstart.</a></li>
+<li><a href="dev.html">Developers - Integrating your application with auto-webstart.</a></li>
 </ul>
 </p>
 
 <subsection name="OSGi packaging">
 <p>
-The <strong>jbundle OSGi to Web Start Web Bundle</strong> is an <a href="http://www.osgi.org">OSGi</a> bundle.
+The <strong>jbundle Auto Web Start Web Bundle</strong> is an <a href="http://www.osgi.org">OSGi</a> bundle.
 To use it in your OSGi project, just install and start this bundle in your OSGi environment.
 Remember to start a web server too.
 </p>
@@ -67,7 +67,7 @@ Import-Package: ${project.artifactId};resolution:=optional;version=${project.ver
 
 <subsection name="Maven Integration">
 <p>
-The <strong>jbundle OSGi to Web Start Web Bundle</strong> is a standard <a href="http://maven.apache.org/">Maven</a> artifact. Here is its dependency information:
+The <strong>jbundle Auto Web Start Web Bundle</strong> is a standard <a href="http://maven.apache.org/">Maven</a> artifact. Here is its dependency information:
 </p>
 <p>
 <source>
