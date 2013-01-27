@@ -39,7 +39,8 @@ under the License.
       <item name="Browser use" href="browser.html"/>
       <item name="JavaFX" href="javafx.html"/>
       <item name="Development" href="dev.html"/>
-    </menu>
+      <item name="Signed jars" href="signed.html"/>
+      </menu>
 
     <menu name="JBundle Projects">
       <item name="App framework" href="/jbundle"/>

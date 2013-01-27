@@ -43,7 +43,7 @@
         You have several options when deploying your JavaFX applications. You can use the auto-webstart javascript framework with a JavaFX jnlp applet template:<br/>
         <code>http://localhost:8181/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafxapplet.jnlp</code><br/>
         or you can launch your program as a JavaFX application:<br/>
-        <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFXApp</code></br>
+        <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFXApp</code><br/>
         this will use the default javafx template: docs/javafx.jnlp
         </p>
         <p>

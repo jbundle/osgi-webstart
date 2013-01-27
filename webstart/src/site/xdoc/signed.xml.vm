@@ -27,7 +27,9 @@
         Okay?
         </p>
         <p>
-        If you must 
+        If you must use a signed jar, make sure that you disable compression, by setting the jnlp.packEnabled flag to false
+        since the compression usually invalidates the digital signatures.<br/>
+        http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2&ampjnlp.packEnabled=false
         </p>
     </section>
 
