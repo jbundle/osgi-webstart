@@ -120,13 +120,17 @@ public class BrowserManager extends Object
 	 * Display this web page in browser.
 	 * Note: If this is successful, this applet will not be running anymore.
 	 * @param url
+	 * @return true if successful
 	 */
-	public void doLink(String url)
+	public boolean doLink(String url)
 	{
         String args[] = new String[1];
         args[0] = url;
         //logger.info("doLink command: " + args[0]);
-        this.callJavascript("doLink", args);	    
+        Object success = this.callJavascript("doLink", args);
+        if (success instanceof Boolean)
+            return ((Boolean)success).booleanValue();
+        return false;
 	}
 	/**
 	 * Call javascript with this command.
