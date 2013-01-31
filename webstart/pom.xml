@@ -68,14 +68,14 @@
                         <artifactItem>
                             <groupId>org.dojotoolkit</groupId>
                             <artifactId>dojo</artifactId>
-                            <version>${dojoVersion}</version>
+                            <version>${dojo-version}</version>
                             <type>zip</type>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </artifactItem>
                         <artifactItem>
                             <groupId>org.jbundle.res</groupId>
                             <artifactId>org.jbundle.res.images</artifactId>
-                            <version>${jbundleVersion}</version>
+                            <version>${jbundle-version}</version>
                             <classifier>root</classifier>
                             <type>jar</type>
                             <outputDirectory>${project.build.directory}/${project.build.finalName}
@@ -84,7 +84,7 @@
                         <artifactItem>
                             <groupId>org.jbundle.res</groupId>
                             <artifactId>org.jbundle.res.images.misc</artifactId>
-                            <version>${jbundleVersion}</version>
+                            <version>${jbundle-version}</version>
                             <classifier>root</classifier>
                             <type>jar</type>
                             <outputDirectory>${project.build.directory}/${project.build.finalName}
@@ -93,7 +93,7 @@
                         <artifactItem>
                             <groupId>org.jbundle.res</groupId>
                             <artifactId>org.jbundle.res.docs</artifactId>
-                            <version>${jbundleVersion}</version>
+                            <version>${jbundle-version}</version>
                             <classifier>root</classifier>
                             <type>jar</type>
                             <outputDirectory>${project.build.directory}/${project.build.finalName}
@@ -119,7 +119,7 @@
                             </outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.build.directory}/dojo-${dojoVersion}
+                                    <directory>${project.build.directory}/dojo-${dojo-version}
                                     </directory>
                                     <filtering>false</filtering>
                                 </resource>
@@ -152,7 +152,7 @@
 	    <dependency>
 		    <groupId>org.jibx.schema.net.java</groupId>
 		    <artifactId>org.jibx.schema.net.java.jnlp_6_0</artifactId>
-		    <version>${jibxSchemaVersion}</version>
+		    <version>${jibx-schema-version}</version>
 	    </dependency>
 
 		<dependency>

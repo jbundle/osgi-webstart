@@ -9,15 +9,15 @@
   </parent>
 
   <artifactId>org.jbundle.res.dojo</artifactId>
-  <!-- version>${dojoVersion}</version -->
+  <!-- version>${dojo-version}</version -->
 
   <name>jbundle-util-osgi-webstart-dojo - dojo project</name>
   <description>dojo toolkit osgi package</description>
   
   <properties>
-    <jbundlePackageExport>
+    <jbundle-package-export>
       *;version=${project.version},
-    </jbundlePackageExport>
+    </jbundle-package-export>
   </properties>
 
   <packaging>bundle</packaging>
@@ -41,7 +41,7 @@
 						<artifactItem>
 							<groupId>org.dojotoolkit</groupId>
 							<artifactId>dojo</artifactId>
-							<version>${dojoVersion}</version>
+							<version>${dojo-version}</version>
 							<type>zip</type>
 							<outputDirectory>${project.build.directory}</outputDirectory>
 						</artifactItem>
@@ -63,7 +63,7 @@
 							</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.build.directory}/dojo-${dojoVersion}
+									<directory>${project.build.directory}/dojo-${dojo-version}
 									</directory>
 									<filtering>false</filtering>
 								</resource>

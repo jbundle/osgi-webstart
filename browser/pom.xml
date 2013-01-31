@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>com.sun</groupId>
 			<artifactId>plugin</artifactId>
-			<version>${pluginVersion}</version>
+			<version>${plugin-version}</version>
 			<scope>system</scope>
 			<optional>true</optional>
 			<systemPath>${java.home}/lib/plugin.jar</systemPath>
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>javax.jnlp</groupId>
 			<artifactId>javaws</artifactId>
-			<version>${javawsVersion}</version>
+			<version>${javaws-version}</version>
 			<scope>system</scope>
 			<optional>true</optional>
 			<systemPath>${java.home}/lib/javaws.jar</systemPath>
