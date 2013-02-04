@@ -18,7 +18,7 @@
   <name>jbundle-util-osgi-webstart-reactor</name>
 
   <properties>
-    <projectName>jbundle-util-osgi-webstart</projectName>
+    <projectName>jbundle-util-auto-webstart</projectName>
   </properties>
 
   <scm>
