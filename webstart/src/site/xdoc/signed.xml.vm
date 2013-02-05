@@ -16,20 +16,21 @@
 
      <section name="Note on signed jars">
         <p>
-        Before I start, let me rant a little...<br/>
-        <b>Do not</b> sign your jars. This forces you to ask for permission to run and the user gets this scary warning:<br/>
+        I'm still not sure how I want to handle signed jars.<br/>
+        No user in their right mind would accept this dialog box.<br/>
         <img src="images/javasecuritywarning.png" /><br/>
-        No user in their right mind would accept this.<br/>
-        Stay in the sandbox! Don't access files on the local computer and don't access web sites that didn't originate at the
+        Personally, I <b>do not</b> sign my jars.
+        I stay in the sandbox. I don't access files on the local computer and I don't access web sites that didn't originate at the
         application's site. <br/>
         If you need to access web content, just add a proxy to your web server to deliver these pages to your user's application.<br/>
         If you are worried about your applet getting hacked in-transit, just deliver it with https.<br/>
         Okay?
         </p>
         <p>
-        If you must use a signed jar, make sure that you disable compression, by setting the jnlp.packEnabled flag to false
-        since the compression usually invalidates the digital signatures.<br/>
-        http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2&ampjnlp.packEnabled=false
+        If you must use a signed jar, you will need to disable compression, by setting the jnlp.packEnabled flag to false, or
+        add an OSGi manifest and do a pack200 repack operation to make sure that your jar gets to the destination unchanged.<br/>
+	Disable compression like this:<br/>
+        <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2&amp;jnlp.packEnabled=false</code>
         </p>
     </section>
 
