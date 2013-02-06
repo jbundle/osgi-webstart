@@ -16,25 +16,31 @@
 
      <section name="Description">
 
-  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>Auto Web Start Web Bundle</strong> automatically allows your OSGi
-  applications to run as Web Start applets or applications.</p>
+  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>Auto Web Start</strong> program lets you run
+  your java applications as Web Start applets or applications automatically.</p>
 
 <p>
-It's a pain to set up Web Start to run java in a web browser. You have to specify the
-correct package to module mappings in a JNLP file to make everything work.
+Just install your java jars in your web server, provide the main class name and <b>Auto Web Start</b> will figure out the rest.
 </p>
 <p>
-Wouldn't it be nice if Web Start were as easy to set up as OSGi. <i>Well now it is.</i> The OSGi to Web Start
-converter will automatically create JNLP and jar files from OSGi dependencies.
+Here's how it works:<br/>
+When you install your jars in your web server an OSGi manifest is automatically added to your jars. This
+tells the server what packages the jar contains and what external packages are required to run.
+When you are ready to run your application or applet from a web browser, <b>Auto Web Start</b> converts these
+dependencies to a web start jnlp file. It also, does a pack200/gzip compression that can reduce the download
+size of your files by an order of magnitude.
 </p>
 <p>
-All you have to do is specify the main java class in your url. For example:<br/>
+All you have to do is specify the main java class in your url. For example, to run a program in a web page:<br/>
 <code>
-<a href="http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
-is all you would need to type to launch the OSGi Biorhythm program from a web browser.
-The Auto Web Start Web Bundle takes care of all the Web Start configuration. It even automatically
-updates the cached jnlp and java jar files when the OSGi bundles are updated.
+To run this program as a stand-alone applications:<br/>
+<code>
+<a href="/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+</code>
+<strong>Auto Web Start Web</strong> takes care of all the Web Start configuration. It even automatically
+updates the jnlp and java jar files when you update your application.
 </p>
 
     </section>
@@ -80,12 +86,6 @@ The <strong>jbundle Auto Web Start Web Bundle</strong> is a standard <a href="ht
 </source>
 </p>
 
-<p>
-<a href="http://www.sourceforge.net/projects/jcalendarbutton" >
-To download this project, go to our project page at:
-<br/>
-<img src="http://sourceforge.net/sflogo.php?group_id=239200&amp;type=3" width="88" height="31" alt="SourceForge" align="bottom" /></a>
-</p>
 </subsection>
 
 </section>

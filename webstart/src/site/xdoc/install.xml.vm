@@ -28,7 +28,21 @@ Here are the instructions for several provisioning systems:
 </ul>
 </p>
 
-<subsection name="Apache Felix OBR">
+<subsection name="Apache Karaf">
+<p>
+You can install <b>Auto Web Start</b> directly into karaf from maven central by typing:
+<source>
+features:install obr
+obr:addurl http://www.jbundle.org/repository/repository.xml
+obr:start -d 'jbundle-util-osgi-obr - obr bundle retrieval'
+obr:start -d 'jbundle-util-osgi-webstart - osgi to web start web bundle'
+</source>
+</p>
+Note: By installing osgi-obr, you don't even need to install your jars. If they are in the OBR index,
+they will be auto-downloaded and installed and then deployed to web start.
+</subsection>
+
+<subsection name="Apache Felix">
 <p>
 There is an obr repository index for jbundle artifacts. Just type these commands in apache felix:
 <style type="text/css">
@@ -36,26 +50,9 @@ span.response {color:blue}
 span.comment {color:blue; font-style:italic}
 </style>
 <source>
-<span class="response">g!</span> repos add ${project.organization.url}/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Adding the jbundle obr index simplifies installing bundles)</span><br/>
-<span class="response">g!</span> repos add http://www.jibx.org/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Adding the dependent jibx index)</span><br/>
+<span class="response">g!</span> repos add ${project.organization.url}/repository/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Adding the jbundle obr index simplifies installing bundles)</span><br/>
+<span class="response">g!</span> deploy -s 'jbundle-util-osgi-obr - obr bundle retrieval' <span class="comment">(Install and start the jbundle on-demand OBR Bundle)</span><br/>
 <span class="response">g!</span> deploy -s '${project.name}' <span class="comment">(Install and start the Auto Web Start Web Bundle)</span><br/>
-</source>
-</p>
-</subsection>
-
-<subsection name="Apache Karaf">
-<p>
-<source>
-Of course, you can just install obr artifacts by typing:
-features:install obr
-Then, just add the repositories using the karaf
-obr:addurl and obr:deploy commands.
-
-or you can install from the karaf features file:
-features:install war
-features:addUrl mvn:${project.groupId}/${project.groupId}.pkg.karaf/${project.version}/xml/features
-features:install ${project.groupId}.webstart
-start [bundle no]
 </source>
 </p>
 </subsection>

@@ -23,11 +23,11 @@ Here's a quick example of the Auto Web Start Web Bundle.
 Let's start with a simple OSGi program that has three dependent OSGi modules.
 </p>
 <p>
-Step 1: Download and install an <a href="www.osgi.org">OSGi</a> Framework Distribution.<br/>
-We'll use the <a href="http://felix.apache.org">Apache Felix</a> OSGi implementation for our example.
+Step 1: Download and install an <a href="http://www.osgi.org">OSGi</a> Framework Distribution.
+We'll use <a href="http://felix.apache.org">Apache Felix</a> for this example.
 </p>
 <p>
-Step 2: Start your OSGi implementation and install the OSGi bundles.<br/>
+Step 2: Start your OSGi container and install the OSGi bundles.<br/>
 <style type="text/css">
 span.response {color:blue}
 span.comment {color:blue; font-style:italic}
@@ -35,11 +35,10 @@ span.comment {color:blue; font-style:italic}
 <source>
 cd felix<br/>
 java -jar bin/felix.jar<br/>
-<span class="response">g!</span> deploy -s 'Apache Felix Http Jetty'<span class="comment">(Start a web server)</span><br/>
-<span class="response">g!</span> repos add ${project.organization.url}/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Adding the jbundle obr index simplifies installing bundles)</span><br/>
-<span class="response">g!</span> repos add http://www.jibx.org/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment">(Simplify adding the dependent bundles from jibx.org)</span><br/>
-<span class="response">g!</span> deploy -s '${project.name}' <span class="comment">(Install and start the Auto Web Start Web Bundle)</span><br/>
-<span class="response">g!</span> deploy 'jbundle-util-biorhythm-osgi' <span class="comment">(Install our sample client OSGi project and its dependencies)</span><br/>
+<span class="response">g!</span> deploy -s 'Apache Felix Http Jetty'<span class="comment"> # (Start a web server)</span><br/>
+<span class="response">g!</span> repos add ${project.organization.url}/repository/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment"> # (Adding the jbundle obr index simplifies bundle installation)</span><br/>
+<span class="response">g!</span> deploy -s '${project.name}' <span class="comment"> # (Install and start the Auto Web Start Web Bundle)</span><br/>
+<span class="response">g!</span> deploy 'jbundle-util-biorhythm-osgi' <span class="comment"> # (Install our sample client its dependencies)</span><br/>
 </source>
 </p>
 <p>
@@ -49,6 +48,12 @@ Step 3: Start your Web Browser and try the Auto Web Start Web Bundle. Type in th
 </source>
 You should see a screen like this:<br/>
 <img src="./images/screen.jpg"/>
+</p>
+<p>
+To run this same applet in your Web Browser, click here:<br/>
+<source>
+<a href="/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+</source>
 </p>
 <p>
 <i>Voilà!</i><br/>

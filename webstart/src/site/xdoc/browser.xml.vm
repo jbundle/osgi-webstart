@@ -35,7 +35,7 @@ The browser will call your application with the part of the url starting with th
 application accordingly.
 </p>
 <p>
-You can control the browser's behavior by adding the BrowserManager to your code. To make your code work when it is not
+You can control the browser's behavior by adding the BrowserManager to your code. To make sure your code works when it is not
 in a browser, use the following template:<br/>
 <code>
         try   { // Add browser connection if running as an applet<br/>
@@ -48,7 +48,7 @@ in a browser, use the following template:<br/>
 </code>
 </p>
 <p>
-If your javascript is keeping track of it's history, you can manipulate the history stack or directly calling javascript
+If your applet is keeping track of it's own history, you can manipulate the history stack by calling javascript:
 by calling the following methods:<br/>
 <code>
     public void pushBrowserHistory(String command, String title)<br/>

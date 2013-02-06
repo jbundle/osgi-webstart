@@ -27,11 +27,11 @@ All of the other information that Web Start needs come from the OSGi bundles.
 </ul>
 </p>
 
-<subsection name="Web Bundle parameters">
+<subsection name="Web Bundle optional parameters">
 <p>
-Here are the url parameter that you supply so the Auto Web Start Web Bundle can create the
+Here are the url parameter that you can supply so the Auto Web Start Web Bundle can create the
 correct JNLP and jar files for your web application or applet. Any unknown params are passed
-down to the application or applet.<br/>
+on to the application or applet.<br/>
 Your url should look something like this:<br/>
 <code>
 <a href="http://localhost:8080/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
@@ -112,7 +112,10 @@ for a Web Start Web Bundle.
 </p>
 <p>
 All you have to do is start the ${project.groupId}.obr module and add all your
-obr indexes to your OSGi implementation. Any required bundles are added automagically!
+obr indexes to your OSGi implementation. Any required bundles are added automagically!<br/>
+<code>
+obr:deploy -s 'jbundle-util-osgi-obr - obr bundle retrieval'
+</code>
 </p>
 <p>
 This web bundle can be used to launch a very complicated jnlp project. For Example:<br/>
