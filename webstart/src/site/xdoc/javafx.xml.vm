@@ -33,7 +33,7 @@
         <code><a href="/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafxapplet.jnlp">http://www.jbundle.org/webstart/docs/applet.html?appletClass=org.jbundle.javafx.example.helloworld.HelloWorldJavaFX&amp;template=docs/javafxapplet.jnlp</a></code><br/>
         </p>
         <p>
-        If you want to deploy a JavaFX jars that were not packaged with an OSGi manifest, just use the wrap protocol to automatically generate a manifest.<br/>
+        If you want to deploy JavaFX jars that were not packaged with an OSGi manifest, just use the wrap protocol to automatically generate a manifest.<br/>
         For example, for a regular java jar file, in karaf, I would type:<br/>
         <code>install wrap:file:///home/don/workspace/workspace/jbundle/javafx/helloworld/target/org.jbundle.javafx.example.helloworld-${project.version}.jar</code><br/>
         and I'm ready to run the application from a browser with the same command that we used in the first example. 
@@ -56,8 +56,7 @@
         </code>
         Now, start this example in your browser: 
         <a href="http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2">http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2</a>.
-        Ignore the sandbox warning and try the samples. A few of the examples will not work, because they try to access local resources which
-        is not allowed from a browser.
+        Ignore the sandbox warning and try the samples.
         </p>
     </section>
 

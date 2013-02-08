@@ -16,8 +16,8 @@
 
      <section name="Description">
 
-  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>Auto Web Start</strong> program lets you run
-  your java applications as Web Start applets or applications automatically.</p>
+  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>Auto Web Start</strong> program lets you easily launch
+  your java client applications from a web browser.</p>
 
 <p>
 Just install your java jars in your web server, provide the main class name and <b>Auto Web Start</b> will figure out the rest.
@@ -35,11 +35,11 @@ All you have to do is specify the main java class in your url. For example, to r
 <code>
 <a href="/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
-To run this program as a stand-alone applications:<br/>
+To run this program as a stand-alone application:<br/>
 <code>
 <a href="/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
-<strong>Auto Web Start Web</strong> takes care of all the Web Start configuration. It even automatically
+<strong>Auto Web Start</strong> takes care of all the Web Start configuration. It even automatically
 updates the jnlp and java jar files when you update your application.
 </p>
 
@@ -65,7 +65,7 @@ Remember to start a web server too.
 </p>
 <p>
 <code>
-OBR Repository index: ${project.organization.url}/repository.xml<!-- ${OBRRepositoryIndex} --><br/>
+OBR Repository index: ${project.organization.url}/repository/repository.xml<!-- ${OBRRepositoryIndex} --><br/>
 Manifest import:<br/>
 Import-Package: ${project.artifactId};resolution:=optional;version=${project.version}
 </code>
