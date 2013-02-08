@@ -16,21 +16,21 @@
 
 <section name="Auto Web Start usage">
 <p>
-Installing the Auto Web Start Web Bundle is pretty easy. This bundle has only a
+Installing the Auto Web Start Web Bundle is easy. The <b>Auto Web Start</b> bundle only has a
 few dependencies.<br/>
 Here are the instructions for several provisioning systems:
 </p>
 <p>
 <ul>
-<li><a href="#Apache Felix OBR">Apache Felix OBR</a></li>
 <li><a href="#Apache Karaf">Apache Karaf</a></li>
+<li><a href="#Apache Felix OBR">Apache Felix OBR</a></li>
 <li><a href="#Eclipse P2">Eclipse P2</a></li>
 </ul>
 </p>
 
 <subsection name="Apache Karaf">
 <p>
-You can install <b>Auto Web Start</b> directly into karaf from maven central by typing:
+You can install <b>Auto Web Start</b> directly into <a href="karaf.apache.org">apache karaf</a> from maven central by typing:
 <source>
 features:install obr
 obr:addurl http://www.jbundle.org/repository/repository.xml
@@ -44,7 +44,7 @@ they will be auto-downloaded and installed and then deployed to web start.
 
 <subsection name="Apache Felix">
 <p>
-There is an obr repository index for jbundle artifacts. Just type these commands in apache felix:
+Use the jbundle obr index. Just type these commands in <a href="felix.apache.org">apache felix</a>:
 <style type="text/css">
 span.response {color:blue}
 span.comment {color:blue; font-style:italic}
@@ -60,6 +60,7 @@ span.comment {color:blue; font-style:italic}
 <subsection name="Eclipse P2">
 <p>
 <source>
+TODO - I haven't completely implemented the P2 repo. If you have expertise, I would appreciate any help.<br/>
 You can create an eclipse update (P2) repository using the maven project under pkg/p2 in the source repository.
 After building your repository, just install it in an OSGi web server running under equinox.
 </source>

@@ -71,7 +71,7 @@ webStartProperties - A comma delimited list of web start properties (ie., jnlp.p
 Note: All parameters (including these system params) are passed to the applet/application.
 If you don't want these params passed to your application, prefix them with 'org.jbundle.util.osgi.jnlp.'.
 
- <b>Deploy param:</b>
+ <b>OSGi URL param:</b>
 org.jbundle.util.osgi.webstart.contextpath - The url path to deploy the web bundle (defaults to '/webstart')
 
 </source>
@@ -80,11 +80,9 @@ org.jbundle.util.osgi.webstart.contextpath - The url path to deploy the web bund
 
 <subsection name="Web Start Applet">
 <p>
-The Auto Web Start Web Bundle can also create a Web Start Applet. Just supply the main class
-name in the appletClass parameter rather than the mainClass parameter.
-</p>
-<p>
-Typically you would use the java.com Web Start javascript code to start your applet.
+All of the examples so far have used the built-in full page html page.<br/>
+To add an applet to your web pages, just supply the main class
+name in the appletClass parameter.<br/>
 Here is an html snippet:
 <source>
 &lt;script src="http://java.com/js/deployJava.js"&gt;&lt;/script&gt;
@@ -95,8 +93,7 @@ var parameters = {jnlp_href: '/webstart/applet?appletClass=org.jbundle.util.bior
 deployJava.runApplet(attributes, parameters, '1.6'); 
 &lt;/script&gt;
 </source>
-There is also a built-in web page for displaying your applets. It is located at <code>docs/applet.html</code>.
-All parameters are automatically passed to the web start web bundle. Your url should look something like this:<br/>
+To pass parameters to your application, just include them in your URL. Your url should look something like this:<br/>
 <code>
 <a href="http://localhost:8080/webstart/docs/applet.html?appletClass=org.jbundle.util.biorhythm.Biorhythm&amp;language=es">http://localhost:8080/webstart/docs/applet.html?appletClass=org.jbundle.util.biorhythm.Biorhythm&amp;language=es</a>
 </code>
@@ -106,9 +103,10 @@ This example also shows how to pass a parameter (language=es) to an application 
 
 <subsection name="Advanced usage">
 <p>
-If you really want to make your life easy, use the automatic OSGi bundle retrieval system.
+If you really want to make your life easy, use the automatic OSGi OBR bundle retrieval system.
 This code automatically finds, deploys, installs, and starts any bundles that are required
-for a Web Start Web Bundle.
+for a Web Start Web Bundle. Combining this capability with automatic OBR indexing programs such as
+<a href="http://karaf.apache.org/index/subprojects/cave.html">Karaf Cave</a> gives you virtually zero configuration.
 </p>
 <p>
 All you have to do is start the ${project.groupId}.obr module and add all your
@@ -118,8 +116,16 @@ obr:deploy -s 'jbundle-util-osgi-obr - obr bundle retrieval'
 </code>
 </p>
 <p>
-This web bundle can be used to launch a very complicated jnlp project. For Example:<br/>
+<strong>Auto Web Start</strong> can be used to launch a very complicated projects. Your program framework can
+be included in a jnlp module, significantly reducing downloads for other programs that use the same framework.
+For Example, the jbundle app framework has over 100 jars segmented into several functional groups. Each group is
+included as a jnlp module which will be cached on your local machine. This significantly decreases download volume.<br/>
+Here is an example that uses several modules. This example also packages it's params in a <a href="/webstart/org/jbundle/app/office/thinapp.properties">properties file</a> instead
+of including them in the url. Subsequent downloads of this class of application will be very fast.<br/>
 <code>
+<a href="/webstart/docs/jsapplet.html?appletClass=org.jbundle.thin.Thin&amp;webStartPropertiesFile=org/jbundle/app/office/thinapp.properties">http://www.tourgeek.com/webstart/docs/jsapplet.html?appletClass=org.jbundle.thin.Thin&amp;webStartPropertiesFile=org/jbundle/app/office/thinapp.properties</a>
+<!--
+
 <a href="http://localhost:8080/webstart/docs?mainClass=org.jbundle.Main&amp;codebase=/&amp;connectionType=Proxy&amp;include=org\.jbundle\..*|biz\.source_code\..*|com\.tourapp\..*&amp;otherPackages=org.jbundle.base.db.client,org.jbundle.base.db.proxy,com.tourapp.tour.booking.db">
          http://localhost:8080/webstart/docs?mainClass=org.jbundle.Main&amp;codebase=/&amp;connectionType=Proxy&amp;include=org\.jbundle\..*|biz\.source_code\..*|com\.tourapp\..*&amp;otherPackages=org.jbundle.base.db.client,org.jbundle.base.db.proxy,com.tourapp.tour.booking.db
 </a>
@@ -131,6 +137,7 @@ Here is a thin client in an applet using a parameter property file and a compone
 <a href="http://localhost:8080/webstart/docs/applet.html?webStartPropertiesFile=org/jbundle/util/biorhythm/applet.properties">
          http://localhost:8080/webstart/docs/applet.html?webStartPropertiesFile=org/jbundle/util/biorhythm/applet.properties
 </a>
+-->
 </code>
 </p>
 </subsection>

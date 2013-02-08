@@ -16,28 +16,30 @@
 
      <section name="Description">
 
-  <p>The <a href="http://www.jbundle.org">jbundle.org</a> <strong>Auto Web Start</strong> program lets you easily launch
-  your java client applications from a web browser.</p>
+  <p><strong>Auto Web Start</strong> simplifies launching
+  your java applications from a web browser.</p>
 
 <p>
-Just install your java jars in your web server, provide the main class name and <b>Auto Web Start</b> will figure out the rest.
+Just install your jars in a web server, provide the main class name and <b>Auto Web Start</b> will figure out the rest.
 </p>
 <p>
 Here's how it works:<br/>
-When you install your jars in your web server an OSGi manifest is automatically added to your jars. This
-tells the server what packages the jar contains and what external packages are required to run.
+<strong>Auto Web Start</strong> works like OSGi. You tell it what program to run and all the dependencies are
+automatically loaded and linked.<br/>
+First, install your jars in a web server. An OSGi manifest is automatically created for each jar, detailing
+what packages the jar contains and what external packages are required to run.
 When you are ready to run your application or applet from a web browser, <b>Auto Web Start</b> converts these
-dependencies to a web start jnlp file. It also, does a pack200/gzip compression that can reduce the download
-size of your files by an order of magnitude.
+dependencies to a web start jnlp file. It also does a pack200/gzip compression that can reduce your download
+size by an order of magnitude.
 </p>
 <p>
 All you have to do is specify the main java class in your url. For example, to run a program in a web page:<br/>
 <code>
-<a href="/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="/webstart?applet=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
-To run this program as a stand-alone application:<br/>
+To run a program as a stand-alone application:<br/>
 <code>
-<a href="/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="/webstart?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
 <strong>Auto Web Start</strong> takes care of all the Web Start configuration. It even automatically
 updates the jnlp and java jar files when you update your application.
@@ -59,14 +61,14 @@ updates the jnlp and java jar files when you update your application.
 
 <subsection name="OSGi packaging">
 <p>
-The <strong>jbundle Auto Web Start Web Bundle</strong> is an <a href="http://www.osgi.org">OSGi</a> bundle.
+<strong>jbundle Auto Web Start</strong> is an <a href="http://www.osgi.org">OSGi</a> bundle.
 To use it in your OSGi project, just install and start this bundle in your OSGi environment.
-Remember to start a web server too.
+Of course your will need to start a web server also.
 </p>
 <p>
 <code>
-OBR Repository index: ${project.organization.url}/repository/repository.xml<!-- ${OBRRepositoryIndex} --><br/>
-Manifest import:<br/>
+jbundle OBR Repository index: <a href="${project.organization.url}/repository/repository.xml">${project.organization.url}/repository/repository.xml</a><!-- ${OBRRepositoryIndex} --><br/>
+
 Import-Package: ${project.artifactId};resolution:=optional;version=${project.version}
 </code>
 </p>

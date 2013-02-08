@@ -20,7 +20,7 @@
 The Auto webstart bundle offers web browser integration also.
 </p>
 <p>
-Your application can update when the user clicks the browser forward and back button and the browser URL can
+Your application can update when the user clicks the browser forward and back button and the browser URL will
 automatically update when your application changes to a different screen. This means that a user can bookmark a
 location in your application and return to the same screen later. 
 </p>
@@ -48,8 +48,8 @@ in a browser, use the following template:<br/>
 </code>
 </p>
 <p>
-If your applet is keeping track of it's own history, you can manipulate the history stack by calling javascript:
-by calling the following methods:<br/>
+If your applet is keeping track of it's own history, you can manipulate the javascript history by calling
+the following methods:<br/>
 <code>
     public void pushBrowserHistory(String command, String title)<br/>
     public void popBrowserHistory(int commandsToPop, boolean bCommandHandledByJava, String title)<br/>
@@ -57,9 +57,9 @@ by calling the following methods:<br/>
 </code>
 </p>
 <p>
-Try it yourself. Here is a <a href="http://localhost:8181/webstart/docs/jsapplet.html#?record=com.mycompany.sample.addressbook.db.AddressBook&amp;otherPackages=com.mycompany.sample.addressbook.db&amp;webStartPropertiesFile=/org/jbundle/res/webstart/app.properties">simple example</a>.
+Try it yourself. Here is a <a href="/webstart/docs/jsapplet.html?appletClass=org.jbundle.thin.Thin&amp;webStartPropertiesFile=org/jbundle/app/office/thinapp.properties">simple example</a>.
 Try to navigate through the screens and use the browser's back back to return to the
-previous screen. Try bookingmarking a page and see if you can return to the same place in the application.
+previous screen. Try bookingmarking a page so you can return to the same place in the application.
 </p>
     </section>
 

@@ -20,7 +20,7 @@
 Here's a quick example of the Auto Web Start Web Bundle.
 </p>
 <p>
-Let's start with a simple OSGi program that has three dependent OSGi modules.
+Let's start with a simple program that has three dependent jars.
 </p>
 <p>
 Step 1: Download and install an <a href="http://www.osgi.org">OSGi</a> Framework Distribution.
@@ -38,7 +38,7 @@ java -jar bin/felix.jar<br/>
 <span class="response">g!</span> deploy -s 'Apache Felix Http Jetty'<span class="comment"> # (Start a web server)</span><br/>
 <span class="response">g!</span> repos add ${project.organization.url}/repository/repository.xml<!-- ${OBRRepositoryIndex} --> <span class="comment"> # (Adding the jbundle obr index simplifies bundle installation)</span><br/>
 <span class="response">g!</span> deploy -s '${project.name}' <span class="comment"> # (Install and start the Auto Web Start Web Bundle)</span><br/>
-<span class="response">g!</span> deploy 'jbundle-util-biorhythm-osgi' <span class="comment"> # (Install our sample client its dependencies)</span><br/>
+<span class="response">g!</span> deploy 'jbundle-util-biorhythm-osgi' <span class="comment"> # (Install our sample client and its dependencies)</span><br/>
 </source>
 </p>
 <p>
@@ -56,7 +56,7 @@ To run this same applet in your Web Browser, click here:<br/>
 </source>
 </p>
 <p>
-<i>Voilà!</i><br/>
+<i>Voilà!</i><p/>
 Now try this with one of your own applications.
 </p>
     </section>

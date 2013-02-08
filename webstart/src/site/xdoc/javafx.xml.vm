@@ -39,12 +39,6 @@
         and I'm ready to run the application from a browser with the same command that we used in the first example. 
         </p>
         <p>
-        Since the Auto webstart servlet has access to OSGi resources, you can package your startup parameters and/or jnlp template in your project's jar file.
-        For example take a look at the url on
-        <a href="http://www.jbundle.org/webstart/docs/applet.html?webStartPropertiesFile=org/jbundle/javafx/example/helloworld/javafx.properties">this sample</a>.
-        The applet's params come from the sample appplication's jar file.
-        </p>
-        <p>
         Here's a more complicated example. We'll use the JavaFX ensemble example. I made a <a href="https://github.com/jbundle/javafx/commit/2a3118a1475fc0bbe2d4bc489bc34c3c4b659877">few minor adjustments</a> to the app
         so it will run in the Java sandbox.
         First, install our example and it's dependencies after <a href="install.html#Apache_Karaf">installing auto web start</a> in apache karaf:<br/>
@@ -56,7 +50,7 @@
         </code>
         Now, start this example in your browser: 
         <a href="http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2">http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2</a>.
-        Ignore the sandbox warning and try the samples.
+        Cancel the 'Internet access' warning since we'll be running in the sandbox.
         </p>
     </section>
 

@@ -6,13 +6,13 @@
   <parent>
     <artifactId>jbundle-parent</artifactId>
     <groupId>org.jbundle.config</groupId>
-    <version>1.3.0</version>
+    <version>1.3.1-SNAPSHOT</version>
     <relativePath>../../jbundle-parent</relativePath>
   </parent>
 
   <groupId>org.jbundle.util.osgi</groupId>
   <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
-  <version>1.6.4-SNAPSHOT</version>
+  <version>1.6.3</version>
 
   <packaging>pom</packaging>
   <name>jbundle-util-osgi-webstart-reactor</name>
@@ -29,11 +29,6 @@
 
   <modules>
     <module>webstart</module>
-    <module>util</module>
-    <module>browser</module>
-    <module>js</module>
-    <module>dojo</module>
-    <module>pkg</module>
   </modules>
 
   <repositories>
