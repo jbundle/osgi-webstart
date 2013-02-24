@@ -545,7 +545,7 @@ jbundle.util = {
 				}
 		}
 		if (xsltURI == null)
-			xsltURI = "docs/styles/xsl/ajax/base/menus-ajax.xsl";
+			xsltURI = "org/jbundle/res/docs/styles/xsl/ajax/base/menus-ajax.xsl";
 		xsltURI = jbundle.getServerPath(xsltURI);
 		jbundle.xml.doXSLT(domToBeTransformed, xsltURI, contentParent, jbundle.gui.fixNewDOM);
 		return true;	// Success (so far)

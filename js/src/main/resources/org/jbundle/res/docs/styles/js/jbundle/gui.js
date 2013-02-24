@@ -52,7 +52,7 @@ jbundle.gui = {
 		if (!command)
 			command = "";
 		var xmlToBeTransformed = "<root><user>" + user + "</user><dialogTitle>" + dialogTitle + "</dialogTitle><command>" + command + "</command></root>";
-		var xsltURI = jbundle.getServerPath("docs/styles/js/jbundle/xsl/logon.xsl");
+		var xsltURI = jbundle.getServerPath("org/jbundle/res/docs/styles/js/jbundle/xsl/logon.xsl");
 
 		var logonDialog = dijit.byId("logonDialog");
 		if (!logonDialog)
