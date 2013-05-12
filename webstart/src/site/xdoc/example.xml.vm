@@ -44,7 +44,7 @@ java -jar bin/felix.jar<br/>
 <p>
 Step 3: Start your Web Browser and try the Auto Web Start Web Bundle. Type in this url:<br/>
 <source>
-<a href="http://localhost:8080/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="http://localhost:8080/webstart/biorhythm.jnlp?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/biorhythm.jnlp?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </source>
 You should see a screen like this:<br/>
 <img src="./images/screen.jpg"/>
@@ -52,7 +52,7 @@ You should see a screen like this:<br/>
 <p>
 To run this same applet in your Web Browser, click here:<br/>
 <source>
-<a href="/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="http://localhost:8080/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/applet.html?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </source>
 </p>
 <p>

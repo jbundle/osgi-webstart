@@ -34,7 +34,7 @@ correct JNLP and jar files for your web application or applet. Any unknown param
 on to the application or applet.<br/>
 Your url should look something like this:<br/>
 <code>
-<a href="http://localhost:8080/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/biorhythm?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="http://localhost:8080/webstart/biorhythm.jnlp?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://localhost:8080/webstart/biorhythm.jnlp?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
 <source>
  <b>Main params:</b>
