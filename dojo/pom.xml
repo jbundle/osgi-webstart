@@ -59,7 +59,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${project.build.finalName}/org/jbundle/res
+							<outputDirectory>${project.build.directory}/${project.build.finalName}/org/jbundle/res/docs/styles/js
 							</outputDirectory>
 							<resources>
 								<resource>
