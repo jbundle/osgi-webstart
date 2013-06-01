@@ -1,26 +1,27 @@
 /**
- * Top level methods and vars.
- */
-if(!dojo._hasResource["jbundle.remote"]){
-dojo._hasResource["jbundle.remote"] = true;
-dojo.provide("jbundle.remote");
-
-/**
  * Remote access utilities.
  */
-jbundle.remote = {
+define([
+	"jbundle/main",
+	"jbundle/gui",
+	"jbundle/classes",
+	"dojox/data/dom",
+	"dojo/request",
+	"dojo/_base/json"
+], function(main, gui, classes, dom, request, json) {
+    return {
 	/**
 	 * Send this command to the web server and bind the return to this function.
 	 */
-	sendToAjax: function(remoteCommand, args, bindFunction, url, mimetype, bindArgs) {
-		if (!args)
-			args = new Object();
+	sendToAjax: function(remoteCommand, data, bindFunction, url, mimetype, bindArgs) {
+		if (!data)
+			data = {};
 		if (remoteCommand)
-			args.remoteCommand = remoteCommand;
+			data.remoteCommand = remoteCommand;
 		if (!url)
-			url = jbundle.getServerPath();
-		if (!mimetype)
-			mimetype = "text/html";
+			url = main.getServerPath();
+		//?if (!mimetype)
+		//?	mimetype = "text/html";
 		
 		var timeout = 30 * 1000;	// 30 seconds max
 		if (remoteCommand == "receiveRemoteMessage")
@@ -28,36 +29,42 @@ jbundle.remote = {
 
 		if (!bindArgs)
 			bindArgs = {};
-		bindArgs.url = url;
-		bindArgs.content = args;
-		bindArgs.mimetype = mimetype;
-		bindArgs.load = bindFunction;
-		bindArgs.error = jbundle.remote.transportError;
+		bindArgs.data = data;
+		if (mimetype)
+			bindArgs.headers = {"Content-Type": mimetype};
 		bindArgs.timeout = timeout;
-//			timeout: jbundle.remote.timeoutError,	// Now handled by error.
+		bindArgs.ioArgs = data;
 		
-		dojo.xhrPost(bindArgs);
-	  	if (djConfig.isDebug)
+	    request.post(url, bindArgs, bindFunction).response.then(
+            	bindFunction,
+            function(response){
+            	this.transportError(response);
+            }
+	    );
+	    // dojo.xhrPost(bindArgs);
+	  	if (dojoConfig.isDebug)
 		  	console.log("Called " + remoteCommand);
 	},
 	/**
 	 * Transport error.
 	 */
-	transportError: function(data, ioArgs) {
-		var displayError = jbundle.gEnvState;
-		if (ioArgs)
-			if (ioArgs.args)
-			if (ioArgs.args.content)
-				if (ioArgs.args.content.remoteCommand == "receiveRemoteMessage")
+	transportError: function(response) {
+		var data = response.message;
+		var dataIn = response.options.data;
+		var displayError = main.gEnvState;
+		if (response.options)
+			if (response.options.data)
+			if (response.options.data.remoteCommand)
+				if (response.options.data.remoteCommand == "receiveRemoteMessage")
 				{
 					displayError = false;
-					if (data.dojoType == "timeout")	{
-						ioArgs.xhr.abort();
-						jbundle.remote.receiveRemoteMessage(jbundle.getTaskSession().getSessionByFullSessionID(ioArgs.args.content.target));	// Wait for the next message.
+					if (response.message == "Timeout exceeded")	{
+						//?ioArgs.xhr.abort();
+						this.receiveRemoteMessage(main.getTaskSession().getSessionByFullSessionID(response.options.data));	// Wait for the next message.
 					}
 				}
 		if (displayError == true)	// Ignore the error if the user moves away from this window
-			jbundle.util.displayErrorMessage("Transport error: " + data + "\nArgs: " + ioArgs.toSource());
+			gui.displayErrorMessage("Transport error: " + response.message + "\nArgs: " + response.options.data.toSource());
 	},
 	// ------- ApplicationServer --------
 	/**
@@ -65,34 +72,43 @@ jbundle.remote = {
 	 */
 	createRemoteTask: function(props) {
 		var args = {};
-		args.properties = dojo.toJson(props);
+		args.properties = json.toJson(props);
 
-		jbundle.remote.sendToAjax("createRemoteTask", args, jbundle.remote.handleCreateRemoteTask);
+		this.sendToAjax("createRemoteTask", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleCreateRemoteTask(response);
+	    	});
+		  });
 	},
 	/**
-	 *
+	 * Handle create remote task call
 	 */
-	handleCreateRemoteTask: function(data, ioArgs) {
-		if (jbundle.remote.checkForDataError(data, "Could not create remote task"))
-			return;
-	  	if (djConfig.isDebug)
-		  	console.log("handleCreateRemoteTask session " + data);
-		jbundle.getTaskSession().sessionID = data;
+	handleCreateRemoteTask: function(response) {
+//		require(["jbundle/main", "jbundle/remote", "jbundle/classes"], function(main, remote, classes) {
+
+			var data = response.data;
 	
-		// If there are any queues for this new task, add them to the remote queue now
-		var childSessions = jbundle.getTaskSession().childSessions;
-		if (childSessions)
-		{
-			for (var i = 0; i < childSessions.length; i++)
+			if (this.checkForDataError(data, "Could not create remote task"))
+				return;
+		  	if (dojoConfig.isDebug)
+			  	console.log("handleCreateRemoteTask session " + data);
+			main.getTaskSession().sessionID = data;
+		
+			// If there are any queues for this new task, add them to the remote queue now
+			var childSessions = main.getTaskSession().childSessions;
+			if (childSessions)
 			{
-				if (childSessions[i] instanceof jbundle.classes.SendQueue)
-					jbundle.remote.createRemoteSendQueue(childSessions[i]);
-				if (childSessions[i] instanceof jbundle.classes.ReceiveQueue)
-					jbundle.remote.createRemoteReceiveQueue(childSessions[i]);
-				if (childSessions[i] instanceof jbundle.classes.Session)
-					jbundle.remote.makeRemoteSession(childSessions[i]);
+				for (var i = 0; i < childSessions.length; i++)
+				{
+					if (childSessions[i] instanceof classes.SendQueue)
+						this.createRemoteSendQueue(childSessions[i]);
+					if (childSessions[i] instanceof classes.ReceiveQueue)
+						this.createRemoteReceiveQueue(childSessions[i]);
+					if (childSessions[i] instanceof classes.Session)
+						this.makeRemoteSession(childSessions[i]);
+				}
 			}
-		}
+//		});
 	},
 	// ------- RemoteBaseSession --------
     /**
@@ -104,16 +120,21 @@ jbundle.remote = {
 			target: session.getFullSessionID()
 		};
 
-		jbundle.remote.sendToAjax("freeRemoteSession", args, jbundle.remote.handleFreeRemoteSession);
+		this.sendToAjax("freeRemoteSession", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleFreeRemoteSession(response);
+	    	});
+		  });
 	},
 	/**
 	 *
 	 */
-	handleFreeRemoteSession: function(data, ioArgs) {
-//x		if (jbundle.remote.checkForDataError(data, "Could not free remote session"))
+	handleFreeRemoteSession: function(response) {
+		var data = response.data;
+//x		if (this.checkForDataError(data, "Could not free remote session"))
 //x			return;
 		// TODO (don) Free/remove the session and set gTaskSession to null if IT was freed
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	console.log("freeRemoteSession session " + data);
 	},
     /**
@@ -129,18 +150,22 @@ jbundle.remote = {
 			localSessionID: session.localSessionID
 		};
 
-		jbundle.remote.sendToAjax("makeRemoteSession", args, jbundle.remote.handleMakeRemoteSession);
+		this.sendToAjax("makeRemoteSession", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleMakeRemoteSession(response);
+	    	});
+		  });
 	},
 	/**
-	 *
+	 * Handle make remote session call
 	 */
-	handleMakeRemoteSession: function(data, ioArgs)
-	{
-		if (jbundle.remote.checkForDataError(data, "Could not create remote session"))
+	handleMakeRemoteSession: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, "Could not create remote session"))
 			return;
-		var session = jbundle.getTaskSession().getSessionByLocalSessionID(ioArgs.args.content.localSessionID);
+		var session = main.getTaskSession().getSessionByLocalSessionID(response.options.ioArgs.localSessionID);
 	
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	console.log("makeRemoteSession session " + data);
 		session.sessionID = data;
 		if (data.indexOf(":") > 0)
@@ -153,7 +178,7 @@ jbundle.remote = {
 		if (session.remoteFilters)
 		{
 			for (var key in session.remoteFilters) {
-		    	jbundle.remote.doRemoteAction(session.remoteFilters[key]);
+		    	this.doRemoteAction(session.remoteFilters[key]);
 			}
 		}
 	},
@@ -170,26 +195,30 @@ jbundle.remote = {
 		};
 		if (messageFilter.properties)
 			if (messageFilter.properties instanceof Object)
-				args.properties = dojo.toJson(messageFilter.properties);
+				args.properties = json.toJson(messageFilter.properties);
 
-		jbundle.remote.sendToAjax("doRemoteAction", args, jbundle.remote.handleDoRemoteAction, null, null, messageFilter.bindArgs);
+		this.sendToAjax("doRemoteAction", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleDoRemoteAction(response);
+	    	});
+		  }, null, null, messageFilter.bindArgs);
 	},
 	/**
-	 *
+	 * Handle do remote action call
 	 */
-	handleDoRemoteAction: function(data, ioArgs)
-	{
-		if (jbundle.remote.checkForDataError(data, "Could not do remote action", true))
+	handleDoRemoteAction: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, "Could not do remote action", true))
 			return;
-		if (djConfig.isDebug)
+		if (dojoConfig.isDebug)
 			console.log("handleDoRemoteAction, data received: " + data);
-		var messageFilter = jbundle.getTaskSession().getSessionByFullSessionID(ioArgs.args.content.target).getMessageFilter(ioArgs.args.content.filter);
+		var messageFilter = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target).getMessageFilter(response.options.ioArgs.filter);
 		try {
 //?			if ((data) && (data.length > 0) && (data.charAt(0) == '(') && (data.charAt(data.length - 1) == ')'))
 //?				data = eval(data);
-			messageFilter.methodToCall(data, ioArgs);
+			messageFilter.methodToCall(data, response.options.ioArgs);
 		} catch (e) {
-	  		jbundle.util.displayErrorMessage("Error: " + e.message);
+	  		gui.displayErrorMessage("Error: " + e.message);
 		}
 	},
 	// ------- RemoteTask --------
@@ -204,18 +233,22 @@ jbundle.remote = {
 			target: session.parentSession.getFullSessionID()
 		};
 
-		jbundle.remote.sendToAjax("createRemoteSendQueue", args, jbundle.remote.handleCreateRemoteSendQueue);
+		this.sendToAjax("createRemoteSendQueue", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleCreateRemoteSendQueue(response);
+	    	});
+		  });
 	},
 	/**
 	 *
 	 */
-	handleCreateRemoteSendQueue: function(data, ioArgs)
-	{
-		if (jbundle.remote.checkForDataError(data, "Could not create remote send queue"))
+	handleCreateRemoteSendQueue: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, "Could not create remote send queue"))
 			return;
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	console.log("createRemoteSendQueue session " + data);
-		jbundle.getTaskSession().getSendQueue(ioArgs.args.content.queueName, ioArgs.args.content.queueType).sessionID = data;
+		main.getTaskSession().getSendQueue(response.options.ioArgs.queueName, response.options.ioArgs.queueType).sessionID = data;
 	},
 	/**
 	 * Create the receive queue.
@@ -228,27 +261,31 @@ jbundle.remote = {
 			target: session.parentSession.getFullSessionID()
 		};
 
-		jbundle.remote.sendToAjax("createRemoteReceiveQueue", args, jbundle.remote.handleCreateRemoteReceiveQueue);
+		this.sendToAjax("createRemoteReceiveQueue", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleCreateRemoteReceiveQueue(response);
+	    	});
+		  });
 	},
 	/**
 	 *
 	 */
-	handleCreateRemoteReceiveQueue: function(data, ioArgs)
-	{
-		if (jbundle.remote.checkForDataError(data, "Could not create remote receive queue"))
+	handleCreateRemoteReceiveQueue: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, "Could not create remote receive queue"))
 			return;
-		var receiveQueue = jbundle.getTaskSession().getReceiveQueue(ioArgs.args.content.queueName, ioArgs.args.content.queueType);
+		var receiveQueue = main.getTaskSession().getReceiveQueue(response.options.ioArgs.queueName, response.options.ioArgs.queueType);
 	
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	console.log("createRemoteReceiveQueue session " + data);
 		receiveQueue.sessionID = data;
 		
 		// If there are any filters for this new receive queue, add them to the remote queue now
 		for (var key in receiveQueue.remoteFilters) {
-	    	jbundle.remote.addRemoteMessageFilter(receiveQueue.remoteFilters[key]);
+	    	this.addRemoteMessageFilter(receiveQueue.remoteFilters[key]);
 		}
 
-		jbundle.remote.receiveRemoteMessage(jbundle.getTaskSession().getReceiveQueue(ioArgs.args.content.queueName, ioArgs.args.content.queueType));	// Wait for the next message.
+		this.receiveRemoteMessage(main.getTaskSession().getReceiveQueue(response.options.ioArgs.queueName, response.options.ioArgs.queueType));	// Wait for the next message.
 	},
 	/**
 	 * Login.
@@ -262,19 +299,23 @@ jbundle.remote = {
 			props.password = "";
 		props.target = session.getFullSessionID(),
 
-		jbundle.remote.sendToAjax("login", props, jbundle.remote.handleLogin);
+		this.sendToAjax("login", props, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleLogin(response);
+	    	});
+		  });
 	},
 	/**
-	 *
+	 * Handle login call
 	 */
-	handleLogin: function(data, ioArgs)
-	{
-		if (jbundle.remote.checkForDataError(data, "Could not log in"))
+	handleLogin: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, "Could not log in"))
 			return;
 		data = eval(data);
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	console.log("Login ok ");
-		jbundle.getTaskSession().security = data;
+		main.getTaskSession().security = data;
 	},
 	/**
 	 * Add a remote message filter.
@@ -286,18 +327,22 @@ jbundle.remote = {
 			filter: messageFilter.filterID
 		};
 
-		jbundle.remote.sendToAjax("addRemoteMessageFilter", args, jbundle.remote.handleAddRemoteMessageFilter);
+		this.sendToAjax("addRemoteMessageFilter", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleAddRemoteMessageFilter(response);
+	    	});
+		  });
 	},
 	/**
 	 *
 	 */
-	handleAddRemoteMessageFilter: function(data, ioArgs)
-	{
-		if (jbundle.remote.checkForDataError(data, "Could not add remote message filter"))
+	handleAddRemoteMessageFilter: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, "Could not add remote message filter"))
 			return;
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	console.log("handleAddRemoteMessageFilter to filter " + data);
-		var messageFilter = jbundle.getTaskSession().getSessionByFullSessionID(ioArgs.args.content.target).getMessageFilter(ioArgs.args.content.filter);
+		var messageFilter = main.getTaskSession().getSessionByFullSessionID(ioArgs.args.content.target).getMessageFilter(ioArgs.args.content.filter);
 		messageFilter.remoteFilterID = data;
 	},
 	/**
@@ -309,13 +354,18 @@ jbundle.remote = {
 			target: receiveQueue.getFullSessionID()
 		};
 	
-		jbundle.remote.sendToAjax("receiveRemoteMessage", args, jbundle.remote.handleReceiveMessage);
+		this.sendToAjax("receiveRemoteMessage", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleReceiveMessage(response);
+	    	});
+		  });
 	},
 	/**
 	 *
 	 */
-	handleReceiveMessage: function(data, ioArgs) {
-		if (jbundle.remote.checkForDataError(data, null))
+	handleReceiveMessage: function(response) {
+		var data = response.data;
+		if (this.checkForDataError(data, null))
 		{
 			// Ignore receive data errors.
 		}
@@ -323,14 +373,14 @@ jbundle.remote = {
 		{
 			try {
 				data = eval(data);
-			  	if (djConfig.isDebug)
+			  	if (dojoConfig.isDebug)
 				  	console.log("receiveRemoteMessage to filter " + data.id + ", message: " + data.message);
-				jbundle.getTaskSession().getReceiveQueue(data.queueName, data.queueType).getMessageFilterByRemoteID(data.id).methodToCall(data.message);
+				main.getTaskSession().getReceiveQueue(data.queueName, data.queueType).getMessageFilterByRemoteID(data.id).methodToCall(data.message);
 			} catch (e) {
-		  		jbundle.util.displayErrorMessage("Error: " + e.description);
+		  		gui.displayErrorMessage("Error: " + e.description);
 			}
 		}
-		jbundle.remote.receiveRemoteMessage(jbundle.getTaskSession().getReceiveQueue(data.queueName, data.queueType));	// Wait for the next message.
+		this.receiveRemoteMessage(main.getTaskSession().getReceiveQueue(data.queueName, data.queueType));	// Wait for the next message.
 	},
 	/**
 	 * Send this message.
@@ -342,14 +392,19 @@ jbundle.remote = {
 			target: sendQueue.getFullSessionID()
 		};
 	
-		jbundle.remote.sendToAjax("sendMessage", args, jbundle.remote.handleSendMessage);
+		this.sendToAjax("sendMessage", args, function(response) {
+    		require(["jbundle/remote"], function(remote) {
+	    	    remote.handleSendMessage(response);
+	    	});
+		  });
 	},
 	/**
 	 *
 	 */
-	handleSendMessage: function(data, ioArgs)
-	{
-	  	if (djConfig.isDebug)
+	handleSendMessage: function(response) {
+		var data = response.data;
+
+	  	if (dojoConfig.isDebug)
 		  	console.log("sendMessage ok");
 		// Don't do anything
 	},
@@ -361,7 +416,7 @@ jbundle.remote = {
 		if ((data == undefined) || (data == null) || (data.length == 0))
 		{
 			if (errorText)
-				jbundle.util.displayErrorMessage(errorText);
+				gui.displayErrorMessage(errorText);
 			return true;	// Error
 		}
 		if (!ignoreXMLError)
@@ -377,12 +432,13 @@ jbundle.remote = {
 					if ((startErrorText != -1) && (endErrorText > startErrorText))
 					{
 						errorText = data.substring(startErrorText + 6, endErrorText);
-						jbundle.util.displayErrorMessage(errorText);
+						gui.displayErrorMessage(errorText);
 						return true;
 					}
 				}
 		}
 		return false;	// No error
-	}
-};
-}
+	},
+  };
+});
+

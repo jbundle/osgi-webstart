@@ -5,7 +5,7 @@
 
 <xsl:element name="div">
 	<xsl:attribute name="id">logonDialog</xsl:attribute>
-	<xsl:attribute name="dojoType">dijit.Dialog</xsl:attribute>
+	<xsl:attribute name="data-dojo-type">dijit/Dialog</xsl:attribute>
 	<xsl:attribute name="bgColor">white</xsl:attribute>
 	<xsl:attribute name="bgOpacity">0.5</xsl:attribute>
 	<xsl:attribute name="toggle">fade</xsl:attribute>
@@ -30,7 +30,7 @@
 						<xsl:attribute name="id">loginUser</xsl:attribute>
 						<xsl:attribute name="type">text</xsl:attribute>
 						<xsl:attribute name="name">user</xsl:attribute>
-						<xsl:attribute name="dojoType">dijit.form.TextBox</xsl:attribute>
+						<xsl:attribute name="data-dojo-type">dijit/form/TextBox</xsl:attribute>
 						<xsl:attribute name="value">
 							<xsl:value-of select="root/user"/>
 						</xsl:attribute>
@@ -40,23 +40,23 @@
 			<tr>
 				<td>Password:</td>
 				<td>
-					<input id="loginPassword" type="password" name="password" dojoType="dijit.form.TextBox" />
+					<input id="loginPassword" type="password" name="password" data-dojo-type="dijit/form/TextBox" />
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					<input id="loginSaveUser" type="checkbox" name="saveUser" dojoType="dijit.form.CheckBox" checked="true"/> <label for="loginSaveUser">Remember me?</label>
+					<input id="loginSaveUser" type="checkbox" name="saveUser" data-dojo-type="dijit/form/CheckBox" checked="true"/> <label for="loginSaveUser">Remember me?</label>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
 				<table>
 				<tr>
-					<td><button id="logonSubmitButton" dojoType="dijit.form.Button" onclick="jbundle.gui.submitLogonDialog(true);"><img src="images/buttons/Submit.gif" width="16" height="16" />&#160;Submit</button></td>
+					<td><button id="logonSubmitButton" data-dojo-type="dijit/form/Button" onclick="jbundle.gui.submitLogonDialog(true);"><img src="images/buttons/Submit.gif" width="16" height="16" />&#160;Submit</button></td>
 					<td></td>
-					<td><button id="logonCancelButton" dojoType="dijit.form.Button" onclick="jbundle.gui.submitLogonDialog(false);"><img src="images/buttons/Cancel.gif" width="16" height="16" />&#160;Cancel</button></td>
+					<td><button id="logonCancelButton" data-dojo-type="dijit/form/Button" onclick="jbundle.gui.submitLogonDialog(false);"><img src="images/buttons/Cancel.gif" width="16" height="16" />&#160;Cancel</button></td>
 					<td></td>
-					<td><button id="logonNewUser" dojoType="dijit.form.Button" onclick="jbundle.gui.submitLogonDialog('?screen=.main.user.screen.UserEntryScreen&amp;java=no');"><img src="images/buttons/Form.gif" width="16" height="16" alt="Create new account" class="button" />Create new account</button></td>
+					<td><button id="logonNewUser" data-dojo-type="dijit/form/Button" onclick="jbundle.gui.submitLogonDialog('?screen=.main.user.screen.UserEntryScreen&amp;java=no');"><img src="images/buttons/Form.gif" width="16" height="16" alt="Create new account" class="button" />Create new account</button></td>
 				</tr>
 				</table>
 				</td>

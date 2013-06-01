@@ -1,36 +1,81 @@
 /**
- * Top level methods and vars.
- */
-if(!dojo._hasResource["jbundle.util"]){
-dojo._hasResource["jbundle.util"] = true;
-dojo.provide("jbundle.util");
-
-dojo.require("dojox.data.dom");
-dojo.require("dojo.back");
-
-/**
  * Public Utilities.
  */
-jbundle.util = {
+// + dojo.addOnLoad(jbundle.util, "init");
+
+define([
+	"jbundle/main",
+	"jbundle/gui",
+	"jbundle/classes",
+	"jbundle/remote",
+	"jbundle/xml",
+	"jbundle/utils",
+	"dojo/aspect",
+	"dojo/_base/declare",
+	"dojo/back",
+	"dojox/xml/parser",
+	"dojo/_base/unload",
+	"dojo/domReady!"
+], function(main, gui, classes, remote, xml, utils, aspect, declare, back, xmlParser, baseUnload){
+    return {
+    
+	/*
+	ApplicationState is an object that represents the application state.
+	It will be given to dojo.undo.browser to represent the current application state.
+	*/
+    ApplicationState:
+		declare(null, {
+			// The constructor
+			constructor: function(screenCommand, bookmarkValue, stateData) {
+				this.command = screenCommand;
+				this.data = stateData;
+				if (bookmarkValue)	// The browser URL to change
+					this.changeUrl = bookmarkValue;
+			},
+			back: function() {
+				if (jbundle.java)
+					if (java.isJavaWindow())
+						java.prepareWindowForApplet(false);		// Change from applet display
+				if (this.data)
+					this.doRemoteScreenActionCallback(this.data);
+				else
+					this.doCommand(this.command, true, false);
+			},
+			
+			forward: function() {
+				if (jbundle.java)
+					if (java.isJavaWindow())
+						java.prepareWindowForApplet(false);		// Change from applet display
+				if (this.data)
+					this.doRemoteScreenActionCallback(this.data);
+				else
+					this.doCommand(this.command, true, false);
+			}
+		}),
+
 	// Initialize environment
 	init: function(user, password)
 	{
-		dojo.addOnUnload(jbundle.util, "free");
+		baseUnload.addOnUnload(function() {
+			require(["jbundle/util"], function(util) {
+				util.free();
+			})
+		});
 	
-	  	if (djConfig.isDebug)
+	  	if (dojoConfig.isDebug)
 		  	if (console)
 			  	console.log("init env");
-	  	jbundle.gEnvState = true;
+	  	main.gEnvState = true;
 
-		jbundle.gTaskSession = new jbundle.classes.Session();
+		main.gTaskSession = new classes.Session();
 // For now, you'll have to start the queues manually
-//		jbundle.util.addSendQueue();
-//		jbundle.util.addReceiveQueue();
+//		this.addSendQueue();
+//		this.addReceiveQueue();
 		if (!user)
-			user = jbundle.util.getCookie("userid");
+			user = this.getCookie("userid");
 		if (!password)
 			password = "";
-		htmlSession = jbundle.util.getCookie("JSESSIONID");
+		htmlSession = this.getCookie("JSESSIONID");
 		if (!user)
 			if (htmlSession)
 				user = "";	// Special case - The html session is authenticated - need to re-sign on as anonymous
@@ -40,48 +85,51 @@ jbundle.util = {
 	  	var search = location.search;
 	  	if ((!user) || (user == ""))
 	  	{	// User passed in in URL
-	  		if (jbundle.java.getProperty(search, "user"))
-	  			user = jbundle.java.getProperty(search, "user");
+	  		if (utils.getProperty(search, "user"))
+	  			user = utils.getProperty(search, "user");
 	  	}
 		if (search)
 			if (search != "")
-				if (jbundle.java.getProperty(search, "menu") != null)
-					jbundle.util.lastCommand = search;	// Make sure it does the correct command.
+				if (utils.getProperty(search, "menu") != null)
+					this.lastCommand = search;	// Make sure it does the correct command.
 	  	
-	  	jbundle.util.user = user;
-		jbundle.gui.handleCreateRemoteTaskLink = dojo.connect(jbundle.remote, "handleCreateRemoteTask", jbundle.util, "handleCreateRemoteTask");
+	  	this.user = user;
 
 		var props = {
 	  			user: user,
 				password: password
 			};
-		if (jbundle.java.getProperty(search, "systemname"))
-			props.systemname = jbundle.java.getProperty(search, "systemname");
-		else if (jbundle.java.getProperty(jbundle.java.getCommandFromHash(window.location.hash), "systemname"))
-			props.systemname = jbundle.java.getProperty(jbundle.java.getCommandFromHash(window.location.hash), "systemname");
+		if (utils.getProperty(search, "systemname"))
+			props.systemname = utils.getProperty(search, "systemname");
+		else if (utils.getProperty(utils.getCommandFromHash(window.location.hash), "systemname"))
+			props.systemname = utils.getProperty(utils.getCommandFromHash(window.location.hash), "systemname");
 		
-	  	jbundle.remote.createRemoteTask(props);
+		this.handleCreateRemoteTaskLink = aspect.after(remote, "handleCreateRemoteTask", function(response) {
+			require(["jbundle/util"], function(util) {
+				util.handleCreateRemoteTask(response);
+			})}, true);
+		remote.createRemoteTask(props);
 	  	
 	  	if (pathname)
-	  		if (jbundle.SERVER_PATH == "")
+	  		if (main.SERVER_PATH == "")
 	  	{	// Nail down the host name, so call won't mistakenly call relative to .js directories
 	  		if (pathname.lastIndexOf("/") != -1)
 	  			pathname = pathname.substring(0, pathname.lastIndexOf("/"));
 	  		pathname = pathname + "/";
-	  		jbundle.SERVER_PATH = pathname;
+	  		main.SERVER_PATH = pathname;
 	  	}
 	  	var command = window.location.search;
-		var bookmarkId = jbundle.java.getCommandFromHash(window.location.hash);
+		var bookmarkId = utils.getCommandFromHash(window.location.hash);
 		if ((command) && (bookmarkId))
 			command = command + '&' + bookmarkId;
 		else if (bookmarkId)
 			command = bookmarkId;
 		if (!command)
-			command = jbundle.util.DEFAULT_MENU;
+			command = this.DEFAULT_MENU;
 		if (user == '')
-			if (command != jbundle.util.DEFAULT_MENU)
-				if (jbundle.java.getProperty(command, "menu") != null)
-					jbundle.util.lastCommand = command;	// Special case
+			if (command != this.DEFAULT_MENU)
+				if (utils.getProperty(command, "menu") != null)
+					this.lastCommand = command;	// Special case
 		if (!user)
 			if (host)
 			{
@@ -97,72 +145,90 @@ jbundle.util = {
 		if (bookmarkId && (bookmarkId.indexOf("?") == 0))
 		{	//If we have a bookmark, load that as the initial state.
 			command = bookmarkId;
-			if (command != jbundle.util.DEFAULT_MENU)
-				jbundle.util.lastCommand = command;
+			if (command != this.DEFAULT_MENU)
+				this.lastCommand = command;
 		} else {
 			// Nothing special to do on initial page load
 		}
-		dojo.addOnLoad(function(){
-			var appState = new jbundle.util.ApplicationState(command, bookmarkId, null);
-			dojo.back.setInitialState(appState);
-		});
+//?		dojo.addOnLoad(function(){
+//??			require(["dojo/back"], function(back){
+				var appState = new this.ApplicationState(command, bookmarkId, null);
+				back.setInitialState(appState);
+//?			});
+//?		});
 	},
 	DEFAULT_MENU: "?menu=",
 	user: null,
 	// handleLogin event link. Note: Is there a potential concurrency problem here?
 	handleCreateRemoteTaskLink: null,
 	// Special handler to sign on user after create initial task.
-	handleCreateRemoteTask: function(data, ioArgs)
+	handleCreateRemoteTask: function(request)
 	{
-		dojo.disconnect(jbundle.util.handleCreateRemoteTaskLink);
-		if (jbundle.util.user != null)
+		if (this.handleCreateRemoteTaskLink)
+			this.handleCreateRemoteTaskLink.remove();
+		if (this.user != null)
 		{
-			jbundle.util.saveUser = null;	// Don't change cookie
-			jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
-			jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
+			this.saveUser = null;	// Don't change cookie
+//			gui.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+//				require(["jbundle/gui"], function(gui) {
+//					gui.handleLogin(response);
+//				})}, true);
+			this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+				require(["jbundle/util"], function(util) {
+					util.doLoginCommand(response);
+				})}, true);
 			var props = {
-		  			user: jbundle.util.user
+		  			user: this.user
 				};
-			jbundle.remote.login(jbundle.getTaskSession(), props);
+			remote.login(main.getTaskSession(), props);
 		}
-		if (!jbundle.util.user)
+		if (!this.user)
 		{
 			var action = "Login";
-			jbundle.gui.changeUser(null);
-			jbundle.gui.changeButton(dijit.byId(jbundle.gui.LOGOUT_DESC), jbundle.gui.LOGIN_DESC, action);	// Could be either
-			jbundle.gui.changeButton(dijit.byId(jbundle.gui.LOGIN_DESC), jbundle.gui.LOGIN_DESC, action);
+			gui.changeUser(null);
+			require (["dijit/registry", "jbundle/gui"], function(registry, gui) {
+				gui.changeButton(registry.byId(gui.LOGOUT_DESC), gui.LOGIN_DESC, action);	// Could be either
+				gui.changeButton(registry.byId(gui.LOGIN_DESC), gui.LOGIN_DESC, action);
+			});
 		}
 	},
 	// Free the environment
 	free: function()
 	{
-	  	jbundle.gEnvState = false;	// Ignore the errors (from canceling the receive loop)
-		if (jbundle.gTaskSession)
-			jbundle.remote.freeRemoteSession(jbundle.gTaskSession);
+	  	main.gEnvState = false;	// Ignore the errors (from canceling the receive loop)
+		if (main.gTaskSession)
+			remote.freeRemoteSession(main.gTaskSession);
 	},
 	// Make a remote session
 	makeRemoteSession: function(sessionClassName)
 	{
-		var session = new jbundle.classes.Session(jbundle.getTaskSession());
+		var session = new classes.Session(main.getTaskSession());
 		session.sessionClassName = sessionClassName;
 		if (session.parentSession.sessionID)	// Only add the physical session if the parent session is set up, otherwise the handler will set it up later
-			jbundle.remote.makeRemoteSession(session);
+			remote.makeRemoteSession(session);
 		return session;
 	},
 	// Login
 	login: function(props)
 	{
-		jbundle.remote.login(jbundle.getTaskSession(), props);
+		remote.login(main.getTaskSession(), props);
 	},
 	// Logout
 	logout: function()
 	{
-		jbundle.util.setCookie("userid", null);	// Clear cookie
-		jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
-		jbundle.remote.login(jbundle.getTaskSession(), null);
+		this.setCookie("userid", null);	// Clear cookie
+//		gui.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+//			require(["jbundle/gui"], function(gui) {
+//				gui.handleLogin(response);
+//			})}, true);
 
-		jbundle.util.lastCommand = "?menu=";
-		jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
+		this.lastCommand = "?menu=";
+		this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+			require(["jbundle/util"], function(util) {
+				util.doLoginCommand(response);
+			})}, true);
+
+		remote.login(main.getTaskSession(), null);
 	},
 	// Add a new send message queue
 	addSendQueue: function(filter)
@@ -173,11 +239,11 @@ jbundle.util = {
 			filter.queueName = jbundle.TRX_SEND_QUEUE;
 		if (filter.queueType == null)
 			filter.queueType = jbundle.DEFAULT_QUEUE_TYPE;
-		if (jbundle.getTaskSession().getSendQueue(filter.queueName, filter.queueType))
+		if (main.getTaskSession().getSendQueue(filter.queueName, filter.queueType))
 			return;	// The queue already exists.
-		var sendQueue = new jbundle.classes.SendQueue(jbundle.getTaskSession(), filter.queueName, filter.queueType);
-		if (jbundle.getTaskSession().sessionID)	// Only add if the remote task session exists (otherwise this will be called automatically)
-			jbundle.remote.createRemoteSendQueue(sendQueue);
+		var sendQueue = new classes.SendQueue(main.getTaskSession(), filter.queueName, filter.queueType);
+		if (main.getTaskSession().sessionID)	// Only add if the remote task session exists (otherwise this will be called automatically)
+			remote.createRemoteSendQueue(sendQueue);
 		return sendQueue;
 	},
 	// Add a new receive message queue
@@ -189,11 +255,11 @@ jbundle.util = {
 			filter.queueName = jbundle.TRX_RECEIVE_QUEUE;
 		if (filter.queueType == null)
 			filter.queueType = jbundle.DEFAULT_QUEUE_TYPE;
-		if (jbundle.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType))
+		if (main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType))
 			return;	// The queue already exists.
-	  	var receiveQueue = new jbundle.classes.ReceiveQueue(jbundle.getTaskSession(), filter.queueName, filter.queueType);
-		if (jbundle.getTaskSession().sessionID)	// Only add if the remote task session exists (otherwise this will be called automatically)
-			jbundle.remote.createRemoteReceiveQueue(receiveQueue);
+	  	var receiveQueue = new classes.ReceiveQueue(main.getTaskSession(), filter.queueName, filter.queueType);
+		if (main.getTaskSession().sessionID)	// Only add if the remote task session exists (otherwise this will be called automatically)
+			remote.createRemoteReceiveQueue(receiveQueue);
 		return receiveQueue;
 	},
 	// Send a message
@@ -203,10 +269,10 @@ jbundle.util = {
 			message.queueName = jbundle.TRX_SEND_QUEUE;
 		if (message.queueType == null)
 			message.queueType = jbundle.DEFAULT_QUEUE_TYPE;
-		var sendQueue = jbundle.getTaskSession().getSendQueue(message.queueName, message.queueType);
+		var sendQueue = main.getTaskSession().getSendQueue(message.queueName, message.queueType);
 		if (!sendQueue)
-			sendQueue = jbundle.util.addSendQueue(message);
-		jbundle.remote.sendMessage(sendQueue, message.data);
+			sendQueue = this.addSendQueue(message);
+		remote.sendMessage(sendQueue, message.data);
 	},
 	// Add a message listener to this receive queue
 	addMessageListener: function(filter)
@@ -215,22 +281,12 @@ jbundle.util = {
 			filter.queueName = jbundle.TRX_RECEIVE_QUEUE;
 		if (filter.queueType == null)
 			filter.queueType = jbundle.DEFAULT_QUEUE_TYPE;
-		var receiveQueue = jbundle.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType);
+		var receiveQueue = main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType);
 		if (!receiveQueue)
-			receiveQueue = jbundle.util.addReceiveQueue(filter);
-		var messageFilter = new jbundle.classes.MessageFilter(receiveQueue, filter.onMessage);
+			receiveQueue = this.addReceiveQueue(filter);
+		var messageFilter = new classes.MessageFilter(receiveQueue, filter.onMessage);
 		if (receiveQueue.sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
-			jbundle.remote.addRemoteMessageFilter(messageFilter);
-	},
-	/*
-	 * Display an error message.
-	 */
-	displayErrorMessage: function(message)
-	{
-		if (jbundle.gui)
-			jbundle.gui.displayErrorMessage(message);
-		else
-			alert(message);	// Note: Do something else here.
+			remote.addRemoteMessageFilter(messageFilter);
 	},
 	// Handle an onClick in an <a> link
 	handleLink: function(link)
@@ -239,21 +295,21 @@ jbundle.util = {
 		{
 			var command = link.href;
 			if (command)
-				return jbundle.util.doCommand(command);	// Link handled, don't follow link
+				return this.doCommand(command);	// Link handled, don't follow link
 		}
 		return true;	// Link not handled by me, so follow link
 	},
 	// Do this screen link command
 	doLink: function(command)
 	{
-		jbundle.util.doCommand(command);
+		this.doCommand(command);
 	},
 	// Do this screen button command
 	doButton: function(command)
 	{
 		if (command.indexOf("?") == -1)
 			command = "command=" + command;
-		jbundle.util.doCommand(command);
+		this.doCommand(command);
 		return false;	// This tells form not to submit.
 	},
 	// Last command
@@ -269,79 +325,86 @@ jbundle.util = {
 			decode = true;
 		if (decode)
 			command = decodeURI(command);
-		if ((command.indexOf("Login") != -1) || (jbundle.java.getProperty(command, "user") == ''))
+		if ((command.indexOf("Login") != -1) || (utils.getProperty(command, "user") == ''))
 		{
-			var user = jbundle.java.getProperty(command, "user");
+			var user = utils.getProperty(command, "user");
 			if (user == "")
 				user = null;
 			if (user == null)
 			{
-				if (jbundle.getTaskSession().security)
-					if (jbundle.getTaskSession().security.userProperties)
-						if (jbundle.getTaskSession().security.userProperties.user)
-							user = jbundle.getTaskSession().security.userProperties.user;
+				if (main.getTaskSession())
+				if (main.getTaskSession().security)
+					if (main.getTaskSession().security.userProperties)
+						if (main.getTaskSession().security.userProperties.user)
+							user = main.getTaskSession().security.userProperties.user;
 				if ((user == "1") || (user == ""))
 					user = null;
 			}
 			if (user == null)
-				jbundle.gui.displayLogonDialog();
+				gui.displayLogonDialog();
 			else
-				jbundle.util.logout();
+				this.logout();
 		}
 		else if (command.indexOf("preferences=") != -1)
 		{
-			var navmenus = jbundle.java.getProperty(command, "navmenus");
+			var navmenus = utils.getProperty(command, "navmenus");
 			if (navmenus)
-				jbundle.gui.changeNavMenus(navmenus);
+				gui.changeNavMenus(navmenus);
 		}
-		else if (jbundle.java.getProperty(command, "help") != null)
+		else if (utils.getProperty(command, "help") != null)
 		{
-			if (jbundle.util.lastCommand)
-				if (jbundle.java.getProperty(command, "class") != null)
-					command = jbundle.util.lastCommand + "&help=";
-			jbundle.util.doScreen(command, addHistory);
+			if (this.lastCommand)
+				if (utils.getProperty(command, "class") != null)
+					command = this.lastCommand + "&help=";
+			this.doScreen(command, addHistory);
 		}
-		else if (((jbundle.java.getProperty(command, "screen") != null)
-			|| (jbundle.java.getProperty(command, "menu") != null)
-			|| (jbundle.java.getProperty(command, "xml") != null)
-			|| (jbundle.java.getProperty(command, "record") != null))
-			&& (jbundle.java.getProperty(command, "applet") == null))
+		else if (((utils.getProperty(command, "screen") != null)
+			|| (utils.getProperty(command, "menu") != null)
+			|| (utils.getProperty(command, "xml") != null)
+			|| (utils.getProperty(command, "record") != null))
+			&& (utils.getProperty(command, "applet") == null))
 		{
-			if ((jbundle.java.getProperty(command, "user") != null)
-				&& (jbundle.java.getProperty(command, "user").length > 0)
-				&& ((jbundle.util.user == null) || (jbundle.util.user.length == 0) || (jbundle.util.user != jbundle.java.getProperty(command, "user"))))
+			if ((utils.getProperty(command, "user") != null)
+				&& (utils.getProperty(command, "user").length > 0)
+				&& ((this.user == null) || (this.user.length == 0) || (this.user != utils.getProperty(command, "user"))))
 			{	// Special case - sign on before doing command.
-				var user = jbundle.java.getProperty(command, "user");
-				var password = jbundle.java.getProperty(command, "auth");
+				var user = utils.getProperty(command, "user");
+				var password = utils.getProperty(command, "auth");
 
-				jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
-				jbundle.util.lastCommand = command;
-				jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
+//				gui.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+//					require(["jbundle/gui"], function(gui) {
+//						gui.handleLogin(response);
+//					})}, true);
+				this.lastCommand = command;
+				this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+					require(["jbundle/util"], function(util) {
+						util.doLoginCommand(response);
+					})}, true);
 				var props = {
 			  			user: user,
 						password: password
 					};
-				jbundle.remote.login(jbundle.getTaskSession(), props);
+				remote.login(main.getTaskSession(), props);
 			}
 			else
 			{
-				jbundle.util.lastCommand = command;	// TODO (don) This logic is very weak
-				jbundle.util.doScreen(command, addHistory);
+				this.lastCommand = command;	// TODO (don) This logic is very weak
+				this.doScreen(command, addHistory);
 			}
 		}
-		else if (jbundle.java.getProperty(command, "command"))
+		else if (utils.getProperty(command, "command"))
 		{
-			jbundle.util.doLocalCommand(command, addHistory);
+			this.doLocalCommand(command, addHistory);
 		}
-		else if (jbundle.java.getProperty(command, "applet") != null)
+		else if (utils.getProperty(command, "applet") != null)
 		{
 			javaApplet = null;
-			if (jbundle.getTaskSession().security != null)	// Signed on
-				javaApplet = jbundle.getTaskSession().security.userProperties.javaApplet;
+			if (main.getTaskSession().security != null)	// Signed on
+				javaApplet = main.getTaskSession().security.userProperties.javaApplet;
 			if ((!javaApplet) || ((javaApplet.indexOf('J') == 0) || (javaApplet.indexOf('Y') == 0)))
 			{	// Display an applet
 				// Note: For now I do not render an applet page, I jump to a new applet page (Since I can't figure out how to run js in xsl)
-				if (jbundle.gui.displayApplet(command) == true)
+				if (gui.displayApplet(command) == true)
 					return false;	// Success
 				// drop thru if not handled
 			}
@@ -356,14 +419,15 @@ jbundle.util = {
 		return false;	// In case this was called from onClick in a link (do not follow link since I handled the link).
 	},
 	// handleLogin event link. Note: Is there a potential concurrency problem here?
-	handleLoginLink: null,
+	handleDoLoginLink: null,
 	// After logging into a new account, process the command.
 	doLoginCommand: function()
 	{
-		dojo.disconnect(jbundle.util.handleLoginLink);
+		if (this.handleDoLoginLink)
+			this.handleDoLoginLink.remove();
 
-		var command = jbundle.util.lastCommand;
-		if (jbundle.java.getProperty(command, "user") != null)
+		var command = this.lastCommand;
+		if (utils.getProperty(command, "user") != null)
 		{	// strip out user param
 			var iStart = command.indexOf("user=");
 			var iEnd = command.indexOf("&", iStart);
@@ -372,16 +436,114 @@ jbundle.util = {
 			else
 				command = command.substring(0, iStart - 1) + command.substring(iEnd);
 		}
-		jbundle.util.lastCommand = command;	// Make sure this is the 'last' command
+		this.lastCommand = command;	// Make sure this is the 'last' command
 		if ((command) && (command != ""))
-			jbundle.util.doCommand(command, false, false);		
+			this.doCommand(command, false, false);		
 	},
+	/**
+	 * User pressed submit or cancel.
+	 */
+	submitLogonDialog: function(submit)
+	{
+		require (["dijit/registry", "jbundle/gui", "jbundle/util"], function(registry, gui, util) {
+			dlg0 = dijit.byId("logonDialog");
+			if (submit == true)
+			{
+				var form = document.getElementById("logonForm");
+				var user = form.elements.user.value;
+				var command = form.elements.command.value;
+	
+				var password = form.elements.password.value;
+				this.saveUser = form.elements.saveUser.checked;
+	
+				if (password)
+					password = b64_sha1(password);
+	
+				this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+					require(["jbundle/util"], function(util) {
+						util.handleLogin(response);
+					})}, true);
+	
+				this.lastCommand = "?menu=";
+				this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+					require(["jbundle/util"], function(util) {
+						util.doLoginCommand(response);
+					})}, true);
+	
+				if (command)
+					if (command != "")
+				{
+					this.lastCommand = command;	// Make sure it does the correct command.
+					this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+						require(["jbundle/util"], function(util) {
+							util.handleLogin(response);
+						})}, true);
+				}
+				var props = {
+			  			user: user,
+						password: password
+					};
+				remote.login(main.getTaskSession(), props);
+			}
+			dlg0.hide();
+			if (submit)
+				if (submit != true)
+				if (submit != false)
+			{
+				this.doCommand(submit);
+			}
+		});
+		return false;	// If called from post, don't submit form
+	},
+	// Save the user name.
+	saveUser: null,
+	// handleLogin event link. Note: Is there a potential concurrency problem here?
+	handleLoginLink: null,
+	/**
+	 *
+	 */
+	handleLogin: function(data, ioArgs)
+	{
+		if (this.handleLoginLink)
+			this.handleLoginLink.remove();
+//		if (remote.checkForDataError(data, "Could not log in"))
+	//		return;
+		var user = "";
+		var userid = null;
+		if (main.getTaskSession().security)
+			if (main.getTaskSession().security.userProperties)
+		{
+			user = main.getTaskSession().security.userProperties.user;
+			userid = main.getTaskSession().security.userProperties.userid;
+		}
+		if ((this.saveUser == true)
+			&& (userid)
+				&& (userid != "1"))	// Anon
+			this.setCookie("userid", userid, +365);
+		else if (this.saveUser == false)
+			this.setCookie("userid", null);
+		this.saveUser = null;
+		gui.changeUser(user);
+		var desc = this.LOGOUT_DESC;
+		var command = "Logout";
+		if ((!user) || (user == "") || (userid == "1"))
+		{
+			desc = this.LOGIN_DESC;
+			command = "Login";
+		}
+		require (["dijit/registry", "jbundle/gui"], function(registry, gui) {
+			gui.changeButton(registry.byId(this.LOGIN_DESC), desc, command);	// Could be either
+			gui.changeButton(registry.byId(this.LOGOUT_DESC), desc, command);
+		});
+	},
+	LOGOUT_DESC: "Sign out",	// Change these for I18N
+	LOGIN_DESC: "Sign in",
 	/*
 	 * Local commands are formatted commmand=xyz
 	 */
 	doLocalCommand: function(command, addHistory)
 	{
-		var commandTarget = jbundle.java.getProperty(command, "command");
+		var commandTarget = utils.getProperty(command, "command");
 		console.log("do local command: " + command);
 		if (commandTarget == "Back")
 		{
@@ -389,38 +551,38 @@ jbundle.util = {
 		}
 		else if (commandTarget == "Submit")
 		{
-			jbundle.util.submitData(commandTarget);
+			this.submitData(commandTarget);
 		}
 		else if (commandTarget == "Reset")
 		{
-			jbundle.gui.clearFormData();
+			gui.clearFormData();
 		}
 		else if (commandTarget == "Delete")
 		{
-			jbundle.util.deleteData(command);
+			this.deleteData(command);
 		}
 		else if ((commandTarget == "FormLink")
 			|| (commandTarget == "Form")
 			|| (commandTarget == "Link"))
 		{
-			jbundle.util.doScreen(command, addHistory);
+			this.doScreen(command, addHistory);
 		}
 		else
 		{
-			jbundle.util.submitData(commandTarget);
+			this.submitData(commandTarget);
 		}
 	},
 	/**
 	 * Submit the form data to the screen.
 	 */
 	submitData: function(command) {
-		var messageFilter = new jbundle.classes.MessageFilter(jbundle.util.getAjaxSession(), jbundle.util.doRemoteSubmitCallback);
+		var messageFilter = new classes.MessageFilter(this.getAjaxSession(), this.doRemoteSubmitCallback);
 		messageFilter.name = command;
-		messageFilter.properties = jbundle.gui.getFormData();
-		if (jbundle.util.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
+		messageFilter.properties = gui.getFormData();
+		if (this.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
 		{
-			jbundle.gui.waitCursor();
-			jbundle.remote.doRemoteAction(messageFilter);
+			gui.waitCursor();
+			remote.doRemoteAction(messageFilter);
 		}
 	},
 	/**
@@ -428,33 +590,33 @@ jbundle.util = {
 	 */
 	doRemoteSubmitCallback: function(data, ioArgs)
 	{
-		var bSuccess = jbundle.util.handleReturnData(data, ioArgs);
+		var bSuccess = this.handleReturnData(data, ioArgs);
 		if (bSuccess == true)
-			jbundle.gui.clearFormData();
-		jbundle.gui.restoreCursor();
+			gui.clearFormData();
+		gui.restoreCursor();
 	},
 	/**
 	 * Submit the form data to the screen.
 	 */
 	deleteData: function(command) {
-		var messageFilter = new jbundle.classes.MessageFilter(jbundle.util.getAjaxSession(), jbundle.util.doRemoteDeleteCallback);
+		var messageFilter = new classes.MessageFilter(this.getAjaxSession(), this.doRemoteDeleteCallback);
 		messageFilter.name = command;
-		if (jbundle.gui.isForm())
-			messageFilter.properties = jbundle.gui.getFormData(true);	// Hidden fields
-		if (jbundle.util.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
-			jbundle.remote.doRemoteAction(messageFilter);
+		if (gui.isForm())
+			messageFilter.properties = gui.getFormData(true);	// Hidden fields
+		if (this.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
+			remote.doRemoteAction(messageFilter);
 	},
 	/**
 	 * Handle the XML coming back from the menu action.
 	 */
 	doRemoteDeleteCallback: function(data, ioArgs)
 	{
-		var bSuccess = jbundle.util.handleReturnData(data, ioArgs);
+		var bSuccess = this.handleReturnData(data, ioArgs);
 		if (bSuccess == true)
 		{
-			if (jbundle.gui.isForm())
+			if (gui.isForm())
 			{
-				jbundle.gui.clearFormData();
+				gui.clearFormData();
 			}
 			else
 			{
@@ -462,7 +624,7 @@ jbundle.util = {
 					if (ioArgs.args)
 						if (ioArgs.args.content)
 							if (ioArgs.args.content.name)
-				jbundle.gui.clearGridData(jbundle.java.getProperty(ioArgs.args.content.name, "objectID"));
+				gui.clearGridData(utils.getProperty(ioArgs.args.content.name, "objectID"));
 			}
 		}
 	},
@@ -471,9 +633,9 @@ jbundle.util = {
 	 */
 	getAjaxSession: function()
 	{
-		if (!jbundle.util.jsSession)
-			jbundle.util.jsSession = jbundle.util.makeRemoteSession(".main.remote.AjaxScreenSession");
-		return jbundle.util.jsSession;
+		if (!this.jsSession)
+			this.jsSession = this.makeRemoteSession(".main.remote.AjaxScreenSession");
+		return this.jsSession;
 	},
 	jsSession: null,
 	/**
@@ -482,49 +644,54 @@ jbundle.util = {
 	doScreen: function(command, addHistory)
 	{
 		console.log("do screen: " + command);
-		var messageFilter = new jbundle.classes.MessageFilter(jbundle.util.getAjaxSession(), jbundle.util.doRemoteScreenActionCallback);
+		var messageFilter = new classes.MessageFilter(this.getAjaxSession(), this.doRemoteScreenActionCallback);
 		messageFilter.bindArgs = {
 			addHistory: addHistory
 		};
+		//?messageFilter.bindArgs.handleAs = "xml";
+
 		messageFilter.name = "createScreen";
-		messageFilter.properties = jbundle.java.commandToProperties(command);
-		if (jbundle.util.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
-			jbundle.remote.doRemoteAction(messageFilter);
+		messageFilter.properties = utils.commandToProperties(command);
+		if (this.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
+			remote.doRemoteAction(messageFilter);
 	},
 	// Handle the XML coming back from the menu action
 	doRemoteScreenActionCallback: function(data, ioArgs)
 	{
-		jbundle.util.handleReturnData(data, ioArgs);
+		require(["jbundle/util"], function(util) {
+			util.handleReturnData(data, ioArgs);
+    	});
 	},
 	// Handle the XML coming back from the menu action
 	// Return true if success (non-error return)
 	handleReturnData: function(data, ioArgs)
 	{
-		var domToBeTransformed = dojox.data.dom.createDocument(data);
+		var domToBeTransformed = xmlParser.parse(data); //dojox.data.dom.createDocument(data, "text/xml");
 		var info = domToBeTransformed.getElementsByTagName("status-text");
 		if (info)
 			if (info.length > 0)
 				if (info[0].parentNode == domToBeTransformed)
 		{
-			if (jbundle.util.checkCommand(info[0]))
+			if (this.checkCommand(info[0]))
 				return true;
-			var infoLevel = jbundle.util.handleScreenInfoMessage(info[0]);
+			var infoLevel = this.handleScreenInfoMessage(info[0]);
 			return (infoLevel != "error");	// Only return false if error level
 		}
 
 		var domToAppendTo = document.getElementById("content-area");
 		var contentParent = domToAppendTo.parentNode;
 		// First, delete all the old nodes
-		jbundle.gui.removeChildren(domToAppendTo, true);	// Note: I remove the node also since the replacement's root is <div id='content-area'>
+		xml.removeChildren(domToAppendTo, true);	// Note: I remove the node also since the replacement's root is <div id='content-area'>
 		// Then, add the new nodes (via xslt)
-		var desc = jbundle.gui.changeTitleFromData(domToBeTransformed);
+		var desc = gui.changeTitleFromData(domToBeTransformed);
 		if (ioArgs)
-			if (ioArgs.args.addHistory)
+			if (ioArgs.args)
+				if (ioArgs.args.addHistory)
 		{
 			var command = ioArgs.args.content.name;
-			var bookmark = jbundle.java.propertiesToCommand(ioArgs.args.content.properties);
+			var bookmark = utils.propertiesToCommand(ioArgs.args.content.properties);
 			var appState = new jbundle.util.ApplicationState(command, bookmark, data);
-			dojo.back.addToHistory(appState);
+			back.addToHistory(appState);
 		}
 		// Extract stylesheet name from XML
 		var xsltURI = null;
@@ -546,8 +713,8 @@ jbundle.util = {
 		}
 		if (xsltURI == null)
 			xsltURI = "org/jbundle/res/docs/styles/xsl/ajax/base/menus-ajax.xsl";
-		xsltURI = jbundle.getServerPath(xsltURI);
-		jbundle.xml.doXSLT(domToBeTransformed, xsltURI, contentParent, jbundle.gui.fixNewDOM);
+		xsltURI = main.getServerPath(xsltURI);
+		xml.doXSLT(domToBeTransformed, xsltURI, contentParent, gui.fixNewDOM);
 		return true;	// Success (so far)
 	},
 	// See if this status message contains a command
@@ -559,7 +726,7 @@ jbundle.util = {
 				command = infoDOM.getElementsByTagName("command")[0].firstChild.nodeValue;
 		if (command)
 		{
-			jbundle.util.doCommand(command);
+			this.doCommand(command);
 			return true;
 		}
 		return false;	// No command in status text.
@@ -606,13 +773,13 @@ jbundle.util = {
 				infoText = "Access denied";
 		}
 		if ((error == AUTHENTICATION_REQUIRED) || (error == LOGIN_REQUIRED))
-			jbundle.gui.displayLogonDialog(null, null, infoText, jbundle.util.lastCommand);	// Repeat the last command
+			gui.displayLogonDialog(null, null, infoText, this.lastCommand);	// Repeat the last command
 		else if (error == ACCESS_DENIED)
-			jbundle.gui.displayErrorMessage(infoText);
+			gui.displayErrorMessage(infoText);
 		else if (error == CREATE_USER_REQUIRED)
 			;	// ?
 		else
-			jbundle.gui.displayScreenInfoMessage(infoText, infoClass);
+			gui.displayScreenInfoMessage(infoText, infoClass);
 		return infoClass;
 	},
 	// Convert this array to an xml string
@@ -644,7 +811,7 @@ jbundle.util = {
 	// Get this cookie.
 	getCookie: function(name)
 	{
-		var value = jbundle.java.getProperty(document.cookie, name);
+		var value = utils.getProperty(document.cookie, name);
 		if (value != null)
 			value = unescape(value);
 		return value;
@@ -652,41 +819,8 @@ jbundle.util = {
 	// Non-history hash change
 	hashChange: function(command)
 	{
-		jbundle.util.doCommand(this.command, true, false);
+		this.doCommand(this.command, true, false);
 	}
-};
-/*
-ApplicationState is an object that represents the application state.
-It will be given to dojo.undo.browser to represent the current application state.
-*/
-jbundle.util.ApplicationState = function(screenCommand, bookmarkValue, stateData) {
-	this.command = screenCommand;
-	this.data = stateData;
-	if (bookmarkValue)	// The browser URL to change
-		this.changeUrl = bookmarkValue;
-};
+    };
+});
 
-jbundle.util.ApplicationState.prototype.back = function() {
-	if (jbundle.java)
-		if (jbundle.java.isJavaWindow())
-			jbundle.java.prepareWindowForApplet(false);		// Change from applet display
-	if (this.data)
-		jbundle.util.doRemoteScreenActionCallback(this.data);
-	else
-		jbundle.util.doCommand(this.command, true, false);
-};
-
-jbundle.util.ApplicationState.prototype.forward = function() {
-	if (jbundle.java)
-		if (jbundle.java.isJavaWindow())
-			jbundle.java.prepareWindowForApplet(false);		// Change from applet display
-	if (this.data)
-		jbundle.util.doRemoteScreenActionCallback(this.data);
-	else
-		jbundle.util.doCommand(this.command, true, false);
-};
-
-
-dojo.addOnLoad(jbundle.util, "init");
-
-}

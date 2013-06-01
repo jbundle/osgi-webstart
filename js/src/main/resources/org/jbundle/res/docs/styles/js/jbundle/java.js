@@ -1,24 +1,43 @@
-/**
- * Top level methods and vars.
- */
-if(!dojo._hasResource["jbundle.java"]){
-dojo._hasResource["jbundle.java"] = true;
-dojo.provide("jbundle.java");
-
-dojo.require("dojo.back");
-
-if (!jbundle.util)
+/*
+if (!util)
 {
 	dojo.addOnLoad(function(){
-		dojo.back.setInitialState(new jbundle.java.State(jbundle.java.getCommandFromHash(window.location.hash)));
+		dojo.back.setInitialState(new this.State(utils.getCommandFromHash(window.location.hash)));
+	});
+}
+
+jbundle.java.State.prototype.back = function() { java.doBack(this.changeUrl); };
+jbundle.java.State.prototype.forward = function() { java.doForward(this.changeUrl); };
+*/
+
+/**
+ * For java to call these, these must be at the root.
+ */
+function pushBrowserHistory(command, title)
+{
+	require(['jbundle/java', 'dojo/domReady!'], function(java) {
+	 java.pushBrowserHistory(command, title);
+	});
+}
+function popBrowserHistory(count, commandHandledByClient, title)
+{
+	require(['jbundle/java', 'dojo/domReady!'], function(java) {
+	 java.popBrowserHistory(count, commandHandledByClient, title);
 	});
 }
 
 /**
  * Browser back support.
  */
-jbundle.java = {
-	    SERVLET_NAME: "webstart",          // The default servlet name.
+define([
+	"jbundle/util",		// I should refactor these dependencies to a minimum for non jbundle use
+	"jbundle/utils",
+	"jbundle/xml",
+	"dojo/back",
+	"dojo/domReady!"
+], function(util, utils, xml, back) {
+    return {
+	SERVLET_NAME: "webstart",          // The default servlet name.
 	/**
 	 * This is called from the history state object when the state is popped by a browser back command.
 	 * This method calls TO the java doBack method.
@@ -26,16 +45,16 @@ jbundle.java = {
 	 */
 	doBack: function(command)
 	{
-		if (!jbundle.java.isJavaWindow())
-			jbundle.java.displayApplet(command);
-		if (jbundle.java.ignoreBack != true)
+		if (!this.isJavaWindow())
+			this.displayApplet(command);
+		if (this.ignoreBack != true)
 		{
 			if (document.jbundle)
 				document.jbundle.doBack(command);
 			if (jbundle.debug == true)
 				console.log("doBack command =" + command);
 		}
-		jbundle.java.ignoreBack = false;
+		this.ignoreBack = false;
 	},
 	/**
 	 * This is called from the history state object when the state is popped by a browser forward command.
@@ -44,8 +63,8 @@ jbundle.java = {
 	 */
 	doForward: function(command)
 	{
-		if (!jbundle.java.isJavaWindow())
-			jbundle.java.displayApplet(command);
+		if (!this.isJavaWindow())
+			this.displayApplet(command);
 		else if (document.jbundle)
 			document.jbundle.doForward(command);
 		if (jbundle.debug == true)
@@ -58,22 +77,22 @@ jbundle.java = {
 	 */
 	hashChange: function(command)
 	{
-		if (jbundle.util)
-			if (jbundle.java.getProperty(command, "applet") == null)
+		if (util)
+			if (utils.getProperty(command, "applet") == null)
 			{
-				if (jbundle.java.isJavaWindow())
-					jbundle.java.prepareWindowForApplet(false);
-				jbundle.util.doCommand(command);
+				if (this.isJavaWindow())
+					this.prepareWindowForApplet(false);
+				util.doCommand(command);
 				return;
 			}
-		if (!jbundle.java.isJavaWindow())
-			jbundle.java.displayApplet(command);
+		if (!this.isJavaWindow())
+			this.displayApplet(command);
 		else if (document.jbundle)
 			document.jbundle.hashChange(command);
-		else if (jbundle.util)
+		else if (util)
 		{	// Must be an xsl command
-			jbundle.java.prepareWindowForApplet(false);
-			jbundle.util.doBrowserHashChange(command);
+			this.prepareWindowForApplet(false);
+			util.doBrowserHashChange(command);
 		}
 		if (jbundle.debug == true)
 			console.log("hashChange command =" + command);
@@ -84,8 +103,8 @@ jbundle.java = {
 	 */
 	pushBrowserHistory: function(command, title)
 	{
-		if (dojo.back)
-			dojo.back.addToHistory(new jbundle.java.State(command));
+		if (back)
+			back.addToHistory(new this.State(command));
 		if (title)
 			document.title = title;
 		if (jbundle.debug == true)
@@ -101,7 +120,7 @@ jbundle.java = {
 	{
 		move = 0 - count;
 		if ((commandHandledByClient == 'true') || (commandHandledByClient == true))
-			jbundle.java.ignoreBack = true;
+			this.ignoreBack = true;
 		history.go(move);
 		if (title)
 			document.title = title;
@@ -133,29 +152,29 @@ jbundle.java = {
 			return false;
 		if (version == null)
 			version = '1.6';
-		var params = jbundle.java.commandToProperties(command);
+		var params = utils.commandToProperties(command);
 
 		var domToAppendTo = document.getElementById("content-area");
 		// First, delete all the old nodes
-		jbundle.gui.removeChildren(domToAppendTo, false);
+		xml.removeChildren(domToAppendTo, false);
 		// Then, add the new nodes (via xslt)
-		//+ var desc = jbundle.gui.changeTitleFromData(domToBeTransformed);
-		var attributes = jbundle.java.getAppletAttributes(params);
-		var jnlp = jbundle.java.getJnlpURL(attributes, params);
+		//+ var desc = gui.changeTitleFromData(domToBeTransformed);
+		var attributes = this.getAppletAttributes(params);
+		var jnlp = this.getJnlpURL(attributes, params);
 		if (!params.jnlp_href)
 			params['jnlp_href'] = jnlp;
 		
-		jbundle.java.prepareWindowForApplet(true);
+		this.prepareWindowForApplet(true);
 		
-		var html = jbundle.java.getAppletHtml(attributes, params, version);
+		var html = this.getAppletHtml(attributes, params, version);
 		domToAppendTo.innerHTML = html;
-		jbundle.java.pushBrowserHistory(command);
+		this.pushBrowserHistory(command);
 		return true;
 	},
 	// Return true if java applet is displayed
 	isJavaWindow: function()
 	{
-		if (jbundle.util)
+		if (util)
 			return (document.body.parentNode.className == "java");
 		return true;	// This is only for tourapp windows
 	},
@@ -166,15 +185,15 @@ jbundle.java = {
 		if (flag == true)
 		{
 			if (document.body.parentNode.className != "java")
-				jbundle.java.oldClassName = document.body.parentNode.className;
+				this.oldClassName = document.body.parentNode.className;
 			document.body.parentNode.className="java";	// For firefox html.class
-			if (jbundle.gui)
-				jbundle.gui.changeTheTitle("Java Window");
+			if (gui)
+				gui.changeTheTitle("Java Window");
 		}
 		else
 		{
-		    if (jbundle.java.oldClassName)
-				document.body.parentNode.className=jbundle.java.oldClassName;
+		    if (this.oldClassName)
+				document.body.parentNode.className=this.oldClassName;
 		}
 	},
 	// Get the applet attributes from the params
@@ -212,10 +231,10 @@ jbundle.java = {
 		if (!params.baseURL)
 		{
 			params.baseURL = location.host;
-			if ((location.pathname.indexOf(jbundle.java.SERVLET_NAME) < 1) && (location.pathname.indexOf(jbundle.java.SERVLET_NAME + '/') != 0))
+			if ((location.pathname.indexOf(this.SERVLET_NAME) < 1) && (location.pathname.indexOf(this.SERVLET_NAME + '/') != 0))
 				params.baseURL += "/";
 			else
-				params.baseURL += location.pathname.substring(0, location.pathname.indexOf(jbundle.java.SERVLET_NAME));
+				params.baseURL += location.pathname.substring(0, location.pathname.indexOf(this.SERVLET_NAME));
 		}
 		if (!params.url)
 			params.url = location.protocol + '//' + location.host + location.pathname;
@@ -247,7 +266,7 @@ jbundle.java = {
 		if (!jnlp.applet)
 				if (attributes['code'])
 					jnlp['appletClass'] = attributes['code'];
-		var command = attributes.codebase + jbundle.java.SERVLET_NAME + jbundle.java.propertiesToCommand(jnlp);
+		var command = attributes.codebase + this.SERVLET_NAME + utils.propertiesToCommand(jnlp);
 		return command;
 	},
 	// Get this param from the browser url
@@ -270,26 +289,26 @@ jbundle.java = {
 		{
 			if (command == null)
 				command = "";
-			command = command + "&" + jbundle.java.getCommandFromHash(hash);
+			command = command + "&" + utils.getCommandFromHash(hash);
 		}
 		if (!command)
 			return false;
 		if (version == null)
 			version = '1.6';
-		var params = jbundle.java.commandToProperties(command);
+		var params = utils.commandToProperties(command);
 
-		var attributes = jbundle.java.getAppletAttributes(params);
-		var jnlp = jbundle.java.getJnlpURL(attributes, params);
+		var attributes = this.getAppletAttributes(params);
+		var jnlp = this.getJnlpURL(attributes, params);
 		if (!params.jnlp_href)
 			params['jnlp_href'] = jnlp;
 		
-		jbundle.java.prepareWindowForApplet(true);	// Set java flag to 'true'
+		this.prepareWindowForApplet(true);	// Set java flag to 'true'
 		deployJava.runApplet(attributes, params, version);
 		return true;
     },
     /**
      * Same as deployJava, except I add to a string instead of doing document.write(xx).
-     * NOTE: This method only works with the jbundle.gui code.
+     * NOTE: This method only works with the gui code.
      */
     getAppletHtml: function(attributes, parameters, minimumVersion) {
         if (minimumVersion == 'undefined' || minimumVersion == null) {
@@ -309,17 +328,17 @@ jbundle.java = {
             var browser = deployJava.getBrowser();
             if ((browser != '?') && (browser != 'Safari')) {
                 if (deployJava.versionCheck(minimumVersion + '+')) {
-                    return jbundle.java.writeAppletTag(attributes, parameters);
+                    return this.writeAppletTag(attributes, parameters);
                 } else if (deployJava.installJRE(minimumVersion + '+')) {
                     // after successfull install we need to refresh page to pick
                     // pick up new plugin
                     deployJava.refresh();
                     location.href = document.location;
-                    return jbundle.java.writeAppletTag(attributes, parameters);
+                    return this.writeAppletTag(attributes, parameters);
                 }
             } else {
                 // for unknown or Safari - just try to show applet
-            	return jbundle.java.writeAppletTag(attributes, parameters);
+            	return this.writeAppletTag(attributes, parameters);
             }
         } else {
             if (deployJava.debug) {
@@ -354,93 +373,6 @@ jbundle.java = {
         s += '<' + '/' + 'applet' + '>';
         return s;
     },
-	// Convert this properties object to a command
-	propertiesToCommand: function(properties)
-	{
-		var command = "?";
-		if (properties)
-		{
-			if (typeof(properties) == 'string')
-				if (properties.length > 1)
-				{
-					if (!properties.substring(0, 1) != "(")
-						properties = "(" + properties + ")";
-					properties = eval(properties);
-				}
-			for (var name in properties)
-			{
-				if (command.length > 1)
-					command += "&";
-				command += name + "=" + escape(properties[name]);
-			}
-		}
-		return command;
-	},
-	// Convert this command string to a properties object.
-	commandToProperties: function(command, properties)
-	{
-		if (!properties)
-			properties = {};
-		var commandArray = command.split(/[;&?]/);
-		for (var i = 0; i < commandArray.length; i++)
-		{
-			var thisCommand = commandArray[i];
-			while ((thisCommand.charAt(0) == ' ') || (thisCommand.charAt(0) == '?'))
-				thisCommand = thisCommand.substring(1, thisCommand.length);
-			var equals = thisCommand.indexOf('=');
-			if (equals != -1)	// Always
-				properties[thisCommand.substring(0, equals)] = unescape(thisCommand.substring(equals+1, thisCommand.length));
-		}
-		return properties;
-	},
-	// Get this property from this command string
-	getProperty: function(command, key)
-	{
-		var nameEQ = key.toUpperCase() + "=";
-		if (command == null)
-			return null;
-		if (command.indexOf("?") != -1)
-			if ((command.indexOf("?") < command.indexOf("&") || (command.indexOf("&") == -1)))
-				command = command.substring(command.indexOf("?") + 1);
-		var ca = command.split(/[;&]/);
-		for (var i = 0; i < ca.length; i++)
-		{
-			var c = ca[i];
-			while ((c.charAt(0) == ' ') || (c.charAt(0) == '?'))
-				c = c.substring(1, c.length);
-			if (c.toUpperCase().indexOf(nameEQ) == 0)
-				return unescape(c.substring(nameEQ.length, c.length));
-		}
-		return null;
-	},
-	// Remove the hash mark
-	getCommandFromHash: function(hash)
-	{
-		if (hash)
-			if (hash.length > 0)
-		{
-			hash = unescape(hash);
-			if (hash.substring(0, 1) == '#')
-				hash = hash.substring(1);
-		}
-		return hash;
-	},
 	ignoreBack: false
-};
-
-jbundle.java.State.prototype.back = function() { jbundle.java.doBack(this.changeUrl); };
-jbundle.java.State.prototype.forward = function() { jbundle.java.doForward(this.changeUrl); };
-
-/**
- * For java to call these, these must be at the root.
- */
-function pushBrowserHistory(command, title)
-{
-	jbundle.java.pushBrowserHistory(command, title);
-}
-function popBrowserHistory(count, commandHandledByClient, title)
-{
-	 jbundle.java.popBrowserHistory(count, commandHandledByClient, title);
-}
-
-}
+    };
+});

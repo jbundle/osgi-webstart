@@ -1,21 +1,19 @@
 /**
- * Top level methods and vars.
- */
-if(!dojo._hasResource["jbundle.gui"]){
-dojo._hasResource["jbundle.gui"] = true;
-dojo.provide("jbundle.gui");
-
-dojo.require("dojo.parser");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.Editor");
-dojo.require("dijit.Dialog");
-
-/**
  * Screen utilities.
  */
-jbundle.gui = {
+define([
+	"jbundle/java",
+	"jbundle/xml",
+	"dojo/parser",
+	"dijit/registry",
+	"dijit/Dialog",
+	"dijit/Editor",
+	"dijit/form/Button",
+	"dijit/form/TextBox",
+	"dijit/form/CheckBox",
+	"dojo/domReady!"
+], function(java, xml, parser, registry, Dialog){
+    return {
 	/**
 	 * Get scratch area.
 	 * @return The dom to the scratch area.
@@ -38,27 +36,28 @@ jbundle.gui = {
 	displayLogonDialog: function(domToAppendTo, user, dialogTitle, command)
 	{
 		if (!domToAppendTo)
-			domToAppendTo = jbundle.gui.getScratch();
+			domToAppendTo = this.getScratch();
 		if (!user)
 		{
 			user = "";
-			if (jbundle.getTaskSession().security)
-				if (jbundle.getTaskSession().security.userProperties)
-					if (jbundle.getTaskSession().security.userProperties.user)
-						user = jbundle.getTaskSession().security.userProperties.user;
+			if (main.getTaskSession())
+			if (main.getTaskSession().security)
+				if (main.getTaskSession().security.userProperties)
+					if (main.getTaskSession().security.userProperties.user)
+						user = main.getTaskSession().security.userProperties.user;
 		}
 		if (!dialogTitle)
 			dialogTitle = "Login";
 		if (!command)
 			command = "";
 		var xmlToBeTransformed = "<root><user>" + user + "</user><dialogTitle>" + dialogTitle + "</dialogTitle><command>" + command + "</command></root>";
-		var xsltURI = jbundle.getServerPath("org/jbundle/res/docs/styles/js/jbundle/xsl/logon.xsl");
+		var xsltURI = main.getServerPath("org/jbundle/res/docs/styles/js/jbundle/xsl/logon.xsl");
 
-		var logonDialog = dijit.byId("logonDialog");
+		var logonDialog = registry.byId("logonDialog");
 		if (!logonDialog)
 		{
 			var domToBeTransformed = dojox.data.dom.createDocument(xmlToBeTransformed);
-			jbundle.xml.doXSLT(domToBeTransformed, xsltURI, domToAppendTo, jbundle.gui.handleDisplayLogonDialog);
+			xml.doXSLT(domToBeTransformed, xsltURI, domToAppendTo, this.handleDisplayLogonDialog);
 		}
 		else
 		{
@@ -81,104 +80,20 @@ jbundle.gui = {
 	 */
 	handleDisplayLogonDialog: function(domToAppendTo)
 	{
-		dojo.parser.parse(domToAppendTo);
+		parser.parse(domToAppendTo);
 
-		var logonDialog = dijit.byId("logonDialog");
+		var logonDialog = registry.byId("logonDialog");
        	logonDialog.show();
 		return;
 	},
-	/**
-	 * User pressed submit or cancel.
-	 */
-	submitLogonDialog: function(submit)
-	{
-		dlg0 = dijit.byId("logonDialog");
-		if (submit == true)
-		{
-			var form = document.getElementById("logonForm");
-			var user = form.elements.user.value;
-			var command = form.elements.command.value;
-
-			var password = form.elements.password.value;
-			jbundle.util.saveUser = form.elements.saveUser.checked;
-
-			if (password)
-				password = b64_sha1(password);
-
-			jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
-
-			jbundle.util.lastCommand = "?menu=";
-			jbundle.util.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.util, "doLoginCommand");
-
-			if (command)
-				if (command != "")
-			{
-				jbundle.util.lastCommand = command;	// Make sure it does the correct command.
-				jbundle.gui.handleLoginLink = dojo.connect(jbundle.remote, "handleLogin", jbundle.gui, "handleLogin");
-			}
-			var props = {
-		  			user: user,
-					password: password
-				};
-			jbundle.remote.login(jbundle.getTaskSession(), props);
-		}
-		dlg0.hide();
-		if (submit)
-			if (submit != true)
-			if (submit != false)
-		{
-			jbundle.util.doCommand(submit);
-		}
-		return false;	// If called from post, don't submit form
-	},
-	// Save the user name.
-	saveUser: null,
-	// handleLogin event link. Note: Is there a potential concurrency problem here?
-	handleLoginLink: null,
-	/**
-	 *
-	 */
-	handleLogin: function(data, ioArgs)
-	{
-		dojo.disconnect(jbundle.gui.handleLoginLink);
-//		if (jbundle.remote.checkForDataError(data, "Could not log in"))
-	//		return;
-		var user = "";
-		var userid = null;
-		if (jbundle.getTaskSession().security)
-			if (jbundle.getTaskSession().security.userProperties)
-		{
-			user = jbundle.getTaskSession().security.userProperties.user;
-			userid = jbundle.getTaskSession().security.userProperties.userid;
-		}
-		if ((jbundle.util.saveUser == true)
-			&& (userid)
-				&& (userid != "1"))	// Anon
-			jbundle.util.setCookie("userid", userid, +365);
-		else if (jbundle.util.saveUser == false)
-			jbundle.util.setCookie("userid", null);
-		jbundle.util.saveUser = null;
-		jbundle.gui.changeUser(user);
-		var desc = jbundle.gui.LOGOUT_DESC;
-		var command = "Logout";
-		if ((!user) || (user == "") || (userid == "1"))
-		{
-			desc = jbundle.gui.LOGIN_DESC;
-			command = "Login";
-		}
-		jbundle.gui.changeButton(dijit.byId(jbundle.gui.LOGIN_DESC), desc, command);	// Could be either
-		jbundle.gui.changeButton(dijit.byId(jbundle.gui.LOGOUT_DESC), desc, command);
-	},
-	LOGOUT_DESC: "Sign out",	// Change these for I18N
-	LOGIN_DESC: "Sign in",
 	/*
 	 * Display an error message.
 	 */
 	displayErrorMessage: function(message)
 	{
-		var domToAppendTo = jbundle.gui.getScratch();
+		var domToAppendTo = this.getScratch();
 		
-		var alertDialog = dijit.byId("alertDialog");
+		var alertDialog = registry.byId("alertDialog");
 		if (!alertDialog)
 		{
 			var params =
@@ -192,14 +107,14 @@ jbundle.gui = {
 					displayCloseAction: true,
 					id: "alertDialog"
 				};
-			alertDialog = new dijit.Dialog(params, domToAppendTo);
+			alertDialog = new Dialog(params, domToAppendTo);
 		}
 		// todo (don) This seems lame
 		message = "<div style='text-align: center;'>" + 
 			message + 
-				"<br/><button id=\"alertDialogOkay\" onClick=\"dijit.byId('alertDialog').hide();\" dojoType=\"dijit.form.Button\" class=\"button\" ><img src=\"images/buttons/Close.gif\" width=\"16\" height=\"16\" alt=\"Close\" class=\"button\" />Close</button>" + 
+				"<br/><button id=\"alertDialogOkay\" onClick=\"require(['dijit/registry'], function(registry) {registry.byId('alertDialog').hide();});\" data-dojo-type=\"dijit/form/Button\" class=\"button\" ><img src=\"org/jbundle/res/images/buttons/Close.gif\" width=\"16\" height=\"16\" alt=\"Close\" class=\"button\" />Close</button>" + 
 //x				"&#160;&#160;&#160;" +
-//x				"<button id=\"alertDialogNewUser\" onClick=\"jbundle.util.doCommand('?screen=.main.user.screen.UserEntryScreen&amp;java=no');\" dojoType=\"dijit.form.Button\" class=\"button\" ><img src=\"images/buttons/Form.gif\" width=\"16\" height=\"16\" alt=\"Create new account\" class=\"button\" />Create new account</button>" + 
+//x				"<button id=\"alertDialogNewUser\" onClick=\"require(['jbundle/util'], function(util){util.doCommand('?screen=.main.user.screen.UserEntryScreen&amp;java=no');});\" data-dojo-type=\"dijit/form/Button\" class=\"button\" ><img src=\"org/jbundle/res/images/buttons/Form.gif\" width=\"16\" height=\"16\" alt=\"Create new account\" class=\"button\" />Create new account</button>" + 
 				"</div>";
 		alertDialog.setContent(message);
 
@@ -215,7 +130,7 @@ jbundle.gui = {
 		var messageArea = document.getElementById('status-area');
 		if (messageArea)
 		{
-			jbundle.gui.removeChildren(messageArea);
+			xml.removeChildren(messageArea);
 			messageArea.appendChild(document.createTextNode(infoText));
 			if (!infoClass)
 				infoClass = "information";
@@ -243,7 +158,7 @@ jbundle.gui = {
 		var div = document.getElementById("userName");
 		if (div)
 		{	// Always
-			jbundle.gui.removeChildren(div);
+			xml.removeChildren(div);
 			div.appendChild(document.createTextNode(user));
 		}
 	},
@@ -257,7 +172,7 @@ jbundle.gui = {
 		var div = document.getElementById("title");
 		if (div)
 		{	// Always
-			jbundle.gui.removeChildren(div);
+			xml.removeChildren(div);
 			div.appendChild(document.createTextNode(newtitle));
 		}
 		document.title = newtitle;
@@ -271,7 +186,7 @@ jbundle.gui = {
 		var title = null;
 		if (elements)
 			if (elements.length > 0)
-				jbundle.gui.changeTheTitle(title = elements[0].textContent);
+				this.changeTheTitle(title = elements[0].textContent);
 		return title;
 	},
 	/**
@@ -318,7 +233,7 @@ jbundle.gui = {
 	 */
 	fixNewDOM: function(domToAppendTo)
 	{
-		dojo.parser.parse(domToAppendTo);
+		parser.parse(domToAppendTo);
 	},
 	/**
 	 * Get all the form data from this screen and stick it in a name/value object.
@@ -344,7 +259,7 @@ jbundle.gui = {
 			    if (elem.className)
 			    	if (elem.className.indexOf("jbundle.Editor") != -1)
 			    {
-					var editor = dijit.byNode(elem);
+					var editor = registry.byNode(elem);
 					if (editor)
 						formValues[editor.name] = editor.getValue();
 			    }
@@ -373,8 +288,8 @@ jbundle.gui = {
 				continue;
 			if ((formValues) && (formValues[elem.name]))
 				elem.value = formValues[elem.name];
-			else if ((jbundle.gui.defaultFormValues) && (jbundle.gui.defaultFormValues[elem.name]))
-				elem.value = jbundle.gui.defaultFormValues[elem.name];
+			else if ((this.defaultFormValues) && (this.defaultFormValues[elem.name]))
+				elem.value = this.defaultFormValues[elem.name];
 			else
 				elem.value = "";
 		}
@@ -385,13 +300,13 @@ jbundle.gui = {
 		    if (elem.className)
 		    	if (elem.className.indexOf("jbundle.Editor") != -1)
 		    {
-				var editor = dijit.byNode(elem);
+				var editor = registry.byNode(elem);
 				if (editor)
 				{
 					if ((formValues) && (formValues[editor.name]))
 						editor.setValue(formValues[editor.name]);
-					else if ((jbundle.gui.defaultFormValues) && (jbundle.gui.defaultFormValues[editor.name]))
-						editor.setValue(jbundle.gui.defaultFormValues[editor.name]);
+					else if ((this.defaultFormValues) && (this.defaultFormValues[editor.name]))
+						editor.setValue(this.defaultFormValues[editor.name]);
 					else
 						editor.setValue("");
 				}
@@ -403,7 +318,7 @@ jbundle.gui = {
 	 * Clear all the data in this form and make sure the hidden objectID is cleared.
 	 */
 	clearFormData: function() {
-		jbundle.gui.setFormData(null);
+		this.setFormData(null);
 		if (document.getElementById('objectID'))
 			document.getElementById('objectID').value = "";
 	},
@@ -413,33 +328,7 @@ jbundle.gui = {
 	clearGridData: function(objectID) {
 		var tr = document.getElementById(objectID);
 		if (tr)
-			jbundle.gui.removeChildren(tr, true);
-	},
-	/**
-	 * Utility - Remove all children from this node.
-	 */
-	removeChildren: function(dom, removeFromParent)
-	{
-		if (dom.nodeType == 1)	// Node.ELEMENT_NODE)
-		{
-			if (dom.getAttribute("widgetid"))
-			{	// TODO (don) - Fix this to use dom.destroy();
-				if (removeFromParent)
-					if (dijit.byId(dom.getAttribute("widgetid")))
-					{
-						dijit.byId(dom.getAttribute("widgetid")).destroyRecursive();
-						removeFromParent = false;	// Previous command removed it.
-					}
-//						dijit.util.manager.remove(dom.getAttribute("widgetid"));	// dojo destroy
-			}
-			var children = dom.childNodes;
-			for (var i = children.length-1; i >= 0; i--)
-			{
-				jbundle.gui.removeChildren(children[i], true);
-			}
-		}
-		if (removeFromParent)
-			dom.parentNode.removeChild(dom);
+			xml.removeChildren(tr, true);
 	},
 	// Display the wait cursor
 	waitCursor: function()
@@ -455,11 +344,11 @@ jbundle.gui = {
 	// Returns true if successful
 	displayApplet: function(command)
 	{
-		if (!jbundle.java)
+		if (!java)
 			return false;	// No java.js
-		jbundle.gui.appletDisplayed = jbundle.java.displayApplet(command);
-		return jbundle.gui.appletDisplayed;
+		this.appletDisplayed = java.displayApplet(command);
+		return this.appletDisplayed;
 	},
 	appletDisplayed: false
-};
-}
+    };
+});
