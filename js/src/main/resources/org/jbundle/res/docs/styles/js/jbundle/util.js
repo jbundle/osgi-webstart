@@ -236,9 +236,9 @@ define([
 		if (!filter)
 			filter = new Object();
 		if (filter.queueName == null)
-			filter.queueName = jbundle.TRX_SEND_QUEUE;
+			filter.queueName = main.TRX_SEND_QUEUE;
 		if (filter.queueType == null)
-			filter.queueType = jbundle.DEFAULT_QUEUE_TYPE;
+			filter.queueType = main.DEFAULT_QUEUE_TYPE;
 		if (main.getTaskSession().getSendQueue(filter.queueName, filter.queueType))
 			return;	// The queue already exists.
 		var sendQueue = new classes.SendQueue(main.getTaskSession(), filter.queueName, filter.queueType);
@@ -252,9 +252,9 @@ define([
 		if (!filter)
 			filter = new Object();
 		if (filter.queueName == null)
-			filter.queueName = jbundle.TRX_RECEIVE_QUEUE;
+			filter.queueName = main.TRX_RECEIVE_QUEUE;
 		if (filter.queueType == null)
-			filter.queueType = jbundle.DEFAULT_QUEUE_TYPE;
+			filter.queueType = main.DEFAULT_QUEUE_TYPE;
 		if (main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType))
 			return;	// The queue already exists.
 	  	var receiveQueue = new classes.ReceiveQueue(main.getTaskSession(), filter.queueName, filter.queueType);
@@ -268,7 +268,7 @@ define([
 		if (message.queueName == null)
 			message.queueName = jbundle.TRX_SEND_QUEUE;
 		if (message.queueType == null)
-			message.queueType = jbundle.DEFAULT_QUEUE_TYPE;
+			message.queueType = main.DEFAULT_QUEUE_TYPE;
 		var sendQueue = main.getTaskSession().getSendQueue(message.queueName, message.queueType);
 		if (!sendQueue)
 			sendQueue = this.addSendQueue(message);
@@ -278,9 +278,9 @@ define([
 	addMessageListener: function(filter)
 	{
 		if (filter.queueName == null)
-			filter.queueName = jbundle.TRX_RECEIVE_QUEUE;
+			filter.queueName = main.TRX_RECEIVE_QUEUE;
 		if (filter.queueType == null)
-			filter.queueType = jbundle.DEFAULT_QUEUE_TYPE;
+			filter.queueType = main.DEFAULT_QUEUE_TYPE;
 		var receiveQueue = main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType);
 		if (!receiveQueue)
 			receiveQueue = this.addReceiveQueue(filter);

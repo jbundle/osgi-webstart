@@ -38,9 +38,9 @@ define([
     			getSendQueue: function(queueName, queueType)
     			{
     				if (queueName === undefined)
-    					queueName = jbundle.TRX_SEND_QUEUE;
+    					queueName = main.TRX_SEND_QUEUE;
     				if (queueType === undefined)
-    					queueType = jbundle.DEFAULT_QUEUE_TYPE;
+    					queueType = main.DEFAULT_QUEUE_TYPE;
     				var childSessions = main.getTaskSession().childSessions;
     				if (childSessions)
     				{
@@ -58,9 +58,9 @@ define([
     			getReceiveQueue: function(queueName, queueType)
     			{
     				if (queueName === undefined)
-    					queueName = jbundle.TRX_RECEIVE_QUEUE;
+    					queueName = main.TRX_RECEIVE_QUEUE;
     				if (queueType === undefined)
-    					queueType = jbundle.DEFAULT_QUEUE_TYPE;
+    					queueType = main.DEFAULT_QUEUE_TYPE;
     				var childSessions = main.getTaskSession().childSessions;
     				if (childSessions)
     				{

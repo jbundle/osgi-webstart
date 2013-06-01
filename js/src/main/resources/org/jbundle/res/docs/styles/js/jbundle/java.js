@@ -51,7 +51,7 @@ define([
 		{
 			if (document.jbundle)
 				document.jbundle.doBack(command);
-			if (jbundle.debug == true)
+			if (dojoConfig.isDebug == true)
 				console.log("doBack command =" + command);
 		}
 		this.ignoreBack = false;
@@ -67,7 +67,7 @@ define([
 			this.displayApplet(command);
 		else if (document.jbundle)
 			document.jbundle.doForward(command);
-		if (jbundle.debug == true)
+		if (dojoConfig.isDebug == true)
 			console.log("doForward command =" + command);
 	},
 	/**
@@ -94,7 +94,7 @@ define([
 			this.prepareWindowForApplet(false);
 			util.doBrowserHashChange(command);
 		}
-		if (jbundle.debug == true)
+		if (dojoConfig.isDebug == true)
 			console.log("hashChange command =" + command);
 	},
 	/**
@@ -107,7 +107,7 @@ define([
 			back.addToHistory(new this.State(command));
 		if (title)
 			document.title = title;
-		if (jbundle.debug == true)
+		if (dojoConfig.isDebug == true)
 			console.log("pushBrowserHistory command =" + command + " title= " + title);
 	},
 	/**
@@ -124,7 +124,7 @@ define([
 		history.go(move);
 		if (title)
 			document.title = title;
-		if (jbundle.debug == true)
+		if (dojoConfig.isDebug == true)
 			console.log('popBrowserHistory count =' + count + ' move = ' + move + ' handled = ' + commandHandledByClient + " title= " + title);
 	},
 	/**

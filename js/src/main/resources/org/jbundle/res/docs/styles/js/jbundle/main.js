@@ -14,17 +14,6 @@ define([
 				filePath = this.SERVER_NAME;
 			return this.SERVER_PATH + filePath;
 		},
-		
-		// Which browser?
-		whichBrowser: function()
-		{
-			if (document.implementation && document.implementation.createDocument)	// True for non-IE
-				return jbundle.NS;
-			else if (window.ActiveXObject)
-				return jbundle.IE;
-			else
-				return null;
-		},
 		// Get the next filter ID (and bump the counter)
 		getNextFilterID: function()
 		{
@@ -43,15 +32,9 @@ define([
     	nextFilterID: 0,
     	// Next unique local session ID
     	nextLocalSessionID: 0,
+
+    	TRX_SEND_QUEUE: "trxSend",		// The generic queue for remote sent transaction messages.
+    	TRX_RECEIVE_QUEUE: "trxReceive",	// The generic queue for received remote transaction messages.
+    	DEFAULT_QUEUE_TYPE: "intranet",
     };
 });
-
-jbundle = {
-	TRX_SEND_QUEUE: "trxSend",		// The generic queue for remote sent transaction messages.
-	TRX_RECEIVE_QUEUE: "trxReceive",	// The generic queue for received remote transaction messages.
-	DEFAULT_QUEUE_TYPE: "intranet",
-
-	IE: false,
-	NS: true,
-	debug: true,	// Debug mode
-};
