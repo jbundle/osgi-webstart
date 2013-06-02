@@ -1,0 +1,30 @@
+{
+    "name": "jbundle",
+    "description": "JBundle",
+    "version": "1.0",
+    "keywords": ["JavaScript", "Dojo", "Toolkit", "JBundle"],
+    "maintainers": [{
+        "name": "Don Corley"
+    }],
+    "contributors": [{
+        "name": "Don Corley"
+    }],
+    "licenses": [{
+        "type": "GPL3.0",
+        "url": "http://www.gnu.org/licenses/gpl.html"
+    }],
+    "bugs": "https://github.com/jbundle/osgi-webstart/issues",
+    "repositories": [{
+        "type": "git",
+        "url": "https://github.com/jbundle/osgi-webstart.git",
+        "path": "js/src/main/resources/org/jbundle/res/docs/styles/js"
+    }],
+    "dependencies": {
+        "dojo": "~1.9.0",
+        "dijit": "~1.9.0",
+        "dojox": "~1.9.0"
+    },
+    "main": "js/src/main/resources/org/jbundle/res/docs/styles/js",
+    "homepage": "http://jbundle.org/",
+    "dojoBuild": "jbundle.profile.js"
+}
