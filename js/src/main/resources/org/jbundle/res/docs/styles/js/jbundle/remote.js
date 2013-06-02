@@ -38,7 +38,9 @@ define([
 	    request.post(url, bindArgs, bindFunction).response.then(
             	bindFunction,
             function(response){
-            	this.transportError(response);
+        		require(["jbundle/remote"], function(remote) {
+                	remote.transportError(response);
+    	    	});
             }
 	    );
 	    // dojo.xhrPost(bindArgs);
@@ -50,21 +52,22 @@ define([
 	 */
 	transportError: function(response) {
 		var data = response.message;
-		var dataIn = response.options.data;
+		var dataIn = response.response.data;
 		var displayError = main.gEnvState;
-		if (response.options)
-			if (response.options.data)
-			if (response.options.data.remoteCommand)
-				if (response.options.data.remoteCommand == "receiveRemoteMessage")
+		if (response.response)
+			if (response.response.options)
+			if (response.response.options.ioArgs)
+			if (response.response.options.ioArgs.remoteCommand)
+				if (response.response.options.ioArgs.remoteCommand == "receiveRemoteMessage")
 				{
 					displayError = false;
 					if (response.message == "Timeout exceeded")	{
 						//?ioArgs.xhr.abort();
-						this.receiveRemoteMessage(main.getTaskSession().getSessionByFullSessionID(response.options.data));	// Wait for the next message.
+						this.receiveRemoteMessage(main.getTaskSession().getSessionByFullSessionID(response.response.data));	// Wait for the next message.
 					}
 				}
 		if (displayError == true)	// Ignore the error if the user moves away from this window
-			gui.displayErrorMessage("Transport error: " + response.message + "\nArgs: " + response.options.data.toSource());
+			gui.displayErrorMessage("Transport error: " + response.message + "\nArgs: " + response.response.data.toString());
 	},
 	// ------- ApplicationServer --------
 	/**
