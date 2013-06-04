@@ -17,7 +17,7 @@ html.java {
 body {
 	font-family: helvetica, arial, san-serif;
 	font-weight: bold;
-	background-image: url("../../../images/backgrounds/worldmapalpha.gif");
+	background-image: url("/org/jbundle/res/images/backgrounds/worldmapalpha.gif");
 	background-color: #eeeeff;
 	margin: 0 0 0 0;
 	height: 100%;

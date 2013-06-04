@@ -2,14 +2,16 @@
  * This is an empty module that includes all the jbundle modules.
  */
 
-define([ "jbundle/main",
-	"jbundle/util",
+define([
+	"dojo/parser",
 	"jbundle/java",
-], function(main, util){
+	"dojo/back",
+	"dojo/domReady!"
+], function(parser, main){
     return {
 	init: function()
 	{
-		util.init();
+		parser.parse();
 	}
-    };
+  };
 });
