@@ -7,20 +7,18 @@ isDebug: false,
 preventBackButtonFix: false
 };
 </script>
-<script djConfig="parseOnLoad: true" src="../../org/jbundle/res/dojo/dojo.js" type="text/javascript"></script>
+<link title="basicstyle" type="text/css" href="/org/jbundle/res/docs/styles/js/jbundle/tundra.css" rel="stylesheet" />
+<link type="text/css" href="/org/jbundle/res/docs/styles/css/style.css" rel="stylesheet" />
+<script type="text/javascript" src="/org/jbundle/res/docs/styles/js/dojo/dojo.js"></script>
 
-<script type="text/javascript" src="../../org/jbundle/res/docs/styles/js/jbundle/main.js"></script>
-<script type="text/javascript" src="../../org/jbundle/res/docs/styles/js/jbundle/java.js"></script>
-
-<style type="text/css">
-        @import "../../org/jbundle/res/dijit/themes/tundra/tundra.css";
-</style>
-<link title="basicstyle" href="../../org/jbundle/res/docs/styles/css/style.css" type="text/css" rel="stylesheet" />
 <link rel="shortcut icon" href="images/icons/jbundle16.jpg" type="image/x-icon" />
 
 <script type="text/javascript">
-dojo.require("dojo.back");
-dojo.require("jbundle.java");
+require(["jbundle/java-all",
+     	"dojo/domReady!"],
+     function(jbundle) {
+     	jbundle.init();
+     });
 </script>
 <title>Java Window</title>
 <meta name="Keywords" content="travel, tours, custom tours, air, hotel, sightseeing, transfer, cruise, car rental, airport transfer, flight, travel agent" />
