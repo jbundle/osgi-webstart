@@ -2,7 +2,7 @@ var profile = (function(){
     return {
         basePath: "..",
         releaseDir: ".",
-        releaseName: "../lib",
+        releaseName: "../js",
         action: "release",
 	// Strips all comments and whitespace from CSS files and inlines @imports where possible.
 	cssOptimize: 'comments',

@@ -12,7 +12,7 @@ SRCDIR="$BASEDIR"
 TOOLSDIR="$SRCDIR/util/buildscripts"
 
 # Destination directory for built code
-DISTDIR="$BASEDIR/../dist"
+DISTDIR="$BASEDIR/../js"
 
 # Main application package build configuration
 PROFILE="$BASEDIR/jbundle/jbundle.profile.js"
@@ -40,3 +40,14 @@ rm -rf "$DISTDIR"
 echo " Done"
 
 ./util/buildscripts/build.sh --profile jbundle/jbundle.profile.js
+
+# Cleanup
+
+rm -fr $DISTDIR/dojo
+rm -fr $DISTDIR/dojox
+rm -fr $DISTDIR/dijit
+rm -fr $DISTDIR/util
+rm -fr $SRCDIR/dojo
+rm -fr $SRCDIR/dojox
+rm -fr $SRCDIR/dijit
+rm -fr $SRCDIR/util
