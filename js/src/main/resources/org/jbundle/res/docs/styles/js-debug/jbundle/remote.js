@@ -300,7 +300,7 @@ define([
 			props.user = "";
 		if (!props.password)
 			props.password = "";
-		props.target = session.getFullSessionID(),
+		props.target = session.getFullSessionID();
 
 		this.sendToAjax("login", props, function(response) {
     		require(["jbundle/remote"], function(remote) {

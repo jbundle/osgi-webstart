@@ -4,7 +4,8 @@
 define([
 	"jbundle/java",
 	"jbundle/xml",
-	"jbundle/utils",
+	"jbundle/thinutil",
+	"jbundle/main",
 	"dojo/parser",
 	"dijit/registry",
 	"dijit/Dialog",
@@ -13,7 +14,7 @@ define([
 	"dijit/form/TextBox",
 	"dijit/form/CheckBox",
 	"dojo/domReady!"
-], function(java, xml, utils, parser, registry, Dialog){
+], function(java, xml, thinutil, main, parser, registry, Dialog){
     return {
 	/**
 	 * Get scratch area.
@@ -131,7 +132,7 @@ define([
 		var messageArea = document.getElementById('status-area');
 		if (messageArea)
 		{
-			utils.removeChildren(messageArea);
+			thinutil.removeChildren(messageArea);
 			messageArea.appendChild(document.createTextNode(infoText));
 			if (!infoClass)
 				infoClass = "information";
@@ -159,7 +160,7 @@ define([
 		var div = document.getElementById("userName");
 		if (div)
 		{	// Always
-			utils.removeChildren(div);
+			thinutil.removeChildren(div);
 			div.appendChild(document.createTextNode(user));
 		}
 	},
@@ -173,7 +174,7 @@ define([
 		var div = document.getElementById("title");
 		if (div)
 		{	// Always
-			utils.removeChildren(div);
+			thinutil.removeChildren(div);
 			div.appendChild(document.createTextNode(newtitle));
 		}
 		document.title = newtitle;
@@ -329,7 +330,7 @@ define([
 	clearGridData: function(objectID) {
 		var tr = document.getElementById(objectID);
 		if (tr)
-			utils.removeChildren(tr, true);
+			thinutil.removeChildren(tr, true);
 	},
 	// Display the wait cursor
 	waitCursor: function()

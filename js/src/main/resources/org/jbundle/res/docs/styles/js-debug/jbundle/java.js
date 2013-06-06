@@ -19,11 +19,11 @@ function popBrowserHistory(count, commandHandledByClient, title)
  * Note: java.js has minimal dependencies, and no dijit or parser dependencies to keep code small.
  */
 define([
-	"jbundle/utils",
+	"jbundle/thinutil",
 	"dojo/back",
 	"dojo/_base/declare",
 //	"dojo/domReady!",
-], function(utils, back, declare) {
+], function(thinutil, back, declare) {
     return {
 
 	/**
@@ -49,7 +49,7 @@ define([
 	// Initialize environment
 	init: function()
 	{	// Push initial history
-		back.setInitialState(new this.State(utils.getCommandFromHash(window.location.hash), this));
+		back.setInitialState(new this.State(thinutil.getCommandFromHash(window.location.hash), this));
 	},
 
     SERVLET_NAME: "webstart",          // The default servlet name.
@@ -92,7 +92,7 @@ define([
 	 */
 	hashChange: function(command)
 	{
-		if (utils.getProperty(command, "applet") == null)
+		if (thinutil.getProperty(command, "applet") == null)
 		{
 			if (this.isJavaWindow())
 				this.prepareWindowForApplet(false);
@@ -157,11 +157,11 @@ define([
 			return false;
 		if (version == null)
 			version = '1.6';
-		var params = utils.commandToProperties(command);
+		var params = thinutil.commandToProperties(command);
 
 		var domToAppendTo = document.getElementById("content-area");
 		// First, delete all the old nodes
-		utils.removeChildren(domToAppendTo, false);
+		thinutil.removeChildren(domToAppendTo, false);
 		// Then, add the new nodes (via xslt)
 		//+ var desc = gui.changeTitleFromData(domToBeTransformed);
 		var attributes = this.getAppletAttributes(params);
@@ -272,7 +272,7 @@ define([
 		if (!jnlp.applet)
 				if (attributes['code'])
 					jnlp['appletClass'] = attributes['code'];
-		var command = attributes.codebase + this.SERVLET_NAME + utils.propertiesToCommand(jnlp);
+		var command = attributes.codebase + this.SERVLET_NAME + thinutil.propertiesToCommand(jnlp);
 		return command;
 	},
 	// Get this param from the browser url
@@ -295,13 +295,13 @@ define([
 		{
 			if (command == null)
 				command = "";
-			command = command + "&" + utils.getCommandFromHash(hash);
+			command = command + "&" + thinutil.getCommandFromHash(hash);
 		}
 		if (!command)
 			return false;
 		if (version == null)
 			version = '1.6';
-		var params = utils.commandToProperties(command);
+		var params = thinutil.commandToProperties(command);
 
 		var attributes = this.getAppletAttributes(params);
 		var jnlp = this.getJnlpURL(attributes, params);

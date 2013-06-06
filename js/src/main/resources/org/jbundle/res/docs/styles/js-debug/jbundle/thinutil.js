@@ -1,10 +1,12 @@
 /**
- * Shared utilities.
+ * Base utilities.
  */
 define([
 ], function(){
     return {
-	// Convert this properties object to a command
+	/**
+	 * Convert this properties object to a command.
+	 */
 	propertiesToCommand: function(properties)
 	{
 		var command = "?";
@@ -26,7 +28,9 @@ define([
 		}
 		return command;
 	},
-	// Convert this command string to a properties object.
+	/**
+	 * Convert this command string to a properties object.
+	 */
 	commandToProperties: function(command, properties)
 	{
 		if (!properties)
@@ -43,7 +47,9 @@ define([
 		}
 		return properties;
 	},
-	// Get this property from this command string
+	/**
+	 * Get this property from this command string.
+	 */
 	getProperty: function(command, key)
 	{
 		var nameEQ = key.toUpperCase() + "=";
@@ -63,7 +69,9 @@ define([
 		}
 		return null;
 	},
-	// Remove the hash mark
+	/**
+	 * Remove the hash mark.
+	 */
 	getCommandFromHash: function(hash)
 	{
 		if (hash)

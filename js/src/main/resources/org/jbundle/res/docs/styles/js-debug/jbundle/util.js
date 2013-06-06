@@ -9,14 +9,16 @@ define([
 	"jbundle/classes",
 	"jbundle/remote",
 	"jbundle/xml",
-	"jbundle/utils",
+	"jbundle/thinutil",
+	"jbundle/java",
+	"dijit/registry",
 	"dojo/aspect",
 	"dojo/_base/declare",
 	"dojo/back",
 	"dojox/xml/parser",
 	"dojo/_base/unload",
 	"dojo/domReady!"
-], function(main, gui, classes, remote, xml, utils, aspect, declare, back, xmlParser, baseUnload){
+], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, xmlParser, baseUnload){
     return {
     
 	/*
@@ -36,35 +38,31 @@ define([
 					this.java = java;
 			},
 			back: function(data) {
-//				require(["jbundle/util", "jbundle/java"], function(util, java) {
-					if (this.java)
-						if (this.java.isJavaWindow())
-							this.java.prepareWindowForApplet(false);		// Change from applet display
-					if (this.data)
-					{
-						var response = {};
-						response.data = this.data;
-						this.util.doRemoteScreenActionCallback(response);
-					}
-					else
-						this.util.doCommand(this.command, true, false);
-//				});
+				if (typeof this.java !== 'undefined')
+					if (this.java.isJavaWindow())
+						this.java.prepareWindowForApplet(false);		// Change from applet display
+				if (this.data)
+				{
+					var response = {};
+					response.data = this.data;
+					this.util.doRemoteScreenActionCallback(response);
+				}
+				else
+					this.util.doCommand(this.command, true, false);
 			},
 
 			forward: function() {
-//				require(["jbundle/util", "jbundle/java"], function(util, java) {
-					if (this.java)
-						if (this.java.isJavaWindow())
-							this.java.prepareWindowForApplet(false);		// Change from applet display
-					if (this.data)
-					{
-						var response = {};
-						response.data = this.data;
-						this.util.doRemoteScreenActionCallback(response);
-					}
-					else
-						this.util.doCommand(this.command, true, false);
-//				});
+				if (typeof this.java !== 'undefined')
+					if (this.java.isJavaWindow())
+						this.java.prepareWindowForApplet(false);		// Change from applet display
+				if (this.data)
+				{
+					var response = {};
+					response.data = this.data;
+					this.util.doRemoteScreenActionCallback(response);
+				}
+				else
+					this.util.doCommand(this.command, true, false);
 			}
 		}),
 
@@ -76,10 +74,9 @@ define([
 				util.free();
 			})
 		});
-	
+
 	  	if (dojoConfig.isDebug)
-		  	if (console)
-			  	console.log("init env");
+		  	console.log("init env");
 	  	main.gEnvState = true;
 
 		main.gTaskSession = new classes.Session();
@@ -100,24 +97,24 @@ define([
 	  	var search = location.search;
 	  	if ((!user) || (user == ""))
 	  	{	// User passed in in URL
-	  		if (utils.getProperty(search, "user"))
-	  			user = utils.getProperty(search, "user");
+	  		if (thinutil.getProperty(search, "user"))
+	  			user = thinutil.getProperty(search, "user");
 	  	}
 		if (search)
 			if (search != "")
-				if (utils.getProperty(search, "menu") != null)
+				if (thinutil.getProperty(search, "menu") != null)
 					this.lastCommand = search;	// Make sure it does the correct command.
 	  	
 	  	this.user = user;
 
 		var props = {
-	  			user: user,
-				password: password
-			};
-		if (utils.getProperty(search, "systemname"))
-			props.systemname = utils.getProperty(search, "systemname");
-		else if (utils.getProperty(utils.getCommandFromHash(window.location.hash), "systemname"))
-			props.systemname = utils.getProperty(utils.getCommandFromHash(window.location.hash), "systemname");
+  			user: user,
+			password: password
+		};
+		if (thinutil.getProperty(search, "systemname"))
+			props.systemname = thinutil.getProperty(search, "systemname");
+		else if (thinutil.getProperty(thinutil.getCommandFromHash(window.location.hash), "systemname"))
+			props.systemname = thinutil.getProperty(thinutil.getCommandFromHash(window.location.hash), "systemname");
 		
 		this.handleCreateRemoteTaskLink = aspect.after(remote, "handleCreateRemoteTask", function(response) {
 			require(["jbundle/util"], function(util) {
@@ -134,7 +131,7 @@ define([
 	  		main.SERVER_PATH = pathname;
 	  	}
 	  	var command = window.location.search;
-		var bookmarkId = utils.getCommandFromHash(window.location.hash);
+		var bookmarkId = thinutil.getCommandFromHash(window.location.hash);
 		if ((command) && (bookmarkId))
 			command = command + '&' + bookmarkId;
 		else if (bookmarkId)
@@ -143,7 +140,7 @@ define([
 			command = this.DEFAULT_MENU;
 		if (user == '')
 			if (command != this.DEFAULT_MENU)
-				if (utils.getProperty(command, "menu") != null)
+				if (thinutil.getProperty(command, "menu") != null)
 					this.lastCommand = command;	// Special case
 		if (!user)
 			if (host)
@@ -166,7 +163,7 @@ define([
 			// Nothing special to do on initial page load
 		}
 		// Push initial history
-		var appState = new this.ApplicationState(command, bookmarkId, null, this, null);
+		var appState = new this.ApplicationState(command, bookmarkId, null, this, java);
 		back.setInitialState(appState);
 	},
 	DEFAULT_MENU: "?menu=",
@@ -181,13 +178,13 @@ define([
 		if (this.user != null)
 		{
 			this.saveUser = null;	// Don't change cookie
-//			gui.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
-//				require(["jbundle/gui"], function(gui) {
-//					gui.handleLogin(response);
-//				})}, true);
 			this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
 				require(["jbundle/util"], function(util) {
 					util.doLoginCommand(response);
+				})}, true);
+			this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+				require(["jbundle/util"], function(util) {
+					util.handleLogin(response);
 				})}, true);
 			var props = {
 		  			user: this.user
@@ -229,15 +226,16 @@ define([
 	logout: function()
 	{
 		this.setCookie("userid", null);	// Clear cookie
-//		gui.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
-//			require(["jbundle/gui"], function(gui) {
-//				gui.handleLogin(response);
-//			})}, true);
 
 		this.lastCommand = "?menu=";
 		this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
 			require(["jbundle/util"], function(util) {
 				util.doLoginCommand(response);
+			})}, true);
+
+		this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+			require(["jbundle/util"], function(util) {
+				util.handleLogin(response);
 			})}, true);
 
 		remote.login(main.getTaskSession(), null);
@@ -337,9 +335,9 @@ define([
 			decode = true;
 		if (decode)
 			command = decodeURI(command);
-		if ((command.indexOf("Login") != -1) || (utils.getProperty(command, "user") == ''))
+		if ((command.indexOf("Login") != -1) || (thinutil.getProperty(command, "user") == ''))
 		{
-			var user = utils.getProperty(command, "user");
+			var user = thinutil.getProperty(command, "user");
 			if (user == "")
 				user = null;
 			if (user == null)
@@ -359,29 +357,29 @@ define([
 		}
 		else if (command.indexOf("preferences=") != -1)
 		{
-			var navmenus = utils.getProperty(command, "navmenus");
+			var navmenus = thinutil.getProperty(command, "navmenus");
 			if (navmenus)
 				gui.changeNavMenus(navmenus);
 		}
-		else if (utils.getProperty(command, "help") != null)
+		else if (thinutil.getProperty(command, "help") != null)
 		{
 			if (this.lastCommand)
-				if (utils.getProperty(command, "class") != null)
+				if (thinutil.getProperty(command, "class") != null)
 					command = this.lastCommand + "&help=";
 			this.doScreen(command, addHistory);
 		}
-		else if (((utils.getProperty(command, "screen") != null)
-			|| (utils.getProperty(command, "menu") != null)
-			|| (utils.getProperty(command, "xml") != null)
-			|| (utils.getProperty(command, "record") != null))
-			&& (utils.getProperty(command, "applet") == null))
+		else if (((thinutil.getProperty(command, "screen") != null)
+			|| (thinutil.getProperty(command, "menu") != null)
+			|| (thinutil.getProperty(command, "xml") != null)
+			|| (thinutil.getProperty(command, "record") != null))
+			&& (thinutil.getProperty(command, "applet") == null))
 		{
-			if ((utils.getProperty(command, "user") != null)
-				&& (utils.getProperty(command, "user").length > 0)
-				&& ((this.user == null) || (this.user.length == 0) || (this.user != utils.getProperty(command, "user"))))
+			if ((thinutil.getProperty(command, "user") != null)
+				&& (thinutil.getProperty(command, "user").length > 0)
+				&& ((this.user == null) || (this.user.length == 0) || (this.user != thinutil.getProperty(command, "user"))))
 			{	// Special case - sign on before doing command.
-				var user = utils.getProperty(command, "user");
-				var password = utils.getProperty(command, "auth");
+				var user = thinutil.getProperty(command, "user");
+				var password = thinutil.getProperty(command, "auth");
 
 //				gui.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
 //					require(["jbundle/gui"], function(gui) {
@@ -404,11 +402,11 @@ define([
 				this.doScreen(command, addHistory);
 			}
 		}
-		else if (utils.getProperty(command, "command"))
+		else if (thinutil.getProperty(command, "command"))
 		{
 			this.doLocalCommand(command, addHistory);
 		}
-		else if (utils.getProperty(command, "applet") != null)
+		else if (thinutil.getProperty(command, "applet") != null)
 		{
 			javaApplet = null;
 			if (main.getTaskSession().security != null)	// Signed on
@@ -439,7 +437,7 @@ define([
 			this.handleDoLoginLink.remove();
 
 		var command = this.lastCommand;
-		if (utils.getProperty(command, "user") != null)
+		if (thinutil.getProperty(command, "user") != null)
 		{	// strip out user param
 			var iStart = command.indexOf("user=");
 			var iEnd = command.indexOf("&", iStart);
@@ -457,54 +455,52 @@ define([
 	 */
 	submitLogonDialog: function(submit)
 	{
-		require (["dijit/registry", "jbundle/gui", "jbundle/util"], function(registry, gui, util) {
-			dlg0 = dijit.byId("logonDialog");
-			if (submit == true)
+		dlg0 = registry.byId("logonDialog");
+		if (submit == true)
+		{
+			var form = document.getElementById("logonForm");
+			var user = form.elements.user.value;
+			var command = form.elements.command.value;
+
+			var password = form.elements.password.value;
+			this.saveUser = form.elements.saveUser.checked;
+
+			if (password)
+				password = b64_sha1(password);
+
+			this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+				require(["jbundle/util"], function(util) {
+					util.handleLogin(response);
+				})}, true);
+
+			this.lastCommand = "?menu=";
+			this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+				require(["jbundle/util"], function(util) {
+					util.doLoginCommand(response);
+				})}, true);
+
+			if (command)
+				if (command != "")
 			{
-				var form = document.getElementById("logonForm");
-				var user = form.elements.user.value;
-				var command = form.elements.command.value;
-	
-				var password = form.elements.password.value;
-				this.saveUser = form.elements.saveUser.checked;
-	
-				if (password)
-					password = b64_sha1(password);
-	
+				this.lastCommand = command;	// Make sure it does the correct command.
 				this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
 					require(["jbundle/util"], function(util) {
 						util.handleLogin(response);
 					})}, true);
-	
-				this.lastCommand = "?menu=";
-				this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
-					require(["jbundle/util"], function(util) {
-						util.doLoginCommand(response);
-					})}, true);
-	
-				if (command)
-					if (command != "")
-				{
-					this.lastCommand = command;	// Make sure it does the correct command.
-					this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
-						require(["jbundle/util"], function(util) {
-							util.handleLogin(response);
-						})}, true);
-				}
-				var props = {
-			  			user: user,
-						password: password
-					};
-				remote.login(main.getTaskSession(), props);
 			}
-			dlg0.hide();
-			if (submit)
-				if (submit != true)
-				if (submit != false)
-			{
-				this.doCommand(submit);
-			}
-		});
+			var props = {
+		  			user: user,
+					password: password
+				};
+			remote.login(main.getTaskSession(), props);
+		}
+		dlg0.hide();
+		if (submit)
+			if (submit != true)
+			if (submit != false)
+		{
+			this.doCommand(submit);
+		}
 		return false;	// If called from post, don't submit form
 	},
 	// Save the user name.
@@ -514,7 +510,7 @@ define([
 	/**
 	 *
 	 */
-	handleLogin: function(data, options)
+	handleLogin: function(response)
 	{
 		if (this.handleLoginLink)
 			this.handleLoginLink.remove();
@@ -543,10 +539,8 @@ define([
 			desc = this.LOGIN_DESC;
 			command = "Login";
 		}
-		require (["dijit/registry", "jbundle/gui"], function(registry, gui) {
-			gui.changeButton(registry.byId(this.LOGIN_DESC), desc, command);	// Could be either
-			gui.changeButton(registry.byId(this.LOGOUT_DESC), desc, command);
-		});
+		gui.changeButton(registry.byId(this.LOGIN_DESC), desc, command);	// Could be either
+		gui.changeButton(registry.byId(this.LOGOUT_DESC), desc, command);
 	},
 	LOGOUT_DESC: "Sign out",	// Change these for I18N
 	LOGIN_DESC: "Sign in",
@@ -555,7 +549,7 @@ define([
 	 */
 	doLocalCommand: function(command, addHistory)
 	{
-		var commandTarget = utils.getProperty(command, "command");
+		var commandTarget = thinutil.getProperty(command, "command");
 		console.log("do local command: " + command);
 		if (commandTarget == "Back")
 		{
@@ -640,7 +634,7 @@ define([
 							if (response.options.ioArgs)
 								if (response.options.ioArgs.content)
 									if (response.options.ioArgs.content.name)
-					gui.clearGridData(utils.getProperty(response.options.ioArgs.content.name, "objectID"));
+					gui.clearGridData(thinutil.getProperty(response.options.ioArgs.content.name, "objectID"));
 				}
 			}
     	});
@@ -668,7 +662,7 @@ define([
 		//?messageFilter.bindArgs.handleAs = "xml";
 
 		messageFilter.name = "createScreen";
-		messageFilter.properties = utils.commandToProperties(command);
+		messageFilter.properties = thinutil.commandToProperties(command);
 		if (this.getAjaxSession().sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
 			remote.doRemoteAction(messageFilter);
 	},
@@ -700,14 +694,14 @@ define([
 		var domToAppendTo = document.getElementById("content-area");
 		var contentParent = domToAppendTo.parentNode;
 		// First, delete all the old nodes
-		utils.removeChildren(domToAppendTo, true);	// Note: I remove the node also since the replacement's root is <div id='content-area'>
+		thinutil.removeChildren(domToAppendTo, true);	// Note: I remove the node also since the replacement's root is <div id='content-area'>
 		// Then, add the new nodes (via xslt)
 		var desc = gui.changeTitleFromData(domToBeTransformed);
 		if (options)
 			if (options.addHistory)
 		{
 			var command = options.ioArgs.name;
-			var bookmark = utils.propertiesToCommand(options.ioArgs.properties);
+			var bookmark = thinutil.propertiesToCommand(options.ioArgs.properties);
 			var appState = new this.ApplicationState(command, bookmark, data, this, null);
 			back.addToHistory(appState);
 		}
@@ -829,7 +823,7 @@ define([
 	// Get this cookie.
 	getCookie: function(name)
 	{
-		var value = utils.getProperty(document.cookie, name);
+		var value = thinutil.getProperty(document.cookie, name);
 		if (value != null)
 			value = unescape(value);
 		return value;

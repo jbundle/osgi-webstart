@@ -13,7 +13,13 @@
 	<xsl:attribute name="title"><xsl:value-of select="root/dialogTitle"/></xsl:attribute>
 	<xsl:attribute name="iconSrc">images/buttons/Login.gif</xsl:attribute>
 	<xsl:attribute name="displayCloseAction">true</xsl:attribute>
-	<form id="logonForm" onsubmit="return jbundle.gui.submitLogonDialog(true);">
+<xsl:element name="form">
+	<xsl:attribute name="id">logonForm</xsl:attribute>
+	<xsl:attribute name="onsubmit">
+	require(['jbundle/util'], function(util) {
+		return util.submitLogonDialog(true);
+	});
+	</xsl:attribute>
 		<table>
 			<xsl:element name="input">
 				<xsl:attribute name="id">command</xsl:attribute>
@@ -52,17 +58,55 @@
 				<td colspan="2" align="center">
 				<table>
 				<tr>
-					<td><button id="logonSubmitButton" data-dojo-type="dijit/form/Button" onclick="jbundle.gui.submitLogonDialog(true);"><img src="images/buttons/Submit.gif" width="16" height="16" />&#160;Submit</button></td>
+					<td>
+<xsl:element name="button">
+	<xsl:attribute name="id">logonSubmitButton</xsl:attribute>
+	<xsl:attribute name="type">submit</xsl:attribute>
+	<xsl:attribute name="data-dojo-type">dijit/form/Button</xsl:attribute>
+	<xsl:attribute name="onclick">
+	require(['jbundle/util'], function(util) {
+		util.submitLogonDialog(true);
+	});
+	</xsl:attribute>
+	<img src="images/buttons/Submit.gif" width="16" height="16" />
+	&#160;Submit
+</xsl:element>
+					</td>
 					<td></td>
-					<td><button id="logonCancelButton" data-dojo-type="dijit/form/Button" onclick="jbundle.gui.submitLogonDialog(false);"><img src="images/buttons/Cancel.gif" width="16" height="16" />&#160;Cancel</button></td>
+					<td>
+<xsl:element name="button">
+	<xsl:attribute name="id">logonCancelButton</xsl:attribute>
+	<xsl:attribute name="data-dojo-type">dijit/form/Button</xsl:attribute>
+	<xsl:attribute name="onclick">
+	require(['jbundle/util'], function(util) {
+		util.submitLogonDialog(false);
+	});
+	</xsl:attribute>
+	<img src="images/buttons/Cancel.gif" width="16" height="16" />
+	&#160;Cancel
+</xsl:element>
+					</td>
 					<td></td>
-					<td><button id="logonNewUser" data-dojo-type="dijit/form/Button" onclick="jbundle.gui.submitLogonDialog('?screen=.main.user.screen.UserEntryScreen&amp;java=no');"><img src="images/buttons/Form.gif" width="16" height="16" alt="Create new account" class="button" />Create new account</button></td>
+					<td>
+<xsl:element name="button">
+	<xsl:attribute name="id">logonNewUser</xsl:attribute>
+	<xsl:attribute name="data-dojo-type">dijit/form/Button</xsl:attribute>
+	<xsl:attribute name="onclick">
+	require(['jbundle/util'], function(util) {
+		util.submitLogonDialog('?screen=.main.user.screen.UserEntryScreen&amp;java=no');
+	});
+	</xsl:attribute>
+	<xsl:attribute name="alt">Create new account</xsl:attribute>
+	<img src="images/buttons/Form.gif" width="16" height="16" />
+	&#160;Create new account
+</xsl:element>
+					</td>
 				</tr>
 				</table>
 				</td>
 			</tr>
 		</table>
-	</form>
+	</xsl:element>
 </xsl:element>
 
 </xsl:template>
