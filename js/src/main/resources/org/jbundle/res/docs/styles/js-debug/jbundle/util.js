@@ -175,10 +175,11 @@ define([
 	{
 		if (this.handleCreateRemoteTaskLink)
 			this.handleCreateRemoteTaskLink.remove();
+		this.handleCreateRemoteTaskLink = null;
 		if (this.user != null)
 		{
 			this.saveUser = null;	// Don't change cookie
-			this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+			this.doLoginCommandLink = aspect.after(remote, "handleLogin", function(response) {
 				require(["jbundle/util"], function(util) {
 					util.doLoginCommand(response);
 				})}, true);
@@ -228,7 +229,7 @@ define([
 		this.setCookie("userid", null);	// Clear cookie
 
 		this.lastCommand = "?menu=";
-		this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+		this.doLoginCommandLink = aspect.after(remote, "handleLogin", function(response) {
 			require(["jbundle/util"], function(util) {
 				util.doLoginCommand(response);
 			})}, true);
@@ -386,7 +387,7 @@ define([
 //						gui.handleLogin(response);
 //					})}, true);
 				this.lastCommand = command;
-				this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+				this.doLoginCommandLink = aspect.after(remote, "handleLogin", function(response) {
 					require(["jbundle/util"], function(util) {
 						util.doLoginCommand(response);
 					})}, true);
@@ -429,12 +430,14 @@ define([
 		return false;	// In case this was called from onClick in a link (do not follow link since I handled the link).
 	},
 	// handleLogin event link. Note: Is there a potential concurrency problem here?
-	handleDoLoginLink: null,
+	doLoginCommandLink: null,
 	// After logging into a new account, process the command.
 	doLoginCommand: function()
 	{
-		if (this.handleDoLoginLink)
-			this.handleDoLoginLink.remove();
+		if (this.doLoginCommandLink)
+			this.doLoginCommandLink.remove();
+		this.doLoginCommandLink = null;
+
 
 		var command = this.lastCommand;
 		if (thinutil.getProperty(command, "user") != null)
@@ -468,13 +471,8 @@ define([
 			if (password)
 				password = b64_sha1(password);
 
-			this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
-				require(["jbundle/util"], function(util) {
-					util.handleLogin(response);
-				})}, true);
-
 			this.lastCommand = "?menu=";
-			this.handleDoLoginLink = aspect.after(remote, "handleLogin", function(response) {
+			this.doLoginCommandLink = aspect.after(remote, "handleLogin", function(response) {
 				require(["jbundle/util"], function(util) {
 					util.doLoginCommand(response);
 				})}, true);
@@ -514,6 +512,7 @@ define([
 	{
 		if (this.handleLoginLink)
 			this.handleLoginLink.remove();
+		this.handleLoginLink = null;
 //		if (remote.checkForDataError(data, "Could not log in"))
 	//		return;
 		var user = "";
