@@ -1,15 +1,3 @@
-/*
-if (!util)
-{
-	dojo.addOnLoad(function(){
-		dojo.back.setInitialState(new this.State(utils.getCommandFromHash(window.location.hash)));
-	});
-}
-
-jbundle.java.State.prototype.back = function() { java.doBack(this.changeUrl); };
-jbundle.java.State.prototype.forward = function() { java.doForward(this.changeUrl); };
-*/
-
 /**
  * For java to call these, these must be at the root.
  */
@@ -28,16 +16,43 @@ function popBrowserHistory(count, commandHandledByClient, title)
 
 /**
  * Browser back support.
+ * Note: java.js has minimal dependencies, and no dijit or parser dependencies to keep code small.
  */
 define([
-	"jbundle/util",		// I should refactor these dependencies to a minimum for non jbundle use
 	"jbundle/utils",
-	"jbundle/xml",
 	"dojo/back",
-	"dojo/domReady!"
-], function(util, utils, xml, back) {
+	"dojo/_base/declare",
+//	"dojo/domReady!",
+], function(utils, back, declare) {
     return {
-	SERVLET_NAME: "webstart",          // The default servlet name.
+
+	/**
+	 * The state object.
+	 * Note: The Url hash is the command
+	 */
+    State:
+		declare(null, {
+			// The constructor
+			constructor: function(command, java) {
+				this.changeUrl = command;
+				this.java = java;
+			},
+			back: function(data) {
+				this.java.doBack(this.changeUrl);
+			},
+
+			forward: function() {
+				this.java.doForward(this.changeUrl);
+			}
+	}),
+
+	// Initialize environment
+	init: function()
+	{	// Push initial history
+		back.setInitialState(new this.State(utils.getCommandFromHash(window.location.hash), this));
+	},
+
+    SERVLET_NAME: "webstart",          // The default servlet name.
 	/**
 	 * This is called from the history state object when the state is popped by a browser back command.
 	 * This method calls TO the java doBack method.
@@ -77,14 +92,13 @@ define([
 	 */
 	hashChange: function(command)
 	{
-		if (util)
-			if (utils.getProperty(command, "applet") == null)
-			{
-				if (this.isJavaWindow())
-					this.prepareWindowForApplet(false);
-				util.doCommand(command);
-				return;
-			}
+		if (utils.getProperty(command, "applet") == null)
+		{
+			if (this.isJavaWindow())
+				this.prepareWindowForApplet(false);
+//+			util.doCommand(command);
+			return;
+		}
 		if (!this.isJavaWindow())
 			this.displayApplet(command);
 		else if (document.jbundle)
@@ -92,7 +106,7 @@ define([
 		else if (util)
 		{	// Must be an xsl command
 			this.prepareWindowForApplet(false);
-			util.doBrowserHashChange(command);
+//+			util.doBrowserHashChange(command);
 		}
 		if (dojoConfig.isDebug == true)
 			console.log("hashChange command =" + command);
@@ -104,7 +118,7 @@ define([
 	pushBrowserHistory: function(command, title)
 	{
 		if (back)
-			back.addToHistory(new this.State(command));
+			back.addToHistory(new this.State(command, this));
 		if (title)
 			document.title = title;
 		if (dojoConfig.isDebug == true)
@@ -134,15 +148,6 @@ define([
 	{
 		window.location = command;
 	},
-	/**
-	 * The state object.
-	 * Note: The Url hash is the command
-	 * Note: The back and forward functions are prototypes.
-	 */
-	State: function(command)
-	{
-		this.changeUrl = command;
-	},
 	// Display a applet with this command in the content area.
 	// Returns true if successful
 	// --NOTE-- For this work, you must include deployJava.js in mainstyles-ajax
@@ -156,7 +161,7 @@ define([
 
 		var domToAppendTo = document.getElementById("content-area");
 		// First, delete all the old nodes
-		xml.removeChildren(domToAppendTo, false);
+		utils.removeChildren(domToAppendTo, false);
 		// Then, add the new nodes (via xslt)
 		//+ var desc = gui.changeTitleFromData(domToBeTransformed);
 		var attributes = this.getAppletAttributes(params);
@@ -174,8 +179,9 @@ define([
 	// Return true if java applet is displayed
 	isJavaWindow: function()
 	{
-		if (util)
-			return (document.body.parentNode.className == "java");
+		if (document.body.parentNode)
+			if (document.body.parentNode.className)
+				return (document.body.parentNode.className == "java");
 		return true;	// This is only for tourapp windows
 	},
 	oldClassName: "",
@@ -187,8 +193,8 @@ define([
 			if (document.body.parentNode.className != "java")
 				this.oldClassName = document.body.parentNode.className;
 			document.body.parentNode.className="java";	// For firefox html.class
-			if (gui)
-				gui.changeTheTitle("Java Window");
+//?			if (gui)
+//?				gui.changeTheTitle("Java Window");
 		}
 		else
 		{

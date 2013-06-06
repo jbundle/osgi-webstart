@@ -74,10 +74,10 @@ define([
 	 * Create the remote task.
 	 */
 	createRemoteTask: function(props) {
-		var args = {};
-		args.properties = json.toJson(props);
+		var data = {};
+		data.properties = json.toJson(props);
 
-		this.sendToAjax("createRemoteTask", args, function(response) {
+		this.sendToAjax("createRemoteTask", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleCreateRemoteTask(response);
 	    	});
@@ -119,11 +119,11 @@ define([
      */
 	freeRemoteSession: function(session)
 	{
-		var args = {
+		var data = {
 			target: session.getFullSessionID()
 		};
 
-		this.sendToAjax("freeRemoteSession", args, function(response) {
+		this.sendToAjax("freeRemoteSession", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleFreeRemoteSession(response);
 	    	});
@@ -147,13 +147,13 @@ define([
      */
 	makeRemoteSession: function(session)
 	{
-		var args = {
+		var data = {
 			name: session.sessionClassName,
 			target: session.parentSession.getFullSessionID(),
 			localSessionID: session.localSessionID
 		};
 
-		this.sendToAjax("makeRemoteSession", args, function(response) {
+		this.sendToAjax("makeRemoteSession", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleMakeRemoteSession(response);
 	    	});
@@ -190,7 +190,7 @@ define([
 	 */
 	doRemoteAction: function(messageFilter)
 	{
-		var args = {
+		var data = {
 			target: messageFilter.parentSession.getFullSessionID(),
 			filter: messageFilter.filterID,
 			name: messageFilter.name,
@@ -198,9 +198,9 @@ define([
 		};
 		if (messageFilter.properties)
 			if (messageFilter.properties instanceof Object)
-				args.properties = json.toJson(messageFilter.properties);
+				data.properties = json.toJson(messageFilter.properties);
 
-		this.sendToAjax("doRemoteAction", args, function(response) {
+		this.sendToAjax("doRemoteAction", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleDoRemoteAction(response);
 	    	});
@@ -219,7 +219,7 @@ define([
 		try {
 //?			if ((data) && (data.length > 0) && (data.charAt(0) == '(') && (data.charAt(data.length - 1) == ')'))
 //?				data = eval(data);
-			messageFilter.methodToCall(data, response.options.ioArgs);
+			messageFilter.methodToCall(response);
 		} catch (e) {
 	  		gui.displayErrorMessage("Error: " + e.message);
 		}
@@ -230,13 +230,13 @@ define([
 	 */
 	createRemoteSendQueue: function(session)
 	{
-		var args = {
+		var data = {
 			queueName: session.queueName,
 			queueType: session.queueType,
 			target: session.parentSession.getFullSessionID()
 		};
 
-		this.sendToAjax("createRemoteSendQueue", args, function(response) {
+		this.sendToAjax("createRemoteSendQueue", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleCreateRemoteSendQueue(response);
 	    	});
@@ -258,13 +258,13 @@ define([
 	 */
 	createRemoteReceiveQueue: function(session)
 	{
-		var args = {
+		var data = {
 			queueName: session.queueName,
 			queueType: session.queueType,
 			target: session.parentSession.getFullSessionID()
 		};
 
-		this.sendToAjax("createRemoteReceiveQueue", args, function(response) {
+		this.sendToAjax("createRemoteReceiveQueue", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleCreateRemoteReceiveQueue(response);
 	    	});
@@ -325,12 +325,12 @@ define([
 	 */
 	addRemoteMessageFilter: function(messageFilter)
 	{
-		var args = {
+		var data = {
 			target: messageFilter.parentSession.getFullSessionID(),
 			filter: messageFilter.filterID
 		};
 
-		this.sendToAjax("addRemoteMessageFilter", args, function(response) {
+		this.sendToAjax("addRemoteMessageFilter", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleAddRemoteMessageFilter(response);
 	    	});
@@ -345,7 +345,8 @@ define([
 			return;
 	  	if (dojoConfig.isDebug)
 		  	console.log("handleAddRemoteMessageFilter to filter " + data);
-		var messageFilter = main.getTaskSession().getSessionByFullSessionID(ioArgs.args.content.target).getMessageFilter(ioArgs.args.content.filter);
+	  	var ioArgs = response.options.ioArgs;
+		var messageFilter = main.getTaskSession().getSessionByFullSessionID(ioArgs.content.target).getMessageFilter(ioArgs.content.filter);
 		messageFilter.remoteFilterID = data;
 	},
 	/**
@@ -353,11 +354,11 @@ define([
 	 */
 	receiveRemoteMessage: function(receiveQueue)
 	{
-		var args = {
+		var data = {
 			target: receiveQueue.getFullSessionID()
 		};
 	
-		this.sendToAjax("receiveRemoteMessage", args, function(response) {
+		this.sendToAjax("receiveRemoteMessage", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleReceiveMessage(response);
 	    	});
@@ -378,7 +379,7 @@ define([
 				data = eval(data);
 			  	if (dojoConfig.isDebug)
 				  	console.log("receiveRemoteMessage to filter " + data.id + ", message: " + data.message);
-				main.getTaskSession().getReceiveQueue(data.queueName, data.queueType).getMessageFilterByRemoteID(data.id).methodToCall(data.message);
+				main.getTaskSession().getReceiveQueue(data.queueName, data.queueType).getMessageFilterByRemoteID(data.id).methodToCall(response);
 			} catch (e) {
 		  		gui.displayErrorMessage("Error: " + e.description);
 			}
@@ -390,12 +391,12 @@ define([
 	 */
 	sendMessage: function(sendQueue, message)
 	{
-		var args = {
+		var data = {
 			message: message,
 			target: sendQueue.getFullSessionID()
 		};
 	
-		this.sendToAjax("sendMessage", args, function(response) {
+		this.sendToAjax("sendMessage", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
 	    	    remote.handleSendMessage(response);
 	    	});

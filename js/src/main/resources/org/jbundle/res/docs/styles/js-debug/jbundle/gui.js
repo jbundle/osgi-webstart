@@ -4,6 +4,7 @@
 define([
 	"jbundle/java",
 	"jbundle/xml",
+	"jbundle/utils",
 	"dojo/parser",
 	"dijit/registry",
 	"dijit/Dialog",
@@ -12,7 +13,7 @@ define([
 	"dijit/form/TextBox",
 	"dijit/form/CheckBox",
 	"dojo/domReady!"
-], function(java, xml, parser, registry, Dialog){
+], function(java, xml, utils, parser, registry, Dialog){
     return {
 	/**
 	 * Get scratch area.
@@ -130,7 +131,7 @@ define([
 		var messageArea = document.getElementById('status-area');
 		if (messageArea)
 		{
-			xml.removeChildren(messageArea);
+			utils.removeChildren(messageArea);
 			messageArea.appendChild(document.createTextNode(infoText));
 			if (!infoClass)
 				infoClass = "information";
@@ -158,7 +159,7 @@ define([
 		var div = document.getElementById("userName");
 		if (div)
 		{	// Always
-			xml.removeChildren(div);
+			utils.removeChildren(div);
 			div.appendChild(document.createTextNode(user));
 		}
 	},
@@ -172,7 +173,7 @@ define([
 		var div = document.getElementById("title");
 		if (div)
 		{	// Always
-			xml.removeChildren(div);
+			utils.removeChildren(div);
 			div.appendChild(document.createTextNode(newtitle));
 		}
 		document.title = newtitle;
@@ -328,7 +329,7 @@ define([
 	clearGridData: function(objectID) {
 		var tr = document.getElementById(objectID);
 		if (tr)
-			xml.removeChildren(tr, true);
+			utils.removeChildren(tr, true);
 	},
 	// Display the wait cursor
 	waitCursor: function()

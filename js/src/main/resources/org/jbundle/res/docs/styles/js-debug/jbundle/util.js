@@ -26,30 +26,45 @@ define([
     ApplicationState:
 		declare(null, {
 			// The constructor
-			constructor: function(screenCommand, bookmarkValue, stateData) {
+			constructor: function(screenCommand, bookmarkValue, stateData, util, java) {
 				this.command = screenCommand;
 				this.data = stateData;
 				if (bookmarkValue)	// The browser URL to change
 					this.changeUrl = bookmarkValue;
+				this.util = util;
+				if (java)
+					this.java = java;
 			},
-			back: function() {
-				if (jbundle.java)
-					if (java.isJavaWindow())
-						java.prepareWindowForApplet(false);		// Change from applet display
-				if (this.data)
-					this.doRemoteScreenActionCallback(this.data);
-				else
-					this.doCommand(this.command, true, false);
+			back: function(data) {
+//				require(["jbundle/util", "jbundle/java"], function(util, java) {
+					if (this.java)
+						if (this.java.isJavaWindow())
+							this.java.prepareWindowForApplet(false);		// Change from applet display
+					if (this.data)
+					{
+						var response = {};
+						response.data = this.data;
+						this.util.doRemoteScreenActionCallback(response);
+					}
+					else
+						this.util.doCommand(this.command, true, false);
+//				});
 			},
-			
+
 			forward: function() {
-				if (jbundle.java)
-					if (java.isJavaWindow())
-						java.prepareWindowForApplet(false);		// Change from applet display
-				if (this.data)
-					this.doRemoteScreenActionCallback(this.data);
-				else
-					this.doCommand(this.command, true, false);
+//				require(["jbundle/util", "jbundle/java"], function(util, java) {
+					if (this.java)
+						if (this.java.isJavaWindow())
+							this.java.prepareWindowForApplet(false);		// Change from applet display
+					if (this.data)
+					{
+						var response = {};
+						response.data = this.data;
+						this.util.doRemoteScreenActionCallback(response);
+					}
+					else
+						this.util.doCommand(this.command, true, false);
+//				});
 			}
 		}),
 
@@ -150,12 +165,9 @@ define([
 		} else {
 			// Nothing special to do on initial page load
 		}
-//?		dojo.addOnLoad(function(){
-//??			require(["dojo/back"], function(back){
-				var appState = new this.ApplicationState(command, bookmarkId, null);
-				back.setInitialState(appState);
-//?			});
-//?		});
+		// Push initial history
+		var appState = new this.ApplicationState(command, bookmarkId, null, this, null);
+		back.setInitialState(appState);
 	},
 	DEFAULT_MENU: "?menu=",
 	user: null,
@@ -502,7 +514,7 @@ define([
 	/**
 	 *
 	 */
-	handleLogin: function(data, ioArgs)
+	handleLogin: function(data, options)
 	{
 		if (this.handleLoginLink)
 			this.handleLoginLink.remove();
@@ -588,12 +600,14 @@ define([
 	/**
 	 * Handle the XML coming back from the menu action.
 	 */
-	doRemoteSubmitCallback: function(data, ioArgs)
+	doRemoteSubmitCallback: function(response)
 	{
-		var bSuccess = this.handleReturnData(data, ioArgs);
-		if (bSuccess == true)
-			gui.clearFormData();
-		gui.restoreCursor();
+		require(["jbundle/util"], function(util) {
+			var bSuccess = util.handleReturnData(response);
+			if (bSuccess == true)
+				gui.clearFormData();
+			gui.restoreCursor();
+    	});
 	},
 	/**
 	 * Submit the form data to the screen.
@@ -609,24 +623,27 @@ define([
 	/**
 	 * Handle the XML coming back from the menu action.
 	 */
-	doRemoteDeleteCallback: function(data, ioArgs)
+	doRemoteDeleteCallback: function(response)
 	{
-		var bSuccess = this.handleReturnData(data, ioArgs);
-		if (bSuccess == true)
-		{
-			if (gui.isForm())
+		require(["jbundle/util"], function(util) {
+			var bSuccess = util.handleReturnData(response);
+			if (bSuccess == true)
 			{
-				gui.clearFormData();
+				if (gui.isForm())
+				{
+					gui.clearFormData();
+				}
+				else
+				{
+					if (response)
+						if (response.options)
+							if (response.options.ioArgs)
+								if (response.options.ioArgs.content)
+									if (response.options.ioArgs.content.name)
+					gui.clearGridData(utils.getProperty(response.options.ioArgs.content.name, "objectID"));
+				}
 			}
-			else
-			{
-				if (ioArgs)
-					if (ioArgs.args)
-						if (ioArgs.args.content)
-							if (ioArgs.args.content.name)
-				gui.clearGridData(utils.getProperty(ioArgs.args.content.name, "objectID"));
-			}
-		}
+    	});
 	},
 	/**
 	 * Get my ajax session.
@@ -656,16 +673,18 @@ define([
 			remote.doRemoteAction(messageFilter);
 	},
 	// Handle the XML coming back from the menu action
-	doRemoteScreenActionCallback: function(data, ioArgs)
+	doRemoteScreenActionCallback: function(response)
 	{
 		require(["jbundle/util"], function(util) {
-			util.handleReturnData(data, ioArgs);
+			util.handleReturnData(response);
     	});
 	},
 	// Handle the XML coming back from the menu action
 	// Return true if success (non-error return)
-	handleReturnData: function(data, ioArgs)
+	handleReturnData: function(response)
 	{
+		var data = response.data;
+		var options = response.options;
 		var domToBeTransformed = xmlParser.parse(data); //dojox.data.dom.createDocument(data, "text/xml");
 		var info = domToBeTransformed.getElementsByTagName("status-text");
 		if (info)
@@ -681,16 +700,15 @@ define([
 		var domToAppendTo = document.getElementById("content-area");
 		var contentParent = domToAppendTo.parentNode;
 		// First, delete all the old nodes
-		xml.removeChildren(domToAppendTo, true);	// Note: I remove the node also since the replacement's root is <div id='content-area'>
+		utils.removeChildren(domToAppendTo, true);	// Note: I remove the node also since the replacement's root is <div id='content-area'>
 		// Then, add the new nodes (via xslt)
 		var desc = gui.changeTitleFromData(domToBeTransformed);
-		if (ioArgs)
-			if (ioArgs.args)
-				if (ioArgs.args.addHistory)
+		if (options)
+			if (options.addHistory)
 		{
-			var command = ioArgs.args.content.name;
-			var bookmark = utils.propertiesToCommand(ioArgs.args.content.properties);
-			var appState = new jbundle.util.ApplicationState(command, bookmark, data);
+			var command = options.ioArgs.name;
+			var bookmark = utils.propertiesToCommand(options.ioArgs.properties);
+			var appState = new this.ApplicationState(command, bookmark, data, this, null);
 			back.addToHistory(appState);
 		}
 		// Extract stylesheet name from XML
@@ -821,6 +839,6 @@ define([
 	{
 		this.doCommand(this.command, true, false);
 	}
-    };
+  };
 });
 

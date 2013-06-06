@@ -63,36 +63,6 @@ define([
 	if (ioArgs.handler)
                ioArgs.handler(ioArgs.elementToInsert);
 	},
-	/**
-	 * Utility - Remove all children from this node.
-	 */
-	removeChildren: function(dom, removeFromParent)
-	{
-		if (dom.nodeType == 1)	// Node.ELEMENT_NODE)
-		{
-			if (dom.getAttribute("widgetid"))
-			{	// TODO (don) - Fix this to use dom.destroy();
-				if (removeFromParent)
-				{
-		    		require(["dijit/registry"], function(registry) {
-						if (registry.byId(dom.getAttribute("widgetid")))
-						{
-							registry.byId(dom.getAttribute("widgetid")).destroyRecursive();
-							removeFromParent = false;	// Previous command removed it.
-						}
-	//					dijit.util.manager.remove(dom.getAttribute("widgetid"));	// dojo destroy
-		    		});
-				}
-			}
-			var children = dom.childNodes;
-			for (var i = children.length-1; i >= 0; i--)
-			{
-				this.removeChildren(children[i], true);
-			}
-		}
-		if (removeFromParent)
-			dom.parentNode.removeChild(dom);
-	},
-    };
+  };
 });
 
