@@ -103,11 +103,11 @@ define([
 			{
 				for (var i = 0; i < childSessions.length; i++)
 				{
-					if (childSessions[i] instanceof classes.SendQueue)
-						this.createRemoteSendQueue(childSessions[i]);
-					if (childSessions[i] instanceof classes.ReceiveQueue)
+					if (childSessions[i].remoteFilters) // instanceof classes.ReceiveQueue)
 						this.createRemoteReceiveQueue(childSessions[i]);
-					if (childSessions[i] instanceof classes.Session)
+					else if (childSessions[i].queueName) // instanceof classes.SendQueue)
+						this.createRemoteSendQueue(childSessions[i]);
+					else // if (childSessions[i] instanceof classes.Session)
 						this.makeRemoteSession(childSessions[i]);
 				}
 			}
@@ -271,7 +271,7 @@ define([
 		  });
 	},
 	/**
-	 *
+	 * Handle create remote receive queue.
 	 */
 	handleCreateRemoteReceiveQueue: function(response) {
 		var data = response.data;
@@ -327,8 +327,12 @@ define([
 	{
 		var data = {
 			target: messageFilter.parentSession.getFullSessionID(),
-			filter: messageFilter.filterID
+			filter: messageFilter.filterID,
+			queueName: messageFilter.queueName,
+			queueType: messageFilter.queueType,
 		};
+		if (messageFilter.session)
+			data.session = messageFilter.session.getFullSessionID();
 
 		this.sendToAjax("addRemoteMessageFilter", data, function(response) {
     		require(["jbundle/remote"], function(remote) {
@@ -337,7 +341,7 @@ define([
 		  });
 	},
 	/**
-	 *
+	 * Add remote message filter.
 	 */
 	handleAddRemoteMessageFilter: function(response) {
 		var data = response.data;
@@ -346,7 +350,7 @@ define([
 	  	if (dojoConfig.isDebug)
 		  	console.log("handleAddRemoteMessageFilter to filter " + data);
 	  	var ioArgs = response.options.ioArgs;
-		var messageFilter = main.getTaskSession().getSessionByFullSessionID(ioArgs.content.target).getMessageFilter(ioArgs.content.filter);
+		var messageFilter = main.getTaskSession().getSessionByFullSessionID(ioArgs.target).getMessageFilter(ioArgs.filter);
 		messageFilter.remoteFilterID = data;
 	},
 	/**
@@ -377,7 +381,7 @@ define([
 		{
 			try {
 				data = eval(data);
-			  	if (dojoConfig.isDebug)
+			  	//if (dojoConfig.isDebug)
 				  	console.log("receiveRemoteMessage to filter " + data.id + ", message: " + data.message);
 				main.getTaskSession().getReceiveQueue(data.queueName, data.queueType).getMessageFilterByRemoteID(data.id).methodToCall(response);
 			} catch (e) {

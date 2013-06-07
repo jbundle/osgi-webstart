@@ -48,9 +48,9 @@ var profile = (function(){
 	// defer loading large sections of code until they are actually required while still allowing multiple modules to
 	// be compiled into a single file.
 	layers: {
-	'jbundle/jbundle-all': {},
+	'jbundle/jbundle': {},
 	
-	'jbundle/java-all': {},
+	'jbundle/webstart': {},
     },
     
         resourceTags: {

@@ -140,12 +140,8 @@ define([
 		declare(classes.Session, {
 			// The constructor
 			constructor: function(parentSession, queueName, queueType) {
-				this.parentSession = parentSession;
 				this.queueName = queueName;
 				this.queueType = queueType;
-				if (parentSession)
-					parentSession.addChildSession(this);
-				this.localSessionID = main.getNextLocalSessionID();
 				},
     			// Utility function to get the full session ID (don't call this directly, it is a session function)
 			});
@@ -154,28 +150,31 @@ define([
 		declare(classes.Session, {
 			// The constructor
 			constructor: function(parentSession, queueName, queueType) {
-					this.parentSession = parentSession;
-					this.queueName = queueName;
-					this.queueType = queueType;
-    				if (parentSession)
-    					parentSession.addChildSession(this);
-					this.remoteFilters = new Object();
-					this.localSessionID = main.getNextLocalSessionID();
-				},
+				this.queueName = queueName;
+				this.queueType = queueType;
+				this.remoteFilters = new Object();
+			},
 			getMessageFilterByRemoteID: function(remoteFilterID) {
-					for (var key in this.remoteFilters) {
-				    	if (this.remoteFilters[key].remoteFilterID == remoteFilterID)
-				    		return this.remoteFilters[key];
-					}
-				},
-			});
+				for (var key in this.remoteFilters) {
+			    	if (this.remoteFilters[key].remoteFilterID == remoteFilterID)
+			    		return this.remoteFilters[key];
+				}
+			},
+		});
 	// Filters in this receive queue.
     classes.MessageFilter =
-		declare(classes.Session, {
+		declare(null, {
 			// The constructor
-			constructor: function(parentSession, methodToCall) {
+			constructor: function(parentSession, methodToCall, session) {
 					this.parentSession = parentSession;
-					this.methodToCall = methodToCall;
+					if (methodToCall)
+						this.methodToCall = methodToCall;
+					if (session)
+						this.session = session;
+					if (parentSession.queueName)
+						this.queueName = parentSession.queueName;
+					if (parentSession.queueType)
+						this.queueType = parentSession.queueType;
 					this.filterID = main.getNextFilterID().toString();
 					parentSession.addMessageFilter(this, this.filterID);
 				},

@@ -66,7 +66,9 @@ define([
 			}
 		}),
 
-	// Initialize environment
+	/**
+	 * Initialize environment.
+	 */
 	init: function(user, password)
 	{
 		baseUnload.addOnUnload(function() {
@@ -202,14 +204,18 @@ define([
 			});
 		}
 	},
-	// Free the environment
+	/**
+	 * Free the environment.
+	 */
 	free: function()
 	{
 	  	main.gEnvState = false;	// Ignore the errors (from canceling the receive loop)
 		if (main.gTaskSession)
 			remote.freeRemoteSession(main.gTaskSession);
 	},
-	// Make a remote session
+	/**
+	 * Make a remote session.
+	 */
 	makeRemoteSession: function(sessionClassName)
 	{
 		var session = new classes.Session(main.getTaskSession());
@@ -218,12 +224,16 @@ define([
 			remote.makeRemoteSession(session);
 		return session;
 	},
-	// Login
+	/**
+	 * Login.
+	 */
 	login: function(props)
 	{
 		remote.login(main.getTaskSession(), props);
 	},
-	// Logout
+	/**
+	 * Logout.
+	 */
 	logout: function()
 	{
 		this.setCookie("userid", null);	// Clear cookie
@@ -241,7 +251,9 @@ define([
 
 		remote.login(main.getTaskSession(), null);
 	},
-	// Add a new send message queue
+	/**
+	 * Add a new send message queue.
+	 */
 	addSendQueue: function(filter)
 	{
 		if (!filter)
@@ -257,7 +269,9 @@ define([
 			remote.createRemoteSendQueue(sendQueue);
 		return sendQueue;
 	},
-	// Add a new receive message queue
+	/**
+	 * Add a new receive message queue.
+	 */
 	addReceiveQueue: function(filter)
 	{
 		if (!filter)
@@ -266,14 +280,17 @@ define([
 			filter.queueName = main.TRX_RECEIVE_QUEUE;
 		if (filter.queueType == null)
 			filter.queueType = main.DEFAULT_QUEUE_TYPE;
-		if (main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType))
-			return;	// The queue already exists.
-	  	var receiveQueue = new classes.ReceiveQueue(main.getTaskSession(), filter.queueName, filter.queueType);
+		var receiveQueue = main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType);
+		if (receiveQueue)
+			return receiveQueue;	// The queue already exists.
+	  	receiveQueue = new classes.ReceiveQueue(main.getTaskSession(), filter.queueName, filter.queueType);
 		if (main.getTaskSession().sessionID)	// Only add if the remote task session exists (otherwise this will be called automatically)
 			remote.createRemoteReceiveQueue(receiveQueue);
 		return receiveQueue;
 	},
-	// Send a message
+	/**
+	 * Send a message.
+	 */
 	sendMessage: function(message)
 	{
 		if (message.queueName == null)
@@ -285,7 +302,9 @@ define([
 			sendQueue = this.addSendQueue(message);
 		remote.sendMessage(sendQueue, message.data);
 	},
-	// Add a message listener to this receive queue
+	/**
+	 * Add a message listener to this receive queue.
+	 */
 	addMessageListener: function(filter)
 	{
 		if (filter.queueName == null)
@@ -295,11 +314,13 @@ define([
 		var receiveQueue = main.getTaskSession().getReceiveQueue(filter.queueName, filter.queueType);
 		if (!receiveQueue)
 			receiveQueue = this.addReceiveQueue(filter);
-		var messageFilter = new classes.MessageFilter(receiveQueue, filter.onMessage);
+		var messageFilter = new classes.MessageFilter(receiveQueue, filter.onMessage, filter.session);
 		if (receiveQueue.sessionID)	// Only add the physical remote filter if the receive queue is set up, otherwise the filter will be set up later
 			remote.addRemoteMessageFilter(messageFilter);
 	},
-	// Handle an onClick in an <a> link
+	/**
+	 * Handle an onClick in an <a> link.
+	 */
 	handleLink: function(link)
 	{
 		if (link)
@@ -310,12 +331,16 @@ define([
 		}
 		return true;	// Link not handled by me, so follow link
 	},
-	// Do this screen link command
+	/**
+	 * Do this screen link command.
+	 */
 	doLink: function(command)
 	{
 		this.doCommand(command);
 	},
-	// Do this screen button command
+	/**
+	 * Do this screen button command.
+	 */
 	doButton: function(command)
 	{
 		if (command.indexOf("?") == -1)
@@ -672,6 +697,21 @@ define([
 			util.handleReturnData(response);
     	});
 	},
+	
+	
+	
+	addMessageFilter: function(response)
+	{
+		var options = response.options;
+		
+		var receiveSession = this.addReceiveQueue();
+		var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
+		var messageFilter = new classes.MessageFilter(receiveSession, null, session);
+		this.addMessageListener(messageFilter);
+	},
+	
+	
+	
 	// Handle the XML coming back from the menu action
 	// Return true if success (non-error return)
 	handleReturnData: function(response)
@@ -726,6 +766,12 @@ define([
 			xsltURI = "org/jbundle/res/docs/styles/xsl/ajax/base/menus-ajax.xsl";
 		xsltURI = main.getServerPath(xsltURI);
 		xml.doXSLT(domToBeTransformed, xsltURI, contentParent, gui.fixNewDOM);
+		
+		if (options.ioArgs)
+			if (options.ioArgs.remoteCommand = 'doRemoteAction')
+				if (options.ioArgs.name = 'createScreen')
+					this.addMessageFilter(response);
+
 		return true;	// Success (so far)
 	},
 	// See if this status message contains a command
