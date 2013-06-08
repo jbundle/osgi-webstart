@@ -15,6 +15,12 @@ define([
 	init: function()
 	{
 		main.init();
-	}
+	},
+    /**
+     * Similar to deployJava, except I pass the complete command.
+     */
+    runAppletWithCommand: function(command, hash, version) {
+    	main.runAppletWithCommand(command, hash, version);
+    }
   };
 });
