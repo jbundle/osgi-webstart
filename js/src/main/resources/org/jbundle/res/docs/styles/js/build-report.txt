@@ -1,0 +1,1431 @@
+Build started: Fri Jun 07 2013 17:21:17 GMT-0700 (PDT)
+Build application version: 1.7.0dev (23930)
+Messages:
+info(100) Assumed module uses legacy loader API.
+	module: dojox/mobile/app/_FormWidget
+	module: dojox/jsonPath/query
+	module: dojox/data/demos/widgets/PicasaViewList
+	module: dojox/lang/oo/mixin
+	module: dojox/wire/XmlWire
+	module: dojox/xmpp/sasl
+	module: dojox/lang/oo/general
+	module: dojox/secure/capability
+	module: dojox/mobile/app/_event
+	module: dojox/storage/manager
+	module: dojox/widget/gauge/AnalogArcIndicator
+	module: dojox/layout/BorderContainer
+	module: dojox/layout/dnd/PlottedDnd
+	module: dojox/lang/async/timeout
+	module: dojox/wire/CompositeWire
+	module: dojox/secure/fromJson
+	module: dojox/wire/ml/XmlHandler
+	module: dojox/data/demos/widgets/FlickrViewList
+	module: dojox/lang/aspect/profiler
+	module: dojox/widget/FilePicker
+	module: dojox/mobile/app/_base
+	module: dojox/widget/gauge/AnalogArrowIndicator
+	module: dojox/lang/async
+	module: dojox/lang/aspect/timer
+	module: dojox/lang/oo/rearrange
+	module: dojox/mobile/app/_Widget
+	module: dojox/socket/Reconnect
+	module: dojox/wire/ml/Data
+	module: dojox/xmpp/TransportSession
+	module: dojox/lang/typed
+	module: dojox/wire/ml/Invocation
+	module: dojox/widget/gauge/AnalogNeedleIndicator
+	module: dojox/xmpp/ChatService
+	module: dojox/wire/TreeAdapter
+	module: dojox/xmpp/PresenceService
+	module: dojox/lang/aspect/tracer
+	module: dojox/wire/DataWire
+	module: dojox/widget/SortList
+	module: dojox/mobile/app/compat
+	module: dojox/data/restListener
+	module: dojox/xmpp/RosterService
+	module: dojox/drawing/plugins/drawing/Silverlight
+	module: dojox/widget/DocTester
+	module: dojox/storage/Provider
+	module: dojox/lang/observable
+	module: dojox/data/ItemExplorer
+	module: dojox/help/console
+	module: dojox/lang/oo/Decorator
+	module: dojox/secure/DOM
+	module: dojox/wire/ml/JsonHandler
+	module: dojox/widget/DataPresentation
+	module: dojox/widget/FeedPortlet
+	module: dojox/lang/async/topic
+	module: dojox/widget/RollingList
+	module: dojox/flash/_base
+	module: dojox/widget/gauge/BarIndicator
+	module: dojox/image/SlideShow
+	module: dojox/lang/aspect/memoizer
+	module: dojox/data/demos/widgets/FileView
+	module: dojox/xmpp/xmppSession
+	module: dojox/image/Gallery
+	module: dojox/storage/AirDBStorageProvider
+	module: dojox/widget/Iterator
+	module: dojox/storage/AirEncryptedLocalStorageProvider
+	module: dojox/layout/ext-dijit/layout/StackContainer-touch
+	module: dojox/lang/functional/listcomp
+	module: dojox/lang/functional/binrec
+	module: dojox/rails
+	module: dojox/wire/ml/DataStore
+	module: dojox/mobile/app/ImageView
+	module: dojox/widget/BarGauge
+	module: dojox/lang/functional/util
+	module: dojox/storage/BehaviorStorageProvider
+	module: dojox/lang/aspect/memoizerGuard
+	module: dojox/mobile/app/TextBox
+	module: dojox/lang/async/event
+	module: dojox/wire/ml/Action
+	module: dojox/storage/GearsStorageProvider
+	module: dojox/help/_base
+	module: dojox/mobile/app/ListSelector
+	module: dojox/lang/oo/aop
+	module: dojox/lang/functional/tailrec
+	module: dojox/wire/demos/TableContainer
+	module: dojox/sql/_crypto
+	module: dojox/lang/aspect
+	module: dojox/mobile/app/ImageThumbView
+	module: dojox/mobile/app/SceneAssistant
+	module: dojox/lang/aspect/counter
+	module: dojox/layout/dnd/Avatar
+	module: dojox/xmpp/util
+	module: dojox/wire/ml/Transfer
+	module: dojox/widget/Loader
+	module: dojox/storage/LocalStorageProvider
+	module: dojox/wire/TextAdapter
+	module: dojox/storage/AirFileStorageProvider
+	module: dojox/lang/functional/curry
+	module: dojox/storage/CookieStorageProvider
+	module: dojox/lang/functional/linrec
+	module: dojox/xmpp/widget/ChatSession
+	module: dojox/storage/WhatWGStorageProvider
+	module: dojox/data/demos/widgets/PicasaView
+	module: dojox/wire/ml/util
+	module: dojox/widget/AnalogGauge
+	module: dojox/lang/aspect/cflow
+	module: dojox/xmpp/bosh
+	module: dojox/widget/gauge/_Gauge
+	module: dojox/data/demos/stores/LazyLoadJSIStore
+	module: dojox/wire/Wire
+	module: dojox/wire/_base
+	module: dojox/lang/functional/numrec
+	module: dojox/mobile/app/List
+	module: dojox/secure/sandbox
+	module: dojox/wire/ml/RestHandler
+	module: dojox/sql/_base
+	module: dojox/wire/TableAdapter
+	module: dojox/storage/_common
+	module: dojox/jq
+	module: dojox/wire/demos/WidgetRepeater
+	module: dojox/mobile/app/StageController
+	module: dojox/widget/DynamicTooltip
+	module: dojox/data/StoreExplorer
+	module: dojox/xmpp/UserService
+	module: dojox/lang/functional/zip
+	module: dojox/mobile/app/SceneController
+	module: dojox/lang/functional/multirec
+	module: dojox/wire/ml/Service
+	module: dojox/robot/recorder
+	module: dojox/mobile/app/AlertDialog
+	module: dojox/storage/FlashStorageProvider
+	module: dojox/lang/docs
+	module: dojox/lang/oo/Filter
+	module: dojox/image/ThumbnailPicker
+info(102) Optimizing module
+	module: dojo/dojo
+	module: jbundle/webstart
+	module: jbundle/jbundle
+info(106) Optimizing CSS.
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonTransparent30.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RoundRectCategory_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ToggleButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCirclePlus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/FilePicker/FilePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/swirl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/CheckedMultiSelect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/ColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SearchBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Switch_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TabBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/atom/widget/templates/css/HtmlFeedEntryEditor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/DocTester/DocTester.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/android_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SpinWheel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/wire/demos/TableContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/MatrixView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedBadge.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/PageIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/CheckBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/base_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Slider-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SpinWheel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Tooltip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/View.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Carousel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Heading-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Opener.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ProgressBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteCheck.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Accordion.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayMinus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ProgressIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/dijit/Calendar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/FormLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ListItem.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ComboBox_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueBadge.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/ListInput.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/RadioGroup.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ListItem_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Accordion.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ValuePicker-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ToolBarButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/IconContainer_keyframes.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRectCategory-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ToggleButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenCirclePlus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TabBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TextArea-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/DnD_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueCircleArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleOrangeButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/MatrixView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/base_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteDownArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ValuePicker-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Tooltip-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Button-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Tooltip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteRightArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRectList-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/dijit/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Overlay-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/ColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ValuePicker-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/drawing/resources/GreekPalette.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ProgressIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/MonthColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/FixedSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Switch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ListItem_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/EdgeToEdgeCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedBadge-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Slider-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/default.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/iphone.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconMenu-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ToolBarButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/MatrixView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Switch_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TabBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ListItem_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/ScrollPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Opener-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ScrollablePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayRoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteDownArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ListItem.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SimpleDialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconMenu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ToolBarButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TextBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/base-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/ResizeHandle.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ToolBarButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RadioButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Overlay.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackRightArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ToggleButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonDarkBlueCheck-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ProgressBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/PageIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Opener.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RoundRectCategory_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Overlay.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ProgressIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackDownArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCircleMinus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Switch_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TabBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackDownArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCross-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/MonthColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ProgressBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SpinWheel-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TabBar_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/EdgeToEdgeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/DatePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/LocalImage.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonCheckboxOn-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/blackberry_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/ColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SearchBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ToolBarButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Opener-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RoundRectCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/FixedSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/autumn.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/DatePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SpinWheel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ToggleButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ListItem.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayRoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/reveal.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ValuePicker-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Tooltip-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mdnd/resources/dnd.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/GridLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/revealv.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconMenu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Accordion-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonCheckboxOff-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteCheck_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/dissolve.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SpinWheel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Overlay.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Tooltip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/EdgeToEdgeCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/holodark_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/CheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Switch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ComboBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SimpleDialog-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/EdgeToEdgeCategory-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TabBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconContainer-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/FormLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Tooltip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteUpArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackCircleCross.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ListItem.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconContainer-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/MonthColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/CheckBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ListItem_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/FileInput.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Carousel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ComboBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SearchBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TextBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RadioButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ToggleButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/RollingList/RollingList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ToolBarButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenCircleMinus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/SimpleColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ListItem_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenCircleArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/base_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/Blockquote.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/dijit/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Switch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ProgressBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ProgressIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueCircleMinus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/gauges/_Gauge.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedBall-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/dijit/dijit.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/SimpleColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TextArea-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayPlus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonOrangeBall.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayArrow_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ListItem_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/View.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/dijit/ColorPalette.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/gantt/resources/gantt.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/scaleIn.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TabBar_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/cube.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SearchBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/ColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SearchBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calc/resources/Standard.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Button-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SimpleDialog-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/SimpleColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteCross-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TextArea.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/iphone-app-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/DnD.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteUpArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonOrangeBall-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/treemap/themes/MobileTreeMap.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/resources/Grid_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/ToggleSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Button-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/CheckBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/PageIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SpinWheel-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/FloatingPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/GridLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayKnob.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/PageIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackCircleCross-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RoundRectCategory_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SpinWheel_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/Badge.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/common-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconMenu-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/ColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RoundRectCategory_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/editorPlugins.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/MonthColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/base_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleGreenButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/base_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteUpArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/FormLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SpinWheel_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/windows-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/dijit/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TabBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ToolBarButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SearchBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/FormLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/android-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/av/widget/resources/Player.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCircleArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/android_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/FileUploader.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueBall.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Accordion-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ComboBox_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ProgressIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconMenu_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Heading-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TextArea-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/perldoc.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/iphone-app.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueCirclePlus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRectCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/PageIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TabBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenCirclePlus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/PageTurning.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SpinWheel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RoundRectList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ListItem_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/common-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ListItem-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Switch_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/fruity.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Accordion-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ProgressIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/CheckBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Heading.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Switch_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TabBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteDownArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RoundRectCategory_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Overlay-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/UploaderFileList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/base_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Wizard/Wizard.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/GridLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/TitleGroup/TitleGroup.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Heading.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/image.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Overlay-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Opener.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TabBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Switch_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconMenu-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calc/resources/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RoundRectCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Pagination_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/dijit/Calendar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Switch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/MatrixView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ScrollablePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SimpleDialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconMenu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SpinWheel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/resources/claroGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Overlay.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/custom-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/charting/resources/Legend.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/manni.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonTransparent19.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Slider-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ToggleButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/FilePickerTextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Opener.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/custom_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconMenu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Overlay.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/FindReplace.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TextArea-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ToolBarButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/base-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Opener-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayArrow_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueCircleArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ComboBox_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/CheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/MatrixView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/PageIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/SlideShow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Heading-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/EdgeToEdgeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/CheckBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Carousel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Sorter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/View.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Pager/Pager.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RoundRectList-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RoundRectList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonTransparent29.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Carousel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Heading-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SimpleDialog-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayPlus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RoundRectList-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconMenu-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Loader/Loader.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ComboBox_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteMinus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCirclePlus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueBall-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Tooltip-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/PageIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Tooltip-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/FixedSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/claroEnhancedGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteMinus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SpinWheel_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconContainer-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/slide.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ComboBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ToolBarButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/resources/tundraGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ComboBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TextArea-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/Magnifier.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/base_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Overlay-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/EdgeToEdgeCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueCirclePlus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ProgressIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ValuePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ScrollablePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteCross.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SimpleDialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconMenu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/base_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/EdgeToEdgeCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/dijit/ColorPicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Tooltip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleGreenPlus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonColorButtons-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleGreenButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/GridContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/EdgeToEdgeCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RoundRectCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ToolBarButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SimpleDialog-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Accordion-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ComboBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RadioButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Switch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ToolBarButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TabBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TextArea.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/BusyButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteRightArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TabBar_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RadioButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/Breadcrumb.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/EdgeToEdgeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/GridLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconContainer-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenCircleMinus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ListItem-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/atom/widget/templates/css/HtmlFeedEntryViewer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/Gallery.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RadioButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/MatrixView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconMenu_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Heading.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ComboBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Switch_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SearchBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/PageBreak.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/base_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/FixedSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackRightArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SearchBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonCheckboxOn.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TabBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayStar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/atom/widget/templates/css/HtmlFeedViewerEntry.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconMenu-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Tooltip-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ToolBarButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/SortList/SortList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/TextColor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SearchBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/custom_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/TriStateCheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ToggleButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/MatrixView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/treemap/themes/GroupLabel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Filter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Switch_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconMenu_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/EdgeToEdgeCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleDownArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Switch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/ColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/InsertAnchor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/friendly.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/CheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonColorButtons.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/base_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Overlay.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/treemap/themes/DrillDownUp.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/DatePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhitePlus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Switch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Filter_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/iphone_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ToggleButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedBall.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SpinWheel_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconContainer-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/AutoSave.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Slider-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ComboBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TextBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/base-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/borland.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/PageIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TabBar_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/tundraEnhancedGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RadioButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TabBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/MatrixView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ToggleButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TextBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Opener-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenBadge-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/windows.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ListItem-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TextBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Calendar/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/flip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleRedCross.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleGrayButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SimpleDialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconMenu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/Smiley.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenBall-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/dijit/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Overlay-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Switch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/soria/MonthColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackLeftArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Sorter_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ListItem_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RoundRectList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/ColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/MonthColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SpinWheel_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ToggleButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/StatusBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Heading.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/base-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/IconMenu_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/ColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRectList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteCheck-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SimpleDialog-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/base-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Heading.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Button-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/Save.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/View.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SpinWheel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/claro/EnhancedGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/highlight.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/CheckBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/CheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ValuePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ToggleButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ListItem_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ProgressIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Accordion-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenBadge.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Carousel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/tundra/Sorter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ListItem.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonDarkBlueCheck.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Opener.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/ShowBlockNodes.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/MonthColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SpinWheel-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TextArea.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueBadge-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/custom.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TabBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconMenu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ComboBox_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ListItem-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconMenu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/PageIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenBall.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Heading-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Switch_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SearchBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/ColorPicker/ColorPicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/cover.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/atom/widget/templates/css/HtmlFeedViewer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TextArea-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ProgressIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/dijit/Calendar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Carousel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGreenCircleArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/murphy.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RoundRectList-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ToggleButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/CheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ValuePicker-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/RoundRectCategory_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TabBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/holodark.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/tundra/EnhancedGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/android-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Tooltip-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleGreenPlus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/FisheyeList/FisheyeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Button-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteDownArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/atom/widget/templates/css/EntryHeader.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/dijit/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/android_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/blackberry-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconMenu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/SpinWheel-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/common-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/DatePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/android-app-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackUpArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleGrayButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Accordion.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/claro/ColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/base-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SearchBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calc/resources/GraphPro.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/Lightbox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayMinus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/zoomIn.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/CheckBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/RangeSlider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/MonthColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Pagination.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TextArea.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SimpleDialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconMenu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/GridLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RoundRectCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/geo/charting/resources/Map.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ListItem-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ToggleButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayCross.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconMenu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/FixedSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/ColumnView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/GridLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ToggleButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/treemap/themes/TreeMap.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/RotatorContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/drawing/resources/toolbar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RoundRect.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/View.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCross.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/UpgradeBar/UpgradeBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ComboBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/swap.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ToolBarButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ScrollablePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/tundra/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ProgressBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Switch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/claro/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Accordion.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/native.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ToggleButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/IconMenu_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/android-app.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ipad-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Accordion.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Slider-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SpinWheel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ValuePicker-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Opener.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TextArea.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Carousel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/DatePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/PageIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ProgressIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/common-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonYellowStar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SimpleDialog-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/sketch/resources/sketch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/Common_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Slider-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Opener-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/TabBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Switch_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleDownArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ProgressIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/SafePaste.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ipad.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/tundra/Filter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Opener-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/colorful.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/SpellCheck.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TabBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ProgressIndicator-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TextArea.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/dijit/Calendar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/zoomOut.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Accordion.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/resources/nihiloGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Carousel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/base.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ToolBarButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RoundRectList-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RoundRectCategory.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SpinWheel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/PasteFromWord.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/MonthColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SpinWheel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ToolBarButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/pastie.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ComboBox_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/FixedSplitter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ListItem_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteLeftArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/EnhancedGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ToolBarButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayStar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ComboBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/SpinWheel_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconContainer-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ProgressBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/TextBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/FormLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SpinWheel-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/RoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SearchBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/slidev.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Portlet/Portlet.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/iphone-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/View.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ScrollablePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/fade.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Carousel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/RoundRectList-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/FormLayout.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ToggleButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ScrollablePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/html/resources/ellipsis.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/wire/demos/markup/flickrDemo.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ValuePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleOrangeButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/form/resources/Rating.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/trac.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteSearch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayCross-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/ToolBarButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/SpinWheel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/CollapsibleToolbar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/coverv.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Carousel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/atom/widget/templates/css/HtmlFeedViewerGrouping.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackUpArrow16.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/InsertEntity.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/ExpandoPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ListItem.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/iphone_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ListItem_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/Switch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/image/resources/ThumbnailPicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonSilverCircleRedCross-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayArrow.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/SimpleDialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconMenu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/EdgeToEdgeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/IconContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/resources/Grid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/EdgeToEdgeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Accordion-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ToggleButton_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ToggleButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/IconContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Carousel_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Switch_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/TabBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Tooltip.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ComboBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCircleMinus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/enhanced/resources/claro/Filter.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/blackberry.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/DatePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonGrayKnob-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/Heading.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Dialog/Dialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Switch_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/IconMenu_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/SimpleColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/highlight/resources/pygments/emacs.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TabBar_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonRedCircleArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/IconMenu-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/SpinWheel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/Carousel.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/Switch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/nihilo/MatrixView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/ValuePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/RoundRectList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/widget/Toaster/Toaster.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhitePlus.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/transitions/scaleOut.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/TabBar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Heading-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ValuePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonYellowStar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlueCircleMinus-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ComboBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonCheckboxOff.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/ListItem-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonDarkBlueCheck_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/grid/resources/soriaGrid.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Switch.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/layout/resources/DndGridContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ValuePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteLeftArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/PageIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/custom/common-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/data/demos/picasaDemo.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/ComboBox-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/android.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/dijit/Calendar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/RoundRectList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/dijit/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/dijit/Calendar-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/SpinWheel-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/RoundRect-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteUpArrow-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/PageIndicator.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/windows/dijit/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/android/ToolBarButton-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonWhiteSearch-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/common-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/iphone/MatrixView_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/common/domButtons/DomButtonBlackLeftArrow16-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/drawing/resources/drawing.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/Overlay-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/calendar/themes/tundra/MonthColumnView.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/iphone/Button-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/editor/plugins/resources/css/Preview.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/holodark/EdgeToEdgeList.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/blackberry_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojox/mobile/themes/blackberry/TabBar_rtl-compat.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Dialog_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/layout/TabContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/layout/AccordionContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/layout/AccordionContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Slider_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/Slider_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/TimeTextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/AccordionContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/soria.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/nihilo.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/ColorPalette.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Editor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Common_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Checkbox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/TabContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/icons/editorIcons.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Dialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Tree.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/tundra.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/TitlePane_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Checkbox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Slider_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/ColorPalette.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Editor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/claro_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Menu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Toolbar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/icons/editorIcons_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Menu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/TitlePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/TitlePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/AccordionContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Menu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Dialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Editor_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Toolbar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Menu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/TitlePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/ColorPalette.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Tree.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/soria_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Menu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/TabContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Button_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/TimeTextBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/ColorPalette.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/TitlePane_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/claro.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Button_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/layout/TabContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Toolbar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/TabContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/InlineEditBox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Menu_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Dialog_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Editor_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/layout/SplitContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Select.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Editor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/BorderContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/TabContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Checkbox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/layout/ContentPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/AccordionContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/ContentPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Dialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Tree_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/layout/TabContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/dijit_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/TimePicker_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/layout/BorderContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/TitlePane_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Toolbar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Editor.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Button_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/icons/commonIcons_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/icons/commonIcons.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/document.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/tundra_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Tree.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Button.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/TimePicker.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Dialog_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/layout/TabContainer_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Menu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Dialog.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/ContentPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/ProgressBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Tree_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Tree.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/ProgressBar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Menu.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Editor_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Tree_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/Editor_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/TimePicker_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/dijit.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/layout/BorderContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/Calendar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/AccordionContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/TitlePane_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/NumberSpinner.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/form/Select.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/ProgressBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/ProgressBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/Checkbox.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/Select.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/BorderContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/Select.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Common.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/nihilo_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/layout/SplitContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/Slider_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/TitlePane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/claro/form/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/TimePicker_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/TimePicker_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/layout/SplitContainer.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/Slider.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/form/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/form/RadioButton.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/ProgressBar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Dialog_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/soria/Toolbar.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/nihilo/Calendar_rtl.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dijit/themes/tundra/layout/ContentPane.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojo/_firebug/firebug.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojo/resources/dojo.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojo/resources/dnd.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/jbundle/tundra.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/jbundle/claro.css
+info(107) Package Version:
+	package: dojox; version: 1.9.0
+	package: dijit; version: 1.9.0
+	package: dojo; version: 1.9.0
+	package: jbundle; version: 1.0
+warn(205) Module not tagged as pure AMD yet it contains AMD API applications.
+	module: dojox/editor/plugins/ResizeTableColumn
+	module: dojox/editor/plugins/SpellCheck
+warn(216) dojo/has plugin resource could not be resolved during build-time.
+	plugin resource id: dojo-bidi?../bidi/action2d/Tooltip; reference module id: dojox/charting/action2d/Tooltip
+	plugin resource id: dojo-bidi?../bidi/axis2d/Default; reference module id: dojox/charting/axis2d/Default
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/TabBarButton; reference module id: dojox/mobile/TabBarButton
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/CarouselItem; reference module id: dojox/mobile/CarouselItem
+	plugin resource id: dojo-bidi?./bidi/Chart; reference module id: dojox/charting/Chart
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Tooltip; reference module id: dojox/mobile/Tooltip
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Accordion; reference module id: dojox/mobile/Accordion
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/ToolBarButton; reference module id: dojox/mobile/ToolBarButton
+	plugin resource id: touch?dojox/gesture/tap; reference module id: dojox/treemap/DrillDownUp
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Switch; reference module id: dojox/mobile/Switch
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/ListItem; reference module id: dojox/mobile/ListItem
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/_StoreListMixin; reference module id: dojox/mobile/_DataListMixin
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Button; reference module id: dojox/mobile/Button
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/SwapView; reference module id: dojox/mobile/SwapView
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/_StoreListMixin; reference module id: dojox/mobile/_StoreListMixin
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Carousel; reference module id: dojox/mobile/Carousel
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/SpinWheelSlot; reference module id: dojox/mobile/SpinWheelSlot
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/_ComboBoxMenu; reference module id: dojox/mobile/_ComboBoxMenu
+	plugin resource id: dojo-bidi?../bidi/action2d/ZoomAndPan; reference module id: dojox/charting/action2d/MouseZoomAndPan
+	plugin resource id: dojo-bidi?./bidi/_BidiMixin; reference module id: dojox/grid/DataGrid
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/TreeView; reference module id: dojox/mobile/TreeView
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/_ItemBase; reference module id: dojox/mobile/_ItemBase
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/TabBar; reference module id: dojox/mobile/TabBar
+	plugin resource id: dojo-bidi?../bidi/widget/Chart; reference module id: dojox/charting/widget/Chart
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/IconItem; reference module id: dojox/mobile/IconItem
+	plugin resource id: dojo-bidi?../bidi/widget/Legend; reference module id: dojox/charting/widget/Legend
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/IconMenu; reference module id: dojox/mobile/IconMenu
+	plugin resource id: dojo-bidi?./bidi/Chart3D; reference module id: dojox/charting/Chart3D
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/TextBox; reference module id: dojox/mobile/TextBox
+	plugin resource id: dojo-bidi?../bidi/action2d/ZoomAndPan; reference module id: dojox/charting/action2d/TouchZoomAndPan
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Heading; reference module id: dojox/mobile/Heading
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/RoundRectCategory; reference module id: dojox/mobile/RoundRectCategory
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/Badge; reference module id: dojox/mobile/Badge
+	plugin resource id: dojo-bidi?dojox/mobile/bidi/ValuePickerSlot; reference module id: dojox/mobile/ValuePickerSlot
+	plugin resource id: dojo-parser?:dojo/_base/window; reference module id: dojox/mvc/parserExtension
+	plugin resource id: dojo-mobile-parser?:dojo/parser; reference module id: dojox/mvc/parserExtension
+	plugin resource id: dojo-parser?:dojox/mobile/parser; reference module id: dojox/mvc/parserExtension
+	plugin resource id: dojo-bidi?./_BidiMixin; reference module id: dijit/_WidgetBase
+	plugin resource id: dojo-firebug?./_firebug/firebug; reference module id: dojo/main
+	plugin resource id: dom-addeventlistener?:./aspect; reference module id: dojo/on
+	plugin resource id: host-browser?dom-addeventlistener?:../on:; reference module id: dojo/request/watch
+warn(224) A plugin dependency was encountered but there was no build-time plugin resolver.
+	module: dojox/mobile/TimePicker; plugin: dojox/mobile/_PickerChooser
+	module: dojox/mobile/DatePicker; plugin: dojox/mobile/_PickerChooser
+	module: dijit/Fieldset; plugin: dojo/query
+	module: dijit/Tree; plugin: dojo/query
+	module: dojo/request/node; plugin: dojo/node
+	module: dojo/request/node; plugin: dojo/node
+	module: dojo/request/node; plugin: dojo/node
+	module: dojo/request/node; plugin: dojo/node
+	module: dojo/request; plugin: dojo/request/default
+	module: dojo/request/registry; plugin: dojo/request/default
+Layer Contents:
+jbundle/jbundle:
+	dijit/form/nls/validate
+	dijit/form/TextBox
+	dijit/_TemplatedMixin
+	dijit/_CssStateMixin
+	dijit/DialogUnderlay
+	jbundle/main
+	dijit/_editor/html
+	dijit/_editor/nls/commands
+	dijit/place
+	dijit/_HasDropDown
+	dijit/_editor/plugins/EnterKeyHandling
+	dijit/focus
+	dojo/i18n
+	dijit/hccss
+	dijit/form/_ComboBoxMenuMixin
+	dojo/parser
+	dijit/form/_SearchMixin
+	dijit/form/ToggleButton
+	dojo/date/stamp
+	dijit/form/Textarea
+	dojo/Stateful
+	dojox/xml/parser
+	dijit/form/_AutoCompleterMixin
+	dijit/form/ComboBoxMixin
+	dijit/form/_TextBoxMixin
+	dijit/form/SimpleTextarea
+	dojo/hccss
+	jbundle/classes
+	dijit/main
+	dijit/_OnDijitClickMixin
+	dojo/dnd/autoscroll
+	dojo/dnd/TimedMoveable
+	dijit/form/_ListMouseMixin
+	dojo/cache
+	dijit/form/templates/DropDownBox.html
+	dojo/promise/all
+	dijit/form/templates/Button.html
+	dojo/_base/url
+	dojo/text
+	dijit/form/templates/CheckBox.html
+	jbundle/thinutil
+	dojo/uacss
+	dojo/string
+	dijit/Tooltip
+	dijit/form/_FormValueMixin
+	dijit/form/_FormWidgetMixin
+	dijit/a11yclick
+	dijit/Destroyable
+	dijit/layout/_ContentPaneResizeMixin
+	dijit/_editor/RichText
+	dijit/nls/loading
+	dojo/dnd/Moveable
+	dojo/store/util/SimpleQueryEngine
+	dijit/form/_ExpandingTextAreaMixin
+	dijit/ToolbarSeparator
+	dijit/layout/_LayoutWidget
+	dojo/back
+	dijit/_base/manager
+	dijit/popup
+	dojo/dnd/Mover
+	dojo/request/default
+	dijit/BackgroundIframe
+	dijit/form/Button
+	dijit/_WidgetBase
+	dojo/store/Memory
+	dijit/templates/Tooltip.html
+	dijit/Editor
+	dijit/Toolbar
+	jbundle/jbundle
+	dojo/regexp
+	dijit/form/ComboBox
+	dijit/_AttachMixin
+	dijit/form/_FormMixin
+	dijit/form/_CheckBoxMixin
+	dijit/layout/ContentPane
+	dijit/form/templates/ValidationTextBox.html
+	dijit/form/templates/TextBox.html
+	dijit/_KeyNavContainer
+	dijit/layout/utils
+	dijit/_Contained
+	dijit/form/DataList
+	dijit/templates/Dialog.html
+	dijit/form/CheckBox
+	dijit/_editor/_Plugin
+	dijit/_Container
+	jbundle/java
+	dojo/html
+	dijit/form/ValidationTextBox
+	dijit/selection
+	jbundle/gui
+	dojo/window
+	dijit/_FocusMixin
+	jbundle/xml
+	dijit/form/_ButtonMixin
+	dijit/registry
+	dijit/_editor/range
+	dijit/_KeyNavMixin
+	dojo/store/util/QueryResults
+	dijit/form/_ListBase
+	dijit/form/_FormWidget
+	dojo/dnd/common
+	jbundle/remote
+	dijit/Viewport
+	dijit/form/_ComboBoxMenu
+	dijit/Dialog
+	dijit/_base/focus
+	dijit/a11y
+	dijit/form/_ToggleButtonMixin
+	dojox/data/dom
+	dijit/_Widget
+	dojo/touch
+	dijit/form/nls/ComboBox
+	dojo/request
+	dijit/_DialogMixin
+	dijit/nls/common
+	jbundle/util
+	dijit/form/_FormValueWidget
+
+jbundle/webstart:
+	jbundle/java
+	dojo/back
+	jbundle/webstart
+	jbundle/thinutil
+
+dojo/dojo:
+	dojo/_base/fx
+	dojo/dom-form
+	dojo/promise/tracer
+	dojo/errors/RequestError
+	dojo/_base/html
+	dojo/_base/kernel
+	dojo/io-query
+	dojo/_base/Deferred
+	dojo/NodeList-dom
+	dojo/query
+	dojo/has
+	dojo/json
+	dojo/_base/declare
+	dojo/dom
+	dojo/_base/browser
+	dojo/errors/RequestTimeoutError
+	dojo/dom-style
+	dojo/dom-geometry
+	dojo/dom-prop
+	dojo/when
+	dojo/dom-attr
+	dojo/dom-construct
+	dojo/request/xhr
+	dojo/keys
+	dojo/domReady
+	dojo/_base/lang
+	dojo/Evented
+	dojo/request/util
+	dojo/mouse
+	dojo/topic
+	dojo/_base/xhr
+	dojo/dojo
+	dojo/_base/unload
+	dojo/Deferred
+	dojo/_base/NodeList
+	dojo/_base/Color
+	dojo/promise/instrumentation
+	dojo/selector/_loader
+	dojo/promise/Promise
+	dojo/request/watch
+	dojo/on
+	dojo/_base/sniff
+	dojo/errors/create
+	dojo/_base/array
+	dojo/_base/json
+	dojo/_base/window
+	dojo/dom-class
+	dojo/_base/config
+	dojo/_base/event
+	dojo/main
+	dojo/sniff
+	dojo/request/handlers
+	dojo/ready
+	dojo/aspect
+	dojo/_base/connect
+	dojo/errors/CancelError
+
+
+
+Process finished normally
+	errors: 0
+	warnings: 53
+	build time: 56.601 seconds

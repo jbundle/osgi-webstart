@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:xfm="http://www.w3.org/2000/12/xforms">
+<head>
+<script type="text/javascript">
+			    dojoConfig= {
+			        has: {
+			        //    "dojo-firebug": true,
+			        //    "dojo-debug-messages": true
+			        },
+			        parseOnLoad: true,
+			        async: true,
+			//        baseUrl: "/org/jbundle/res/docs/styles/js",
+			//      preventBackButtonFix: false
+			    };
+			</script>
+			
+<link title="basicstyle" type="text/css" href="/org/jbundle/res/docs/styles/js/jbundle/tundra.css" rel="stylesheet">
+<link type="text/css" href="/org/jbundle/res/docs/styles/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="/org/jbundle/res/docs/styles/js/dojo/dojo.js"></script>
+</head>
+<body class="tundra">
+<button id="Office System Applet"
+ onClick="require([&quot;jbundle/util&quot;], function(util) {util.doLink('?applet=org.jbundle.app.office.Main&amp;userid=&amp;systemname=office&amp;webStartPropertiesFile=%2Forg%2Fjbundle%2Fres%2Fwebstart%2Fapp.properties');});"
+ data-dojo-type="dijit/form/Button"
+ class="link"
+ type="button">
+ <span class="desc">Office System Applets</span>
+</button>
+
+<script type="text/javascript">
+require(["jbundle/jbundle",
+	"dojo/domReady!"],
+function(jbundle) {
+	jbundle.init();
+});
+</script>
+</body>
+</html>

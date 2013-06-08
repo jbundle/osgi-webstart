@@ -1,0 +1,11 @@
+define('jbundle/nls/jbundle_el',{
+'dijit/_editor/nls/commands':{"removeFormat":"Αφαίρεση μορφοποίησης","copy":"Αντιγραφή","paste":"Επικόλληση","selectAll":"Επιλογή όλων","insertOrderedList":"Αριθμημένη λίστα","insertTable":"Εισαγωγή/Τροποποίηση πίνακα","print":"Εκτύπωση","underline":"Υπογράμμιση","foreColor":"Χρώμα προσκηνίου","htmlToggle":"Πρωτογενής κώδικας HTML","formatBlock":"Στυλ παραγράφου","newPage":"Νέα σελίδα","insertHorizontalRule":"Οριζόντια γραμμή","delete":"Διαγραφή","appleKey":"⌘${0}","insertUnorderedList":"Λίστα με κουκίδες","tableProp":"Ιδιότητα πίνακα","insertImage":"Εισαγωγή εικόνας","superscript":"Εκθέτης","subscript":"Δείκτης","createLink":"Δημιουργία διασύνδεσης","undo":"Αναίρεση","fullScreen":"Εναλλαγή κατάστασης πλήρους οθόνης","italic":"Πλάγια","fontName":"Όνομα γραμματοσειράς","justifyLeft":"Στοίχιση αριστερά","unlink":"Αφαίρεση διασύνδεσης","toggleTableBorder":"Εναλλαγή εμφάνισης περιγράμματος πίνακα","viewSource":"Προβολή προέλευσης HTML","ctrlKey":"ctrl+${0}","fontSize":"Μέγεθος γραμματοσειράς","systemShortcut":"Η ενέργεια \"${0}\" είναι διαθέσιμη στο πρόγραμμα πλοήγησης μόνο μέσω μιας συντόμευσης πληκτρολογίου. Χρησιμοποιήστε τη συντόμευση ${1}.","indent":"Εσοχή","redo":"Ακύρωση αναίρεσης","strikethrough":"Διαγράμμιση","justifyFull":"Πλήρης στοίχιση","justifyCenter":"Στοίχιση στο κέντρο","hiliteColor":"Χρώμα φόντου","deleteTable":"Διαγραφή πίνακα","outdent":"Μείωση περιθωρίου","cut":"Αποκοπή","plainFormatBlock":"Στυλ παραγράφου","toggleDir":"Εναλλαγή κατεύθυνσης","bold":"Έντονα","tabIndent":"Εσοχή με το πλήκτρο Tab","justifyRight":"Στοίχιση δεξιά"}
+,
+'dijit/form/nls/ComboBox':{"previousMessage":"Προηγούμενες επιλογές","nextMessage":"Περισσότερες επιλογές"}
+,
+'dijit/nls/loading':{"loadingState":"Φόρτωση...","errorState":"Σας ζητούμε συγνώμη, παρουσιάστηκε σφάλμα"}
+,
+'dijit/form/nls/validate':{"rangeMessage":"Η τιμή αυτή δεν ανήκει στο εύρος έγκυρων τιμών.","invalidMessage":"Η τιμή που καταχωρήσατε δεν είναι έγκυρη.","missingMessage":"Η τιμή αυτή πρέπει απαραίτητα να καθοριστεί."}
+,
+'dijit/nls/common':{"buttonOk":"ΟΚ","buttonCancel":"Ακύρωση","buttonSave":"Αποθήκευση","itemClose":"Κλείσιμο"}
+});

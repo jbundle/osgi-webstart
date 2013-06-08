@@ -1,0 +1,11 @@
+define('jbundle/nls/jbundle_ca',{
+'dijit/_editor/nls/commands':{"removeFormat":"Elimina el format","copy":"Copia","paste":"Enganxa","selectAll":"Selecciona-ho tot","insertOrderedList":"Llista numerada","insertTable":"Insereix/edita la taula","print":"Imprimeix","underline":"Subratllat","foreColor":"Color de primer pla","htmlToggle":"Font HTML","formatBlock":"Estil de paràgraf","newPage":"Pàgina nova","insertHorizontalRule":"Regla horitzontal","delete":"Suprimeix","appleKey":"⌘${0}","insertUnorderedList":"Llista de vinyetes","tableProp":"Propietat de taula","insertImage":"Insereix imatge","superscript":"Superíndex","subscript":"Subíndex","createLink":"Crea un enllaç","undo":"Desfés","fullScreen":"Commuta pantalla completa","italic":"Cursiva","fontName":"Nom del tipus de lletra","justifyLeft":"Alineació a l'esquerra","unlink":"Elimina l'enllaç","toggleTableBorder":"Inverteix els contorns de taula","viewSource":"Visualitza font HTML","ctrlKey":"control+${0}","fontSize":"Mida del tipus de lletra","systemShortcut":"L'acció \"${0}\" és l'única disponible al navegador utilitzant una drecera del teclat. Utilitzeu ${1}.","indent":"Sagnat","redo":"Refés","strikethrough":"Ratllat","justifyFull":"Justifica","justifyCenter":"Alineació centrada","hiliteColor":"Color de fons","deleteTable":"Suprimeix la taula","outdent":"Sagnat a l'esquerra","cut":"Retalla","plainFormatBlock":"Estil de paràgraf","toggleDir":"Inverteix la direcció","bold":"Negreta","tabIndent":"Sagnat","justifyRight":"Alineació a la dreta"}
+,
+'dijit/form/nls/ComboBox':{"previousMessage":"Opcions anteriors","nextMessage":"Més opcions"}
+,
+'dijit/nls/loading':{"loadingState":"S'està carregant...","errorState":"Ens sap greu. S'ha produït un error."}
+,
+'dijit/form/nls/validate':{"rangeMessage":"Aquest valor és fora de l'interval","invalidMessage":"El valor introduït no és vàlid","missingMessage":"Aquest valor és necessari"}
+,
+'dijit/nls/common':{"buttonOk":"D'acord","buttonCancel":"Cancel·la","buttonSave":"Desa","itemClose":"Tanca"}
+});

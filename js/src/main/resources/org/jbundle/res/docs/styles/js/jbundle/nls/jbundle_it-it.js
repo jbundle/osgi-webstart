@@ -1,0 +1,11 @@
+define('jbundle/nls/jbundle_it-it',{
+'dijit/_editor/nls/commands':{"removeFormat":"Rimuovi formato","copy":"Copia","paste":"Incolla","selectAll":"Seleziona tutto","insertOrderedList":"Elenco numerato","insertTable":"Inserisci/Modifica tabella","print":"Stampa","underline":"Sottolinea","foreColor":"Colore primo piano","htmlToggle":"Origine HTML","formatBlock":"Stile paragrafo","newPage":"Nuova pagina","insertHorizontalRule":"Righello orizzontale","delete":"Elimina","appleKey":"⌘${0}","insertUnorderedList":"Elenco puntato","tableProp":"Proprietà tabella","insertImage":"Inserisci immagine","superscript":"Apice","subscript":"Pedice","createLink":"Crea collegamento","undo":"Annulla","fullScreen":"Attiva/Disattiva schermo intero","italic":"Corsivo","fontName":"Nome carattere","justifyLeft":"Allinea a sinistra","unlink":"Rimuovi collegamento","toggleTableBorder":"Attiva/Disattiva bordo tabella","viewSource":"Visualizza origine HTML","ctrlKey":"ctrl+${0}","fontSize":"Dimensione carattere","systemShortcut":"La azione \"${0}\" è disponibile solo nel browser tramite un tasto di scelta rapida. Utilizzare ${1}.","indent":"Rientro","redo":"Ripristina","strikethrough":"Barrato","justifyFull":"Giustifica","justifyCenter":"Allinea al centro","hiliteColor":"Colore sfondo","deleteTable":"Elimina tabella","outdent":"Annulla rientro","cut":"Taglia","plainFormatBlock":"Stile paragrafo","toggleDir":"Attiva/Disattiva direzione","bold":"Grassetto","tabIndent":"Rientro tabulazione","justifyRight":"Allinea a destra"}
+,
+'dijit/form/nls/ComboBox':{"previousMessage":"Scelte precedenti","nextMessage":"Scelte successive"}
+,
+'dijit/nls/loading':{"loadingState":"Caricamento in corso...","errorState":"Si è verificato un errore"}
+,
+'dijit/form/nls/validate':{"rangeMessage":"Questo valore è fuori dall'intervallo consentito.","invalidMessage":"Il valore immesso non è valido.","missingMessage":"Questo valore è obbligatorio."}
+,
+'dijit/nls/common':{"buttonOk":"Ok","buttonCancel":"Annulla","buttonSave":"Salva","itemClose":"Chiudi"}
+});
