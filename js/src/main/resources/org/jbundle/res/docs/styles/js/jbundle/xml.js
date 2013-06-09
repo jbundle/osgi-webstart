@@ -30,14 +30,15 @@ define("jbundle/xml", [
             });
 	},
 	transformAndInsert: function (xsl, ioArgs) {
-	  xsl = xmlParser.parse(xsl); //dojox.data.dom.createDocument(data, "text/xml");
 	  if (typeof XSLTProcessor != 'undefined') {
-	    var xsltProcessor = new XSLTProcessor();
-	    xsltProcessor.importStylesheet(xsl);
-	    var frag = xsltProcessor.transformToFragment(ioArgs.domToBeTransformed, ioArgs.elementToInsert.ownerDocument);
-	    ioArgs.elementToInsert.appendChild(frag);
+		  xsl = this.parse(xsl);
+		  var xsltProcessor = new XSLTProcessor();
+		  xsltProcessor.importStylesheet(xsl);
+		  var frag = xsltProcessor.transformToFragment(ioArgs.domToBeTransformed, ioArgs.elementToInsert.ownerDocument);
+		  ioArgs.elementToInsert.appendChild(frag);
 	  }
 	  else if (typeof ioArgs.domToBeTransformed.transformNode != 'undefined') {	// IE
+		  xsl = this.parse(xsl);
 		  ioArgs.elementToInsert.insertAdjacentHTML('beforeEnd', ioArgs.domToBeTransformed.transformNode(xsl));
 	  }
 	  else {
@@ -45,7 +46,7 @@ define("jbundle/xml", [
 	            if (window.ActiveXObject) {
 	                var xslt = new ActiveXObject("Msxml2.XSLTemplate");
 	                var xslDoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
-	                xslDoc.loadXML(xsl.xml);
+	                xslDoc.loadXML(xsl);
 	                xslt.stylesheet = xslDoc;
 	                var xslProc = xslt.createProcessor();
 	                xslProc.input = ioArgs.domToBeTransformed;
@@ -63,6 +64,19 @@ define("jbundle/xml", [
 	if (ioArgs.handler)
                ioArgs.handler(ioArgs.elementToInsert);
 	},
+	parse: function(data, mimeType)
+	{
+		if (window.ActiveXObject)
+			if (typeof dojo.global.DOMParser != 'undefined')
+		{	// HACK - Don't know why this object is present in IE
+			deletedparser = dojo.global.DOMParser;
+			delete dojo.global.DOMParser;
+		}
+		var dom = xmlParser.parse(data, mimeType); //dojox.data.dom.createDocument(data, "text/xml");
+		if (typeof deletedparser != 'undefined')
+			dojo.global.DOMParser = deletedparser;
+		return dom;
+	}
   };
 });
 

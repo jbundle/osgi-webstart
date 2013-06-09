@@ -4946,7 +4946,7 @@ function popBrowserHistory(count, commandHandledByClient, title)
  */
 define([
 	"jbundle/thinutil",
-	"dojo/back",
+	"jbundle/back",
 	"dojo/_base/declare",
 //	"dojo/domReady!",
 ], function(thinutil, back, declare) {
@@ -5242,6 +5242,31 @@ define([
      * Same as deployJava, except I add to a string instead of doing document.write(xx).
      * NOTE: This method only works with the gui code.
      */
+    getAppletWithCommand: function(command, hash, version) {
+		if ((hash != null) && (hash.length > 0))
+		{
+			if (command == null)
+				command = "";
+			command = command + "&" + thinutil.getCommandFromHash(hash);
+		}
+		if (!command)
+			return false;
+		if (version == null)
+			version = '1.6';
+		var params = thinutil.commandToProperties(command);
+
+		var attributes = this.getAppletAttributes(params);
+		var jnlp = this.getJnlpURL(attributes, params);
+		if (!params.jnlp_href)
+			params['jnlp_href'] = jnlp;
+		
+		this.prepareWindowForApplet(true);	// Set java flag to 'true'
+		return this.getAppletHtml(attributes, params, version);
+    },
+    /**
+     * Same as deployJava, except I add to a string instead of doing document.write(xx).
+     * NOTE: This method only works with the gui code.
+     */
     getAppletHtml: function(attributes, parameters, minimumVersion) {
         if (minimumVersion == 'undefined' || minimumVersion == null) {
             minimumVersion = '1.1';
@@ -5283,30 +5308,66 @@ define([
      * Same as deployJava, except I add to a string instead of doing document.write(xx).
      */
     writeAppletTag: function(attributes, parameters) {
-        var s = '<' + 'applet ';
+        var startApplet = '<' + 'applet ';
+        var params = '';
+        var endApplet = '<' + '/' + 'applet' + '>';
+        var addCodeAttribute = true;
+
+        if (null == parameters || typeof parameters != 'object') {
+            parameters = new Object();
+        }
+
         for (var attribute in attributes) {
-            s += (' ' + attribute + '="' + attributes[attribute] + '"');
-        }
-        s += '>';
-    
-        if (parameters != 'undefined' && parameters != null) {
-            var codebaseParam = false;
-            for (var parameter in parameters) {
-                if (parameter == 'codebase_lookup') {
-                    codebaseParam = true;
+            if (! this.isValidAppletAttr(attribute)) {
+                parameters[attribute] = attributes[attribute];
+            } else {
+                startApplet += (' ' +attribute+ '="' +attributes[attribute] + '"');
+                if (attribute == 'code') {
+                    addCodeAttribute = false;
                 }
-                s += '<param name="' + parameter + '" value="' + 
-                    parameters[parameter] + '">';
-            }
-            if (!codebaseParam) {
-            	s += '<param name="codebase_lookup" value="false">';
             }
         }
-        s += '<' + '/' + 'applet' + '>';
-        return s;
+
+        var codebaseParam = false;
+        for (var parameter in parameters) {
+            if (parameter == 'codebase_lookup') {
+                codebaseParam = true;
+            }
+            // Originally, parameter 'object' was used for serialized
+            // applets, later, to avoid confusion with object tag in IE
+            // the 'java_object' was added.  Plugin supports both.
+            if (parameter == 'object' || parameter == 'java_object' ||
+                parameter == 'java_code' ) {
+                addCodeAttribute = false;
+            }
+            params += '<param name="' + parameter + '" value="' +
+                parameters[parameter] + '"/>';
+        }
+        if (!codebaseParam) {
+            params += '<param name="codebase_lookup" value="false"/>';
+        }
+
+        if (addCodeAttribute) {
+            startApplet += (' code="dummy"');
+        }
+        startApplet += '>';
+
+        return startApplet + '\n' + params + '\n' + endApplet;
     },
-	ignoreBack: false
-    };
+    isValidAppletAttr: function(attr) {
+        return this.arHas(this.applet, attr.toLowerCase());
+    },
+    arHas: function(ar, attr) {
+        var len = ar.length;
+        for (var i = 0; i < len; i++) {
+            if (ar[i] === attr) return true;
+        }
+        return false;
+    },
+    applet: [ 'codebase', 'code', 'name', 'archive', 'object',
+            'width', 'height', 'alt', 'align', 'hspace', 'vspace' ],
+    ignoreBack: false,
+  };
 });
 
 },
@@ -8945,6 +9006,418 @@ return dojox.xml.parser;
 });
 
 },
+'jbundle/back':function(){
+define(
+		["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/sniff", "dojo/dom", "dojo/dom-construct", "dojo/_base/window", "require"], function(dojo, lang, sniff, dom, domConstruct, baseWindow, require
+				) {
+	// module:
+	//		dojo/back
+	// summary:
+	//		TODOC
+
+	lang.getObject("back", true, dojo);
+
+/*=====
+dojo.back = {
+	// summary: Browser history management resources
+};
+=====*/
+
+	var back = dojo.back,
+
+	// everyone deals with encoding the hash slightly differently
+
+	getHash = back.getHash = function(){
+		var h = window.location.hash;
+		if(h.charAt(0) == "#"){ h = h.substring(1); }
+		return sniff("mozilla") ? h : decodeURIComponent(h);
+	},
+
+	setHash = back.setHash = function(h){
+		if(!h){ h = ""; }
+		window.location.hash = encodeURIComponent(h);
+		historyCounter = history.length;
+	};
+
+	var initialHref = (typeof(window) !== "undefined") ? window.location.href : "";
+	var initialHash = (typeof(window) !== "undefined") ? getHash() : "";
+	var initialState = null;
+
+	var locationTimer = null;
+	var bookmarkAnchor = null;
+	var historyIframe = null;
+	var forwardStack = [];
+	var historyStack = [];
+	var moveForward = false;
+	var changingUrl = false;
+	var historyCounter;
+
+	function handleBackButton(){
+		//summary: private method. Do not call this directly.
+
+		//The "current" page is always at the top of the history stack.
+		var current = historyStack.pop();
+		if(!current){ return; }
+		var last = historyStack[historyStack.length-1];
+		if(!last && historyStack.length == 0){
+			last = initialState;
+		}
+		if(last){
+			if(last.kwArgs["back"]){
+				last.kwArgs["back"]();
+			}else if(last.kwArgs["backButton"]){
+				last.kwArgs["backButton"]();
+			}else if(last.kwArgs["handle"]){
+				last.kwArgs.handle("back");
+			}
+		}
+		forwardStack.push(current);
+	}
+
+	back.goBack = handleBackButton;
+
+	function handleForwardButton(){
+		//summary: private method. Do not call this directly.
+		var last = forwardStack.pop();
+		if(!last){ return; }
+		if(last.kwArgs["forward"]){
+			last.kwArgs.forward();
+		}else if(last.kwArgs["forwardButton"]){
+			last.kwArgs.forwardButton();
+		}else if(last.kwArgs["handle"]){
+			last.kwArgs.handle("forward");
+		}
+		historyStack.push(last);
+	}
+
+	back.goForward = handleForwardButton;
+
+	function createState(url, args, hash){
+		//summary: private method. Do not call this directly.
+		return {"url": url, "kwArgs": args, "urlHash": hash};	//Object
+	}
+
+	function getUrlQuery(url){
+		//summary: private method. Do not call this directly.
+		var segments = url.split("?");
+		if(segments.length < 2){
+			return null; //null
+		}
+		else{
+			return segments[1]; //String
+		}
+	}
+
+	function loadIframeHistory(){
+		//summary: private method. Do not call this directly.
+		var url = (dojo.config["dojoIframeHistoryUrl"] || require.toUrl("./resources/iframe_history.html")) + "?" + (new Date()).getTime();
+		moveForward = true;
+		if(historyIframe){
+			sniff("webkit") ? historyIframe.location = url : window.frames[historyIframe.name].location = url;
+		}else{
+			//console.warn("dojo.back: Not initialised. You need to call dojo.back.init() from a <script> block that lives inside the <body> tag.");
+		}
+		return url; //String
+	}
+
+	function checkLocation(){
+		if(!changingUrl){
+			var hsl = historyStack.length;
+
+			var hash = getHash();
+
+			if((hash === initialHash||window.location.href == initialHref)&&(hsl == 1)){
+				// FIXME: could this ever be a forward button?
+				// we can't clear it because we still need to check for forwards. Ugg.
+				// clearInterval(this.locationTimer);
+				handleBackButton();
+				return;
+			}
+
+			// first check to see if we could have gone forward. We always halt on
+			// a no-hash item.
+			if(forwardStack.length > 0){
+				if(forwardStack[forwardStack.length-1].urlHash === hash){
+					handleForwardButton();
+					return;
+				}
+			}
+
+			// ok, that didn't work, try someplace back in the history stack
+			if((hsl >= 2)&&(historyStack[hsl-2])){
+				if(historyStack[hsl-2].urlHash === hash){
+					handleBackButton();
+				}
+			}
+		}
+	}
+
+	back.init = function(){
+		//summary: Initializes the undo stack. This must be called from a <script>
+		//		   block that lives inside the <body> tag to prevent bugs on IE.
+		// description:
+		//		Only call this method before the page's DOM is finished loading. Otherwise
+		//		it will not work. Be careful with xdomain loading or djConfig.debugAtAllCosts scenarios,
+		//		in order for this method to work, dojo.back will need to be part of a build layer.
+
+		// prevent reinit
+		if(dom.byId("dj_history")){ return; } 
+
+		var src = dojo.config["dojoIframeHistoryUrl"] || require.toUrl("./resources/iframe_history.html");
+		if (dojo._postLoad) {
+			console.error("dojo.back.init() must be called before the DOM has loaded. "
+						+ "If using xdomain loading or djConfig.debugAtAllCosts, include dojo.back "
+						+ "in a build layer.");
+		} else {
+//			document.write('<iframe style="border:0;width:1px;height:1px;position:absolute;visibility:hidden;bottom:0;right:0;" name="dj_history" id="dj_history" src="' + src + '"></iframe>');
+			var body = document.getElementsByTagName('body');
+			if (body.length > 0)
+			{
+				var iframe = document.createElement('iframe');
+				iframe.setAttribute('style', 'border:0;width:1px;height:1px;position:absolute;visibility:hidden;bottom:0;right:0;');
+				iframe.setAttribute('name', 'dj_history');
+				iframe.setAttribute('id', 'dj_history');
+				iframe.setAttribute('src', src);
+				body[0].appendChild(iframe);
+			}
+		}
+	};
+
+	back.setInitialState = function(/*Object*/args){
+		//summary:
+		//		Sets the state object and back callback for the very first page
+		//		that is loaded.
+		//description:
+		//		It is recommended that you call this method as part of an event
+		//		listener that is registered via dojo.addOnLoad().
+		//args: Object
+		//		See the addToHistory() function for the list of valid args properties.
+		initialState = createState(initialHref, args, initialHash);
+	};
+
+	//FIXME: Make these doc comments not be awful. At least they're not wrong.
+	//FIXME: Would like to support arbitrary back/forward jumps. Have to rework iframeLoaded among other things.
+	//FIXME: is there a slight race condition in moz using change URL with the timer check and when
+	//		 the hash gets set? I think I have seen a back/forward call in quick succession, but not consistent.
+
+
+	/*=====
+	dojo.__backArgs = function(kwArgs){
+		// back: Function?
+		//		A function to be called when this state is reached via the user
+		//		clicking the back button.
+		//	forward: Function?
+		//		Upon return to this state from the "back, forward" combination
+		//		of navigation steps, this function will be called. Somewhat
+		//		analgous to the semantic of an "onRedo" event handler.
+		//	changeUrl: Boolean?|String?
+		//		Boolean indicating whether or not to create a unique hash for
+		//		this state. If a string is passed instead, it is used as the
+		//		hash.
+	}
+	=====*/
+
+	back.addToHistory = function(/*dojo.__backArgs*/ args){
+		//	summary:
+		//		adds a state object (args) to the history list.
+		//	args: dojo.__backArgs
+		//		The state object that will be added to the history list.
+		//	description:
+		//		To support getting back button notifications, the object
+		//		argument should implement a function called either "back",
+		//		"backButton", or "handle". The string "back" will be passed as
+		//		the first and only argument to this callback.
+		//
+		//		To support getting forward button notifications, the object
+		//		argument should implement a function called either "forward",
+		//		"forwardButton", or "handle". The string "forward" will be
+		//		passed as the first and only argument to this callback.
+		//
+		//		If you want the browser location string to change, define "changeUrl" on the object. If the
+		//		value of "changeUrl" is true, then a unique number will be appended to the URL as a fragment
+		//		identifier (http://some.domain.com/path#uniquenumber). If it is any other value that does
+		//		not evaluate to false, that value will be used as the fragment identifier. For example,
+		//		if changeUrl: 'page1', then the URL will look like: http://some.domain.com/path#page1
+		//
+		//		There are problems with using dojo.back with semantically-named fragment identifiers
+		//		("hash values" on an URL). In most browsers it will be hard for dojo.back to know
+		//		distinguish a back from a forward event in those cases. For back/forward support to
+		//		work best, the fragment ID should always be a unique value (something using new Date().getTime()
+		//		for example). If you want to detect hash changes using semantic fragment IDs, then
+		//		consider using dojo.hash instead (in Dojo 1.4+).
+		//
+		//	example:
+		//		|	dojo.back.addToHistory({
+		//		|		back: function(){ console.log('back pressed'); },
+		//		|		forward: function(){ console.log('forward pressed'); },
+		//		|		changeUrl: true
+		//		|	});
+
+		//	BROWSER NOTES:
+		//	Safari 1.2:
+		//	back button "works" fine, however it's not possible to actually
+		//	DETECT that you've moved backwards by inspecting window.location.
+		//	Unless there is some other means of locating.
+		//	FIXME: perhaps we can poll on history.length?
+		//	Safari 2.0.3+ (and probably 1.3.2+):
+		//	works fine, except when changeUrl is used. When changeUrl is used,
+		//	Safari jumps all the way back to whatever page was shown before
+		//	the page that uses dojo.undo.browser support.
+		//	IE 5.5 SP2:
+		//	back button behavior is macro. It does not move back to the
+		//	previous hash value, but to the last full page load. This suggests
+		//	that the iframe is the correct way to capture the back button in
+		//	these cases.
+		//	Don't test this page using local disk for MSIE. MSIE will not create
+		//	a history list for iframe_history.html if served from a file: URL.
+		//	The XML served back from the XHR tests will also not be properly
+		//	created if served from local disk. Serve the test pages from a web
+		//	server to test in that browser.
+		//	IE 6.0:
+		//	same behavior as IE 5.5 SP2
+		//	Firefox 1.0+:
+		//	the back button will return us to the previous hash on the same
+		//	page, thereby not requiring an iframe hack, although we do then
+		//	need to run a timer to detect inter-page movement.
+
+		//If addToHistory is called, then that means we prune the
+		//forward stack -- the user went back, then wanted to
+		//start a new forward path.
+		forwardStack = [];
+
+		var hash = null;
+		var url = null;
+		if(!historyIframe){
+			if(dojo.config["useXDomain"] && !dojo.config["dojoIframeHistoryUrl"]){
+				console.warn("dojo.back: When using cross-domain Dojo builds,"
+					+ " please save iframe_history.html to your domain and set djConfig.dojoIframeHistoryUrl"
+					+ " to the path on your domain to iframe_history.html");
+			}
+			historyIframe = window.frames["dj_history"];
+		}
+		if(!bookmarkAnchor){
+			bookmarkAnchor = domConstruct.create("a", {style: {display: "none"}}, baseWindow.body());
+		}
+		if(args["changeUrl"]){
+			hash = ""+ ((args["changeUrl"]!==true) ? args["changeUrl"] : (new Date()).getTime());
+
+			//If the current hash matches the new one, just replace the history object with
+			//this new one. It doesn't make sense to track different state objects for the same
+			//logical URL. This matches the browser behavior of only putting in one history
+			//item no matter how many times you click on the same #hash link, at least in Firefox
+			//and Safari, and there is no reliable way in those browsers to know if a #hash link
+			//has been clicked on multiple times. So making this the standard behavior in all browsers
+			//so that dojo.back's behavior is the same in all browsers.
+			if(historyStack.length == 0 && initialState.urlHash == hash){
+				initialState = createState(url, args, hash);
+				return;
+			}else if(historyStack.length > 0 && historyStack[historyStack.length - 1].urlHash == hash){
+				historyStack[historyStack.length - 1] = createState(url, args, hash);
+				return;
+			}
+
+			changingUrl = true;
+			setTimeout(function() {
+					setHash(hash);
+					changingUrl = false;
+				}, 1);
+			bookmarkAnchor.href = hash;
+
+			/*if(sniff("ie")){
+				url = loadIframeHistory();
+
+				var oldCB = args["back"]||args["backButton"]||args["handle"];
+
+				//The function takes handleName as a parameter, in case the
+				//callback we are overriding was "handle". In that case,
+				//we will need to pass the handle name to handle.
+				var tcb = function(handleName){
+					if(getHash() != ""){
+						setTimeout(function() { setHash(hash); }, 1);
+					}
+					//Use apply to set "this" to args, and to try to avoid memory leaks.
+					oldCB.apply(this, [handleName]);
+				};
+
+				//Set interceptor function in the right place.
+				if(args["back"]){
+					args.back = tcb;
+				}else if(args["backButton"]){
+					args.backButton = tcb;
+				}else if(args["handle"]){
+					args.handle = tcb;
+				}
+
+				var oldFW = args["forward"]||args["forwardButton"]||args["handle"];
+
+				//The function takes handleName as a parameter, in case the
+				//callback we are overriding was "handle". In that case,
+				//we will need to pass the handle name to handle.
+				var tfw = function(handleName){
+					if(getHash() != ""){
+						setHash(hash);
+					}
+					if(oldFW){ // we might not actually have one
+						//Use apply to set "this" to args, and to try to avoid memory leaks.
+						oldFW.apply(this, [handleName]);
+					}
+				};
+
+				//Set interceptor function in the right place.
+				if(args["forward"]){
+					args.forward = tfw;
+				}else if(args["forwardButton"]){
+					args.forwardButton = tfw;
+				}else if(args["handle"]){
+					args.handle = tfw;
+				}
+
+			}else if(!sniff("ie"))*/{
+				// start the timer
+				if(!locationTimer){
+					locationTimer = setInterval(checkLocation, 200);
+				}
+
+			}
+		}else{
+			url = loadIframeHistory();
+		}
+
+		historyStack.push(createState(url, args, hash));
+	};
+
+	back._iframeLoaded = function(evt, ifrLoc){
+		//summary:
+		//		private method. Do not call this directly.
+		var query = getUrlQuery(ifrLoc.href);
+		if(query == null){
+			// alert("iframeLoaded");
+			// we hit the end of the history, so we should go back
+			if(historyStack.length == 1){
+				handleBackButton();
+			}
+			return;
+		}
+		if(moveForward){
+			// we were expecting it, so it's not either a forward or backward movement
+			moveForward = false;
+			return;
+		}
+
+		//Check the back stack first, since it is more likely.
+		//Note that only one step back or forward is supported.
+		if(historyStack.length >= 2 && query == getUrlQuery(historyStack[historyStack.length-2].url)){
+			handleBackButton();
+		}else if(forwardStack.length > 0 && query == getUrlQuery(forwardStack[forwardStack.length-1].url)){
+			handleForwardButton();
+		}
+	};
+
+	return dojo.back;
+	
+});
+
+},
 'dojo/touch':function(){
 define(["./_base/kernel", "./aspect", "./dom", "./dom-class", "./_base/lang", "./on", "./has", "./mouse", "./domReady", "./_base/window"],
 function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
@@ -11687,11 +12160,10 @@ define([
 	"dijit/registry",
 	"dojo/aspect",
 	"dojo/_base/declare",
-	"dojo/back",
-	"dojox/xml/parser",
+	"jbundle/back",
 	"dojo/_base/unload",
 	"dojo/domReady!"
-], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, xmlParser, baseUnload){
+], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, baseUnload){
     return {
     
 	/*
@@ -12370,28 +12842,13 @@ define([
 			util.handleReturnData(response);
     	});
 	},
-	
-	
-	
-	addMessageFilter: function(response)
-	{
-		var options = response.options;
-		
-		var receiveSession = this.addReceiveQueue();
-		var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
-		var messageFilter = new classes.MessageFilter(receiveSession, null, session);
-		this.addMessageListener(messageFilter);
-	},
-	
-	
-	
 	// Handle the XML coming back from the menu action
 	// Return true if success (non-error return)
 	handleReturnData: function(response)
 	{
 		var data = response.data;
 		var options = response.options;
-		var domToBeTransformed = xmlParser.parse(data); //dojox.data.dom.createDocument(data, "text/xml");
+		var domToBeTransformed = xml.parse(data);
 		var info = domToBeTransformed.getElementsByTagName("status-text");
 		if (info)
 			if (info.length > 0)
@@ -12440,7 +12897,8 @@ define([
 		xsltURI = main.getServerPath(xsltURI);
 		xml.doXSLT(domToBeTransformed, xsltURI, contentParent, gui.fixNewDOM);
 		
-		if (options.ioArgs)
+		if (typeof options != 'undefined')
+			if (typeof options.ioArgs != 'undefined')
 			if (options.ioArgs.remoteCommand = 'doRemoteAction')
 				if (options.ioArgs.name = 'createScreen')
 					this.addMessageFilter(response);
@@ -12550,7 +13008,19 @@ define([
 	hashChange: function(command)
 	{
 		this.doCommand(this.command, true, false);
-	}
+	},
+	/**
+	 * Add the message filter.
+	 */
+	addMessageFilter: function(response)
+	{
+		var options = response.options;
+		
+//		var receiveSession = this.addReceiveQueue();
+	//	var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
+		//var messageFilter = new classes.MessageFilter(receiveSession, null, session);
+		//this.addMessageListener(messageFilter);
+	},	
   };
 });
 
@@ -22892,14 +23362,15 @@ define([
             });
 	},
 	transformAndInsert: function (xsl, ioArgs) {
-	  xsl = xmlParser.parse(xsl); //dojox.data.dom.createDocument(data, "text/xml");
 	  if (typeof XSLTProcessor != 'undefined') {
-	    var xsltProcessor = new XSLTProcessor();
-	    xsltProcessor.importStylesheet(xsl);
-	    var frag = xsltProcessor.transformToFragment(ioArgs.domToBeTransformed, ioArgs.elementToInsert.ownerDocument);
-	    ioArgs.elementToInsert.appendChild(frag);
+		  xsl = this.parse(xsl);
+		  var xsltProcessor = new XSLTProcessor();
+		  xsltProcessor.importStylesheet(xsl);
+		  var frag = xsltProcessor.transformToFragment(ioArgs.domToBeTransformed, ioArgs.elementToInsert.ownerDocument);
+		  ioArgs.elementToInsert.appendChild(frag);
 	  }
 	  else if (typeof ioArgs.domToBeTransformed.transformNode != 'undefined') {	// IE
+		  xsl = this.parse(xsl);
 		  ioArgs.elementToInsert.insertAdjacentHTML('beforeEnd', ioArgs.domToBeTransformed.transformNode(xsl));
 	  }
 	  else {
@@ -22907,7 +23378,7 @@ define([
 	            if (window.ActiveXObject) {
 	                var xslt = new ActiveXObject("Msxml2.XSLTemplate");
 	                var xslDoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
-	                xslDoc.loadXML(xsl.xml);
+	                xslDoc.loadXML(xsl);
 	                xslt.stylesheet = xslDoc;
 	                var xslProc = xslt.createProcessor();
 	                xslProc.input = ioArgs.domToBeTransformed;
@@ -22925,6 +23396,19 @@ define([
 	if (ioArgs.handler)
                ioArgs.handler(ioArgs.elementToInsert);
 	},
+	parse: function(data, mimeType)
+	{
+		if (window.ActiveXObject)
+			if (typeof dojo.global.DOMParser != 'undefined')
+		{	// HACK - Don't know why this object is present in IE
+			deletedparser = dojo.global.DOMParser;
+			delete dojo.global.DOMParser;
+		}
+		var dom = xmlParser.parse(data, mimeType); //dojox.data.dom.createDocument(data, "text/xml");
+		if (typeof deletedparser != 'undefined')
+			dojo.global.DOMParser = deletedparser;
+		return dom;
+	}
   };
 });
 

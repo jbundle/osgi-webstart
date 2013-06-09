@@ -316,6 +316,31 @@ define([
      * Same as deployJava, except I add to a string instead of doing document.write(xx).
      * NOTE: This method only works with the gui code.
      */
+    getAppletWithCommand: function(command, hash, version) {
+		if ((hash != null) && (hash.length > 0))
+		{
+			if (command == null)
+				command = "";
+			command = command + "&" + thinutil.getCommandFromHash(hash);
+		}
+		if (!command)
+			return false;
+		if (version == null)
+			version = '1.6';
+		var params = thinutil.commandToProperties(command);
+
+		var attributes = this.getAppletAttributes(params);
+		var jnlp = this.getJnlpURL(attributes, params);
+		if (!params.jnlp_href)
+			params['jnlp_href'] = jnlp;
+		
+		this.prepareWindowForApplet(true);	// Set java flag to 'true'
+		return this.getAppletHtml(attributes, params, version);
+    },
+    /**
+     * Same as deployJava, except I add to a string instead of doing document.write(xx).
+     * NOTE: This method only works with the gui code.
+     */
     getAppletHtml: function(attributes, parameters, minimumVersion) {
         if (minimumVersion == 'undefined' || minimumVersion == null) {
             minimumVersion = '1.1';
@@ -357,28 +382,64 @@ define([
      * Same as deployJava, except I add to a string instead of doing document.write(xx).
      */
     writeAppletTag: function(attributes, parameters) {
-        var s = '<' + 'applet ';
+        var startApplet = '<' + 'applet ';
+        var params = '';
+        var endApplet = '<' + '/' + 'applet' + '>';
+        var addCodeAttribute = true;
+
+        if (null == parameters || typeof parameters != 'object') {
+            parameters = new Object();
+        }
+
         for (var attribute in attributes) {
-            s += (' ' + attribute + '="' + attributes[attribute] + '"');
-        }
-        s += '>';
-    
-        if (parameters != 'undefined' && parameters != null) {
-            var codebaseParam = false;
-            for (var parameter in parameters) {
-                if (parameter == 'codebase_lookup') {
-                    codebaseParam = true;
+            if (! this.isValidAppletAttr(attribute)) {
+                parameters[attribute] = attributes[attribute];
+            } else {
+                startApplet += (' ' +attribute+ '="' +attributes[attribute] + '"');
+                if (attribute == 'code') {
+                    addCodeAttribute = false;
                 }
-                s += '<param name="' + parameter + '" value="' + 
-                    parameters[parameter] + '">';
-            }
-            if (!codebaseParam) {
-            	s += '<param name="codebase_lookup" value="false">';
             }
         }
-        s += '<' + '/' + 'applet' + '>';
-        return s;
+
+        var codebaseParam = false;
+        for (var parameter in parameters) {
+            if (parameter == 'codebase_lookup') {
+                codebaseParam = true;
+            }
+            // Originally, parameter 'object' was used for serialized
+            // applets, later, to avoid confusion with object tag in IE
+            // the 'java_object' was added.  Plugin supports both.
+            if (parameter == 'object' || parameter == 'java_object' ||
+                parameter == 'java_code' ) {
+                addCodeAttribute = false;
+            }
+            params += '<param name="' + parameter + '" value="' +
+                parameters[parameter] + '"/>';
+        }
+        if (!codebaseParam) {
+            params += '<param name="codebase_lookup" value="false"/>';
+        }
+
+        if (addCodeAttribute) {
+            startApplet += (' code="dummy"');
+        }
+        startApplet += '>';
+
+        return startApplet + '\n' + params + '\n' + endApplet;
     },
-	ignoreBack: false
-    };
+    isValidAppletAttr: function(attr) {
+        return this.arHas(this.applet, attr.toLowerCase());
+    },
+    arHas: function(ar, attr) {
+        var len = ar.length;
+        for (var i = 0; i < len; i++) {
+            if (ar[i] === attr) return true;
+        }
+        return false;
+    },
+    applet: [ 'codebase', 'code', 'name', 'archive', 'object',
+            'width', 'height', 'alt', 'align', 'hspace', 'vspace' ],
+    ignoreBack: false,
+  };
 });

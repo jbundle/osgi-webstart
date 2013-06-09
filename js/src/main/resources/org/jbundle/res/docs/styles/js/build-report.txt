@@ -1,4 +1,4 @@
-Build started: Fri Jun 07 2013 17:21:17 GMT-0700 (PDT)
+Build started: Sun Jun 09 2013 01:45:41 GMT-0700 (PDT)
 Build application version: 1.7.0dev (23930)
 Messages:
 info(100) Assumed module uses legacy loader API.
@@ -1350,6 +1350,7 @@ jbundle/jbundle:
 	dijit/a11y
 	dijit/form/_ToggleButtonMixin
 	dojox/data/dom
+	jbundle/back
 	dijit/_Widget
 	dojo/touch
 	dijit/form/nls/ComboBox
@@ -1360,8 +1361,8 @@ jbundle/jbundle:
 	dijit/form/_FormValueWidget
 
 jbundle/webstart:
+	jbundle/back
 	jbundle/java
-	dojo/back
 	jbundle/webstart
 	jbundle/thinutil
 
@@ -1428,4 +1429,4 @@ dojo/dojo:
 Process finished normally
 	errors: 0
 	warnings: 53
-	build time: 56.601 seconds
+	build time: 66.2 seconds

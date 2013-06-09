@@ -696,21 +696,6 @@ define([
 			util.handleReturnData(response);
     	});
 	},
-	
-	
-	
-	addMessageFilter: function(response)
-	{
-		var options = response.options;
-		
-//		var receiveSession = this.addReceiveQueue();
-	//	var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
-		//var messageFilter = new classes.MessageFilter(receiveSession, null, session);
-		//this.addMessageListener(messageFilter);
-	},
-	
-	
-	
 	// Handle the XML coming back from the menu action
 	// Return true if success (non-error return)
 	handleReturnData: function(response)
@@ -877,7 +862,19 @@ define([
 	hashChange: function(command)
 	{
 		this.doCommand(this.command, true, false);
-	}
+	},
+	/**
+	 * Add the message filter.
+	 */
+	addMessageFilter: function(response)
+	{
+		var options = response.options;
+		
+//		var receiveSession = this.addReceiveQueue();
+	//	var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
+		//var messageFilter = new classes.MessageFilter(receiveSession, null, session);
+		//this.addMessageListener(messageFilter);
+	},	
   };
 });
 

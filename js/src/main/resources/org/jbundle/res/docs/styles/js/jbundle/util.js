@@ -14,11 +14,10 @@ define("jbundle/util", [
 	"dijit/registry",
 	"dojo/aspect",
 	"dojo/_base/declare",
-	"dojo/back",
-	"dojox/xml/parser",
+	"jbundle/back",
 	"dojo/_base/unload",
 	"dojo/domReady!"
-], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, xmlParser, baseUnload){
+], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, baseUnload){
     return {
     
 	/*
@@ -697,28 +696,13 @@ define("jbundle/util", [
 			util.handleReturnData(response);
     	});
 	},
-	
-	
-	
-	addMessageFilter: function(response)
-	{
-		var options = response.options;
-		
-		var receiveSession = this.addReceiveQueue();
-		var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
-		var messageFilter = new classes.MessageFilter(receiveSession, null, session);
-		this.addMessageListener(messageFilter);
-	},
-	
-	
-	
 	// Handle the XML coming back from the menu action
 	// Return true if success (non-error return)
 	handleReturnData: function(response)
 	{
 		var data = response.data;
 		var options = response.options;
-		var domToBeTransformed = xmlParser.parse(data); //dojox.data.dom.createDocument(data, "text/xml");
+		var domToBeTransformed = xml.parse(data);
 		var info = domToBeTransformed.getElementsByTagName("status-text");
 		if (info)
 			if (info.length > 0)
@@ -767,7 +751,8 @@ define("jbundle/util", [
 		xsltURI = main.getServerPath(xsltURI);
 		xml.doXSLT(domToBeTransformed, xsltURI, contentParent, gui.fixNewDOM);
 		
-		if (options.ioArgs)
+		if (typeof options != 'undefined')
+			if (typeof options.ioArgs != 'undefined')
 			if (options.ioArgs.remoteCommand = 'doRemoteAction')
 				if (options.ioArgs.name = 'createScreen')
 					this.addMessageFilter(response);
@@ -877,7 +862,19 @@ define("jbundle/util", [
 	hashChange: function(command)
 	{
 		this.doCommand(this.command, true, false);
-	}
+	},
+	/**
+	 * Add the message filter.
+	 */
+	addMessageFilter: function(response)
+	{
+		var options = response.options;
+		
+//		var receiveSession = this.addReceiveQueue();
+	//	var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
+		//var messageFilter = new classes.MessageFilter(receiveSession, null, session);
+		//this.addMessageListener(messageFilter);
+	},	
   };
 });
 
