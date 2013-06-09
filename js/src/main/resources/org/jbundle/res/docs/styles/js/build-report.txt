@@ -1,4 +1,4 @@
-Build started: Sun Jun 09 2013 01:45:41 GMT-0700 (PDT)
+Build started: Sun Jun 09 2013 09:29:56 GMT-0700 (PDT)
 Build application version: 1.7.0dev (23930)
 Messages:
 info(100) Assumed module uses legacy loader API.
@@ -1176,8 +1176,10 @@ info(106) Optimizing CSS.
 	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojo/_firebug/firebug.css
 	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojo/resources/dojo.css
 	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/dojo/resources/dnd.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/jbundle/resources/dojo.css
 	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/jbundle/tundra.css
 	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/jbundle/claro.css
+	file: /home/don/workspace/workspace/jbundle/util/osgi-webstart/js/src/main/resources/org/jbundle/res/docs/styles/js-debug/jbundle/resources/dnd.css
 info(107) Package Version:
 	package: dojox; version: 1.9.0
 	package: dijit; version: 1.9.0
@@ -1429,4 +1431,4 @@ dojo/dojo:
 Process finished normally
 	errors: 0
 	warnings: 53
-	build time: 66.2 seconds
+	build time: 61.343 seconds
