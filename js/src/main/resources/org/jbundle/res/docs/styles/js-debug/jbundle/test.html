@@ -26,6 +26,35 @@
  type="button">
  <span class="desc">Office System Applets</span>
 </button>
+				<script type="text/javascript">
+require(["dojo/back"],
+function(back) {
+//	back.init();	// Before dom loads
+//var src = config["dojoIframeHistoryUrl"] || require.toUrl("./resources/iframe_history.html");
+var src = "./resources/iframe_history.html";
+//if (config.afterOnLoad){
+//	console.error("dojo/back::init() must be called before the DOM has loaded. "
+//				+ "Include dojo/back in a build layer.");
+//}else{
+
+	
+	
+//	document.write('<iframe style="border:0;width:1px;height:1px;position:absolute;visibility:hidden;bottom:0;right:0;" name="dj_history" id="dj_history" src="' + src + '"></iframe>');
+
+	
+	var body = document.getElementsByTagName('body');
+	if (body.length > 0)
+	{
+		var iframe = document.createElement('iframe');
+		iframe.setAttribute('style', 'border:0;width:1px;height:1px;position:absolute;visibility:hidden;bottom:0;right:0;');
+		iframe.setAttribute('name', 'dj_history');
+		iframe.setAttribute('id', 'dj_history');
+		iframe.setAttribute('src', src);
+		body[0].appendChild(iframe);
+	}
+//}
+});
+				</script>
 
 <script type="text/javascript">
 require(["jbundle/jbundle",

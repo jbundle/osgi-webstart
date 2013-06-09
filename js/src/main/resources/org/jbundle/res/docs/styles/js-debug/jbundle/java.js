@@ -20,7 +20,7 @@ function popBrowserHistory(count, commandHandledByClient, title)
  */
 define([
 	"jbundle/thinutil",
-	"dojo/back",
+	"jbundle/back",
 	"dojo/_base/declare",
 //	"dojo/domReady!",
 ], function(thinutil, back, declare) {

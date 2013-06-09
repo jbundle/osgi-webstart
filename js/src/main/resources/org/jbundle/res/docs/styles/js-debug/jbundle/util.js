@@ -14,7 +14,7 @@ define([
 	"dijit/registry",
 	"dojo/aspect",
 	"dojo/_base/declare",
-	"dojo/back",
+	"jbundle/back",
 	"dojox/xml/parser",
 	"dojo/_base/unload",
 	"dojo/domReady!"
