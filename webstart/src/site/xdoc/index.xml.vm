@@ -35,11 +35,11 @@ size by an order of magnitude.
 <p>
 All you have to do is specify the main java class in your url. For example, to run a program in a web page:<br/>
 <code>
-<a href="/webstart/bio.jnlp?applet=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/bio.jnlp?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="/webstart?applet=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart?applet=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
 To run a program as a stand-alone application:<br/>
 <code>
-<a href="/webstart?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
+<a href="/webstart/bio.jnlp?mainClass=org.jbundle.util.biorhythm.Biorhythm">http://www.jbundle.org/webstart/bio.jnlp?mainClass=org.jbundle.util.biorhythm.Biorhythm</a><br/>
 </code>
 <strong>Auto Web Start</strong> takes care of all the Web Start configuration. It even automatically
 updates the jnlp and java jar files when you update your application.
