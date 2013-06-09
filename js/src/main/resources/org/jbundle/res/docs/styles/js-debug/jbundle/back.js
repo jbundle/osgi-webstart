@@ -1,4 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/sniff", "dojo/dom", "dojo/dom-construct", "dojo/_base/window", "require"], function(dojo, lang, sniff, dom, domConstruct, baseWindow, require) {
+define(
+		["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/sniff", "dojo/dom", "dojo/dom-construct", "dojo/_base/window", "require"], function(dojo, lang, sniff, dom, domConstruct, baseWindow, require
+				) {
 	// module:
 	//		dojo/back
 	// summary:

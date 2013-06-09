@@ -15,10 +15,9 @@ define([
 	"dojo/aspect",
 	"dojo/_base/declare",
 	"jbundle/back",
-	"dojox/xml/parser",
 	"dojo/_base/unload",
 	"dojo/domReady!"
-], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, xmlParser, baseUnload){
+], function(main, gui, classes, remote, xml, thinutil, java, registry, aspect, declare, back, baseUnload){
     return {
     
 	/*
@@ -704,10 +703,10 @@ define([
 	{
 		var options = response.options;
 		
-		var receiveSession = this.addReceiveQueue();
-		var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
-		var messageFilter = new classes.MessageFilter(receiveSession, null, session);
-		this.addMessageListener(messageFilter);
+//		var receiveSession = this.addReceiveQueue();
+	//	var session = main.getTaskSession().getSessionByFullSessionID(response.options.ioArgs.target);
+		//var messageFilter = new classes.MessageFilter(receiveSession, null, session);
+		//this.addMessageListener(messageFilter);
 	},
 	
 	
@@ -718,7 +717,7 @@ define([
 	{
 		var data = response.data;
 		var options = response.options;
-		var domToBeTransformed = xmlParser.parse(data); //dojox.data.dom.createDocument(data, "text/xml");
+		var domToBeTransformed = xml.parse(data);
 		var info = domToBeTransformed.getElementsByTagName("status-text");
 		if (info)
 			if (info.length > 0)
@@ -767,7 +766,8 @@ define([
 		xsltURI = main.getServerPath(xsltURI);
 		xml.doXSLT(domToBeTransformed, xsltURI, contentParent, gui.fixNewDOM);
 		
-		if (options.ioArgs)
+		if (typeof options != 'undefined')
+			if (typeof options.ioArgs != 'undefined')
 			if (options.ioArgs.remoteCommand = 'doRemoteAction')
 				if (options.ioArgs.name = 'createScreen')
 					this.addMessageFilter(response);
