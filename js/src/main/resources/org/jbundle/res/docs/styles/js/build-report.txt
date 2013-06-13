@@ -1,4 +1,4 @@
-Build started: Sun Jun 09 2013 09:29:56 GMT-0700 (PDT)
+Build started: Thu Jun 13 2013 12:05:27 GMT-0700 (PDT)
 Build application version: 1.7.0dev (23930)
 Messages:
 info(100) Assumed module uses legacy loader API.
@@ -1298,6 +1298,7 @@ jbundle/jbundle:
 	dojo/store/util/SimpleQueryEngine
 	dijit/form/_ExpandingTextAreaMixin
 	dijit/ToolbarSeparator
+	dojo/hash
 	dijit/layout/_LayoutWidget
 	dojo/back
 	dijit/_base/manager
@@ -1363,9 +1364,10 @@ jbundle/jbundle:
 	dijit/form/_FormValueWidget
 
 jbundle/webstart:
+	jbundle/webstart
 	jbundle/back
 	jbundle/java
-	jbundle/webstart
+	dojo/hash
 	jbundle/thinutil
 
 dojo/dojo:
@@ -1431,4 +1433,4 @@ dojo/dojo:
 Process finished normally
 	errors: 0
 	warnings: 53
-	build time: 61.343 seconds
+	build time: 58.515 seconds
