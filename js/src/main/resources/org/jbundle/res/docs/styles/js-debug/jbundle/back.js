@@ -13,7 +13,11 @@ define(
 	initialized: false,
 
 	init: function() {
+		if (this.initialized == true)
+			return;
+
 		topic.subscribe("/dojo/hashchange", this.hashChange);
+		
 		this.initialized = true;
 	},
 

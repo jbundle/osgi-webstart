@@ -7,20 +7,22 @@
 define([
     "jbundle/main",
 	"jbundle/util",
-	"dojo/parser",
+	"jbundle/back",
 	"jbundle/java",
+	"dojo/parser",
 	"dijit/form/Button",
 	"dijit/form/TextBox",
 	"dijit/form/Textarea",
 	"dijit/form/CheckBox",
 	"dijit/form/ComboBox",
-	"dojo/back",
 	"dojo/domReady!"
-], function(main, util, parser){
+], function(main, util, back, java, parser) {
     return {
 	init: function()
 	{
-		parser.parse();
+		// parser.parse();	// parseonload should be set to yes
+		back.init();
+		java.init();
 		util.init();
 	}
   };

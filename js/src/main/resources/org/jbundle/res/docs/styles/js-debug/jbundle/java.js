@@ -1,20 +1,4 @@
 /**
- * For java to call these, these must be at the root.
- */
-function pushBrowserHistory(command, title)
-{
-	require(['jbundle/java', 'dojo/domReady!'], function(java) {
-	 java.pushBrowserHistory(command, title);
-	});
-}
-function popBrowserHistory(count, commandHandledByClient, title)
-{
-	require(['jbundle/java', 'dojo/domReady!'], function(java) {
-	 java.popBrowserHistory(count, commandHandledByClient, title);
-	});
-}
-
-/**
  * Browser back support.
  * Note: java.js has minimal dependencies, and no dijit or parser dependencies to keep code small.
  */
@@ -46,9 +30,30 @@ define([
 			}
 	}),
 
+	initialized: false,
 	// Initialize environment
 	init: function()
 	{	// Push initial history
+		if (this.initialized == true)
+			return;
+		/**
+		 * For java to call these, these must be at the root.
+		 */
+		window.pushBrowserHistory = function(command, title)
+		{
+			require(['jbundle/java', 'dojo/domReady!'], function(java) {
+			 java.pushBrowserHistory(command, title);
+			});
+		};
+		window.popBrowserHistory = function(count, commandHandledByClient, title)
+		{
+			require(['jbundle/java', 'dojo/domReady!'], function(java) {
+			 java.popBrowserHistory(count, commandHandledByClient, title);
+			});
+		};
+
+		this.initialized = true;
+
 		back.setInitialState(new this.State(thinutil.getCommandFromHash(window.location.hash), this));
 	},
 
