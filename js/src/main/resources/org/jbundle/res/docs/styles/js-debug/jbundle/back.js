@@ -11,6 +11,7 @@ define(
 	forwardStack: [],
 	historyStack: [],
 	initialized: false,
+	CRAWLABLE: false,	// Change this to true and URLs will be #! crawlable
 
 	init: function() {
 		if (this.initialized == true)
@@ -26,6 +27,9 @@ define(
 		if (dojoConfig.isDebug == true)
 			console.log("setHash:" + h);
 		if(!h){ h = ""; }
+		if (this.CRAWLABLE)
+			if (h.charAt(0) !== "!")
+				h = "!" + h;	// Makes it crawlable
         window.location.hash = encodeURIComponent(h);
     },
 
@@ -140,6 +144,9 @@ define(
 		// Respond to a browser hash change event.
 		require (["jbundle/back"],
 				function(back) {
+			if (this.CRAWLABLE)
+				if (hashValue.charAt(0) === "!")
+					hashValue = hashValue.substring(1);	// Make it crawlable
 			back.checkLocation(hashValue);
 		});
 	},

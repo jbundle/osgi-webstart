@@ -356,7 +356,7 @@ define([
 			addHistory = true;
 		if (command == null)
 			return;
-		if (decode == null)
+		if ((typeof(decode) == 'undefined') || (decode == null))
 			decode = true;
 		if (decode)
 			command = decodeURI(command);
