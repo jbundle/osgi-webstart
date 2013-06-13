@@ -1,4 +1,4 @@
-Build started: Thu Jun 13 2013 12:05:27 GMT-0700 (PDT)
+Build started: Thu Jun 13 2013 15:17:22 GMT-0700 (PDT)
 Build application version: 1.7.0dev (23930)
 Messages:
 info(100) Assumed module uses legacy loader API.
@@ -1300,7 +1300,6 @@ jbundle/jbundle:
 	dijit/ToolbarSeparator
 	dojo/hash
 	dijit/layout/_LayoutWidget
-	dojo/back
 	dijit/_base/manager
 	dijit/popup
 	dojo/dnd/Mover
@@ -1433,4 +1432,4 @@ dojo/dojo:
 Process finished normally
 	errors: 0
 	warnings: 53
-	build time: 58.515 seconds
+	build time: 72.986 seconds

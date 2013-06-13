@@ -356,7 +356,7 @@ define("jbundle/util", [
 			addHistory = true;
 		if (command == null)
 			return;
-		if (decode == null)
+		if ((typeof(decode) == 'undefined') || (decode == null))
 			decode = true;
 		if (decode)
 			command = decodeURI(command);
@@ -443,12 +443,14 @@ define("jbundle/util", [
 					return false;	// Success
 				// drop thru if not handled
 			}
-			console.log("do link: " + command);
+			if (dojoConfig.isDebug == true)
+				console.log("do link: " + command);
 			window.location = command;
 		}
 		else
 		{	// This is just a link to be opened in the browser
-			console.log("do link: " + command);
+			if (dojoConfig.isDebug == true)
+				console.log("do link: " + command);
 			window.location = command;
 		}
 		return false;	// In case this was called from onClick in a link (do not follow link since I handled the link).
@@ -573,7 +575,8 @@ define("jbundle/util", [
 	doLocalCommand: function(command, addHistory)
 	{
 		var commandTarget = thinutil.getProperty(command, "command");
-		console.log("do local command: " + command);
+		if (dojoConfig.isDebug == true)
+			console.log("do local command: " + command);
 		if (commandTarget == "Back")
 		{
 			parent.frames[0].history.back();
@@ -677,7 +680,8 @@ define("jbundle/util", [
 	 */
 	doScreen: function(command, addHistory)
 	{
-		console.log("do screen: " + command);
+		if (dojoConfig.isDebug == true)
+			console.log("do screen: " + command);
 		var messageFilter = new classes.MessageFilter(this.getAjaxSession(), this.doRemoteScreenActionCallback);
 		messageFilter.bindArgs = {
 			addHistory: addHistory

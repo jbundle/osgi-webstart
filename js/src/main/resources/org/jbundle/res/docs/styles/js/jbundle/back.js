@@ -11,16 +11,25 @@ define(
 	forwardStack: [],
 	historyStack: [],
 	initialized: false,
+	CRAWLABLE: false,	// Change this to true and URLs will be #! crawlable
 
 	init: function() {
+		if (this.initialized == true)
+			return;
+
 		topic.subscribe("/dojo/hashchange", this.hashChange);
+		
 		this.initialized = true;
 	},
 
 	setHash: function(h){
 		// Change the browser URL hash
-		console.log("setHash:" + h);
+		if (dojoConfig.isDebug == true)
+			console.log("setHash:" + h);
 		if(!h){ h = ""; }
+		if (this.CRAWLABLE)
+			if (h.charAt(0) !== "!")
+				h = "!" + h;	// Makes it crawlable
         window.location.hash = encodeURIComponent(h);
     },
 
@@ -33,7 +42,8 @@ define(
 		//		listener that is registered via dojo.addOnLoad().
 		//args: Object
 		//		See the addToHistory() function for the list of valid args properties.
-		console.log("setInitialState:" + args);
+		if (dojoConfig.isDebug == true)
+			console.log("setInitialState:" + args);
 
 		initialHref = (typeof(window) !== "undefined") ? window.location.href : "";
 		initialHash = (typeof(window) !== "undefined") ? hash() : "";
@@ -65,7 +75,8 @@ define(
 		//If addToHistory is called, then that means we prune the
 		//forward stack -- the user went back, then wanted to
 		//start a new forward path.
-		console.log("addToHistory:" + args);
+		if (dojoConfig.isDebug == true)
+			console.log("addToHistory:" + args);
 
 		this.forwardStack = [];
 
@@ -101,7 +112,8 @@ define(
 
 	handleBackButton: function(){
 		//summary: private method. Do not call this directly.
-		console.log("handleBackButton");
+		if (dojoConfig.isDebug == true)
+			console.log("handleBackButton");
 		//The "current" page is always at the top of the history stack.
 		if (this.historyStack.length > 0)
 		{
@@ -119,7 +131,8 @@ define(
 
 	handleForwardButton: function(){
 		//summary: private method. Do not call this directly.
-		console.log("handleForwardButton");
+		if (dojoConfig.isDebug == true)
+			console.log("handleForwardButton");
 		var last = this.forwardStack.pop();
 		if(!last){ return; }
 		last.args.forward();
@@ -131,23 +144,29 @@ define(
 		// Respond to a browser hash change event.
 		require (["jbundle/back"],
 				function(back) {
+			if (this.CRAWLABLE)
+				if (hashValue.charAt(0) === "!")
+					hashValue = hashValue.substring(1);	// Make it crawlable
 			back.checkLocation(hashValue);
 		});
 	},
 
 	checkLocation: function(hashValue) {
 		// Respond to a browser hash change event.
-		console.log("checkLocation:" + hashValue);
+		if (dojoConfig.isDebug == true)
+			console.log("checkLocation:" + hashValue);
 
 		var hsl = this.historyStack.length;
 
 		if(this.historyStack.length > 0 && encodeURIComponent(this.historyStack[this.historyStack.length - 1].urlHash) == hashValue) {
-			console.log("checkLocation:ignore");
+			if (dojoConfig.isDebug == true)
+				console.log("checkLocation:ignore");
 			return;	// Ignore - already the starting hash value
 		}
 
 		if(this.historyStack.length > 1 && encodeURIComponent(this.historyStack[this.historyStack.length - 2].urlHash) == hashValue) {
-			console.log("checkLocation:back");
+			if (dojoConfig.isDebug == true)
+				console.log("checkLocation:back");
 			this.handleBackButton();
 			return;
 		}
