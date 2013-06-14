@@ -12692,18 +12692,18 @@ define([
 				password = b64_sha1(password);
 
 			this.lastCommand = "?menu=";
-			this.doLoginCommandLink = aspect.after(remote, "handleLogin", function(response) {
+			this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
 				require(["jbundle/util"], function(util) {
-					util.doLoginCommand(response);
+					util.handleLogin(response);
 				})}, true);
 
 			if (command)
 				if (command != "")
 			{
 				this.lastCommand = command;	// Make sure it does the correct command.
-				this.handleLoginLink = aspect.after(remote, "handleLogin", function(response) {
+				this.doLoginCommandLink = aspect.after(remote, "handleLogin", function(response) {
 					require(["jbundle/util"], function(util) {
-						util.handleLogin(response);
+						util.doLoginCommand(response);
 					})}, true);
 			}
 			var props = {

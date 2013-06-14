@@ -15,11 +15,12 @@
 	<xsl:attribute name="displayCloseAction">true</xsl:attribute>
 <xsl:element name="form">
 	<xsl:attribute name="id">logonForm</xsl:attribute>
-	<!-- xsl:attribute name="onsubmit">
+	<xsl:attribute name="onsubmit">
 	require(['jbundle/util'], function(util) {
 		return util.submitLogonDialog(true);
 	});
-	</xsl:attribute -->
+	return false;	// Don't submit form.
+	</xsl:attribute>
 		<table>
 			<xsl:element name="input">
 				<xsl:attribute name="id">command</xsl:attribute>
@@ -63,11 +64,11 @@
 	<xsl:attribute name="id">logonSubmitButton</xsl:attribute>
 	<xsl:attribute name="type">submit</xsl:attribute>
 	<xsl:attribute name="data-dojo-type">dijit/form/Button</xsl:attribute>
-	<xsl:attribute name="onclick">
+	<!-- xsl:attribute name="onclick">
 	require(['jbundle/util'], function(util) {
 		util.submitLogonDialog(true);
 	});
-	</xsl:attribute>
+	</xsl:attribute -->
 	<img src="images/buttons/Submit.gif" width="16" height="16" />
 	&#160;Submit
 </xsl:element>
