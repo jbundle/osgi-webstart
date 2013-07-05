@@ -5113,7 +5113,7 @@ define([
 		if (document.body.parentNode)
 			if (document.body.parentNode.className)
 				return (document.body.parentNode.className == "java");
-		return true;	// This is only for tourapp windows
+		return true;	// This is only for tourgeek windows
 	},
 	oldClassName: "",
 	// Setup/restore this screen to display this applet

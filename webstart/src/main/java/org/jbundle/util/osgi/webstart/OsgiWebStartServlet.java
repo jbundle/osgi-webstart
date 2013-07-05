@@ -132,7 +132,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     public static final String EXCLUDE_COMPONENTS = "excludeComponents";    // Exclude the bundles from these component files
     public static final String PROPERTIES = "webStartProperties";
     
-    public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourapp\\..*";
+    public static final String INCLUDE_DEFAULT = null;  // "org\\.jbundle\\..*|biz\\.source_code\\..*|com\\.tourgeek\\..*";
     public static final String EXCLUDE_DEFAULT = "org\\.osgi\\..*|javax\\..*|org\\.xml\\.sax.*|org\\.w3c\\.dom.*|org\\.omg\\..*";
 
     /**
