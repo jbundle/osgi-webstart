@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jbundle.util.osgi</groupId>
     <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
-    <version>1.6.6-SNAPSHOT</version>
+    <version>1.6.6</version>
   </parent>
 
   <artifactId>jbundle-util-osgi-pkg-reactor</artifactId>
