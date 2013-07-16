@@ -1,7 +1,7 @@
 /**
  * Classes.
  */
-define([
+define("jbundle/classes", [
     	"jbundle/main",
     	"dojo/_base/declare"
 ], function(main, declare) {

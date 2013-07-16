@@ -18,7 +18,7 @@ DISTDIR="$BASEDIR/../js"
 PROFILE="$BASEDIR/jbundle/jbundle.profile.js"
 
 # Main application package build configuration
-DOJO="dojo-release-1.9.0-src"
+DOJO="dojo-release-1.9.1-src"
 DOJO_SRC="/home/don/Downloads/$DOJO.tar.gz"
 
 # Configuration over. Main application start up!
@@ -36,6 +36,8 @@ fi
 echo "Building application with $PROFILE to $DISTDIR."
 
 echo -n "Cleaning old files..."
+# rm -fr jbundle
+# cp -r "$DISTDIR"/jbundle jbundle
 rm -rf "$DISTDIR"
 echo " Done"
 

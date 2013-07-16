@@ -11,7 +11,7 @@
 	<xsl:attribute name="toggle">fade</xsl:attribute>
 	<xsl:attribute name="toggleDuration">250</xsl:attribute>
 	<xsl:attribute name="title"><xsl:value-of select="root/dialogTitle"/></xsl:attribute>
-	<xsl:attribute name="iconSrc">images/buttons/Login.gif</xsl:attribute>
+	<xsl:attribute name="iconSrc">org/jbundle/res/images/buttons/Login.gif</xsl:attribute>
 	<xsl:attribute name="displayCloseAction">true</xsl:attribute>
 <xsl:element name="form">
 	<xsl:attribute name="id">logonForm</xsl:attribute>
@@ -69,7 +69,7 @@
 		util.submitLogonDialog(true);
 	});
 	</xsl:attribute -->
-	<img src="images/buttons/Submit.gif" width="16" height="16" />
+	<img src="org/jbundle/res/images/buttons/Submit.gif" width="16" height="16" />
 	&#160;Submit
 </xsl:element>
 					</td>
@@ -83,7 +83,7 @@
 		util.submitLogonDialog(false);
 	});
 	</xsl:attribute>
-	<img src="images/buttons/Cancel.gif" width="16" height="16" />
+	<img src="org/jbundle/res/images/buttons/Cancel.gif" width="16" height="16" />
 	&#160;Cancel
 </xsl:element>
 					</td>
@@ -98,7 +98,7 @@
 	});
 	</xsl:attribute>
 	<xsl:attribute name="alt">Create new account</xsl:attribute>
-	<img src="images/buttons/Form.gif" width="16" height="16" />
+	<img src="org/jbundle/res/images/buttons/Form.gif" width="16" height="16" />
 	&#160;Create new account
 </xsl:element>
 					</td>

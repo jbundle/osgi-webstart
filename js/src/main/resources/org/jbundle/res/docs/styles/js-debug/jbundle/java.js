@@ -2,7 +2,7 @@
  * Browser back support.
  * Note: java.js has minimal dependencies, and no dijit or parser dependencies to keep code small.
  */
-define([
+define("jbundle/java", [
 	"jbundle/thinutil",
 	"jbundle/back",
 	"dojo/_base/declare",

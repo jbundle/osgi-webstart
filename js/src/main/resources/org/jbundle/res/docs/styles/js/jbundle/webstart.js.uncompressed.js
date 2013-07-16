@@ -263,7 +263,7 @@ define(["./_base/kernel", "require", "./_base/config", "./aspect", "./_base/lang
  * Browser back support.
  * Note: java.js has minimal dependencies, and no dijit or parser dependencies to keep code small.
  */
-define([
+define("jbundle/java", [
 	"jbundle/thinutil",
 	"jbundle/back",
 	"dojo/_base/declare",
@@ -713,7 +713,7 @@ define([
 },
 'jbundle/back':function(){
 define(
-		["dojo/hash", "dojo/topic"],
+		"jbundle/back", ["dojo/hash", "dojo/topic"],
 			function(hash, topic) {
 		    return {
 
@@ -911,7 +911,7 @@ define(
 /**
  * Base utilities.
  */
-define([
+define("jbundle/thinutil", [
 ], function(){
     return {
 	/**

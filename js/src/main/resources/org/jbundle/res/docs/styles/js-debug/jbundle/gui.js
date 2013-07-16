@@ -1,7 +1,7 @@
 /**
  * Screen utilities.
  */
-define([
+define("jbundle/gui", [
 	"jbundle/java",
 	"jbundle/xml",
 	"jbundle/thinutil",
@@ -105,7 +105,7 @@ define([
 					toggle: "fade",
 					toggleDuration: "250",
 					title: "Error!",
-					iconSrc: "images/buttons/Error.gif",
+					iconSrc: "org/jbundle/res/images/buttons/Error.gif",
 					displayCloseAction: true,
 					id: "alertDialog"
 				};
@@ -146,7 +146,7 @@ define([
 	{
 		if (!command)
 			command = desc;
-		var imageName = "<img src=\"images/buttons/" + command + ".gif\" width=\"16\" height=\"16\"/>" + desc;
+		var imageName = "<img src=\"org/jbundle/res/images/buttons/" + command + ".gif\" width=\"16\" height=\"16\"/>" + desc;
 		if (button)
 			button.setLabel(imageName);
 	},

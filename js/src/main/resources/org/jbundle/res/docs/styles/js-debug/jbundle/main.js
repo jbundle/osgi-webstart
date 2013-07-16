@@ -2,7 +2,7 @@
  * Top level methods and vars.
  */
 
-define([
+define("jbundle/main", [
 ], function(dom){
     return {
     	

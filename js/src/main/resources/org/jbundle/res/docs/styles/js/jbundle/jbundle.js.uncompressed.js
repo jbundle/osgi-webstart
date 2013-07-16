@@ -872,6 +872,9 @@ define([
 				this.defer(function(){
 					this._onInput(faux);
 				}); // widget notification after key has posted
+				if(e.type == "keypress"){
+					e.stopPropagation(); // don't allow parents to stop printables from being typed
+				}
 			};
 			this.own(on(this.textbox, "keydown, keypress, paste, cut, input, compositionend", lang.hitch(this, handleEvent)));
 		},
@@ -1068,7 +1071,7 @@ define([
  * Top level methods and vars.
  */
 
-define([
+define("jbundle/main", [
 ], function(dom){
     return {
     	
@@ -3477,7 +3480,7 @@ define([
 			var col = b.isCollapsed;
 			var r, sNode, eNode, sel;
 			if(mark){
-				if(has("ie") < 9){
+				if(has("ie") < 9 || (has("ie") === 9 && has("quirks"))){
 					if(lang.isArray(mark)){
 						// IE CONTROL, have to use the native bookmark.
 						bookmark = [];
@@ -3605,7 +3608,7 @@ define([
 			var tmp = [];
 			if(b && b.mark){
 				var mark = b.mark;
-				if(has("ie") < 9){
+				if(has("ie") < 9 || (has("ie") === 9 && has("quirks"))){
 					// Try to use the pseudo range API on IE for better accuracy.
 					var sel = rangeapi.getSelection(this.window);
 					if(!lang.isArray(mark)){
@@ -4478,7 +4481,10 @@ define([
 					DialogUnderlay.show(pd.underlayAttrs, pd.zIndex - 1);
 				}
 
-				// Adjust focus
+				// Adjust focus.
+				// TODO: regardless of setting of dialog.refocus, if the exeucte() method set focus somewhere,
+				// don't shift focus back to button.  Note that execute() runs at the start of the fade-out but
+				// this code runs later, at the end of the fade-out.  Menu has code like this.
 				if(dialog.refocus){
 					// If we are returning control to a previous dialog but for some reason
 					// that dialog didn't have a focused field, set focus to first focusable item.
@@ -4536,8 +4542,12 @@ define([
 	// then refocus.   Won't do anything if focus was removed because the Dialog was closed, or
 	// because a new Dialog popped up on top of the old one, or when focus moves to popups
 	focus.watch("curNode", function(attr, oldNode, node){
+ 		// Note: if no dialogs, ds.length==1 but ds[ds.length-1].dialog is null
 		var topDialog = ds[ds.length - 1].dialog;
-		if(node && topDialog){	// if no dialogs, ds.length==1 but ds[ds.length-1].dialog is null
+
+		// If a node was focused, and there's a Dialog currently showing, and not in the process of fading out...
+		// Ignore focus events on other document though because it's likely an Editor inside of the Dialog.
+		if(node && topDialog && !topDialog._fadeOutDeferred && node.ownerDocument == topDialog.ownerDocument){
 			// If the node that was focused is inside the dialog or in a popup, even a context menu that isn't
 			// technically a descendant of the the dialog, don't do anything.
 			do{
@@ -4928,7 +4938,7 @@ define([
  * Browser back support.
  * Note: java.js has minimal dependencies, and no dijit or parser dependencies to keep code small.
  */
-define([
+define("jbundle/java", [
 	"jbundle/thinutil",
 	"jbundle/back",
 	"dojo/_base/declare",
@@ -5780,7 +5790,7 @@ define([
 		},
 
 		_startSearchFromInput: function(){
-			this._startSearch(this.focusNode.value.replace(/([\\\*\?])/g, "\\$1"));
+			this._startSearch(this.focusNode.value);
 		},
 
 		_startSearch: function(/*String*/ text){
@@ -5803,7 +5813,7 @@ define([
 						deep: true
 					}
 				},
-				qs = string.substitute(this.queryExpr, [text]),
+				qs = string.substitute(this.queryExpr, [text.replace(/([\\\*\?])/g, "\\$1")]),
 				q,
 				startQuery = function(){
 					var resPromise = _this._fetchHandle = _this.store.query(query, options);
@@ -7089,7 +7099,7 @@ define(["./_base/kernel", "require", "./has", "./_base/array", "./_base/config",
 				bundleName = match[5] || match[4],
 				bundlePathAndName = bundlePath + bundleName,
 				localeSpecified = (match[5] && match[4]),
-				targetLocale =	localeSpecified || dojo.locale,
+				targetLocale =	localeSpecified || dojo.locale || "",
 				loadTarget = bundlePathAndName + "/" + targetLocale,
 				loadList = localeSpecified ? [targetLocale] : getLocalesToLoad(targetLocale),
 				remaining = loadList.length,
@@ -7832,7 +7842,7 @@ define([
 /**
  * Classes.
  */
-define([
+define("jbundle/classes", [
     	"jbundle/main",
     	"dojo/_base/declare"
 ], function(main, declare) {
@@ -9272,7 +9282,7 @@ return dojox.xml.parser;
 },
 'jbundle/back':function(){
 define(
-		["dojo/hash", "dojo/topic"],
+		"jbundle/back", ["dojo/hash", "dojo/topic"],
 			function(hash, topic) {
 		    return {
 
@@ -9584,7 +9594,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
 							e.stopPropagation();
 							e.stopImmediatePropagation && e.stopImmediatePropagation();
 							if(type == "click" && (e.target.tagName != "INPUT" || e.target.type == "radio" || e.target.type == "checkbox")
-								&& e.target.tagName != "TEXTAREA"){
+								&& e.target.tagName != "TEXTAREA" && e.target.tagName != "AUDIO" && e.target.tagName != "VIDEO"){
 								 // preventDefault() breaks textual <input>s on android, keyboard doesn't popup,
 								 // but it is still needed for checkboxes and radio buttons, otherwise in some cases
 								 // the checked state becomes inconsistent with the widget's state
@@ -10239,7 +10249,9 @@ define([
 			var node = evt.target;
 			if(node._cssState && !node.getAttribute("widgetId")){
 				var widget = registry.getEnclosingWidget(node);
-				widget._subnodeCssMouseEvent(node, node._cssState, evt);
+				if(widget){
+					widget._subnodeCssMouseEvent(node, node._cssState, evt);
+				}
 			}
 		});
 	});
@@ -11853,7 +11865,7 @@ define([
 				evt.stopPropagation();
 				evt.preventDefault();
 				this._searchString = ''; // so a DOWN_ARROW b doesn't search for ab
-			}else if(evt.keyCode == keys.SPACE && this._searchTimer && !(evt.ctrlKey || evt.altKey)){
+			}else if(evt.keyCode == keys.SPACE && this._searchTimer && !(evt.ctrlKey || evt.altKey || evt.metaKey)){
 				evt.stopImmediatePropagation(); // stop a11yclick and _HasDropdown from seeing SPACE if we're doing keyboard searching
 				evt.preventDefault(); // stop IE from scrolling, and most browsers (except FF) from sending keypress
 				this._keyboardSearch(evt, ' ');
@@ -11866,8 +11878,10 @@ define([
 			// tags:
 			//		private
 
-			if(evt.charCode < keys.SPACE || (evt.ctrlKey || evt.altKey) || (evt.charCode == keys.SPACE && this._searchTimer)){
-				// Avoid duplicate events on firefox (this is an arrow key that will be handled by keydown handler)
+			if(evt.charCode < keys.SPACE || evt.ctrlKey || evt.altKey || evt.metaKey ||
+					(evt.charCode == keys.SPACE && this._searchTimer)){
+				// Avoid duplicate events on firefox (ex: arrow key that will be handled by keydown handler),
+				// and also control sequences like CMD-Q
 				return;
 			}
 			evt.preventDefault();
@@ -12197,7 +12211,7 @@ define([
  */
 // + dojo.addOnLoad(jbundle.util, "init");
 
-define([
+define("jbundle/util", [
 	"jbundle/main",
 	"jbundle/gui",
 	"jbundle/classes",
@@ -18945,7 +18959,7 @@ define([
 /**
  * Screen utilities.
  */
-define([
+define("jbundle/gui", [
 	"jbundle/java",
 	"jbundle/xml",
 	"jbundle/thinutil",
@@ -19049,7 +19063,7 @@ define([
 					toggle: "fade",
 					toggleDuration: "250",
 					title: "Error!",
-					iconSrc: "images/buttons/Error.gif",
+					iconSrc: "org/jbundle/res/images/buttons/Error.gif",
 					displayCloseAction: true,
 					id: "alertDialog"
 				};
@@ -19090,7 +19104,7 @@ define([
 	{
 		if (!command)
 			command = desc;
-		var imageName = "<img src=\"images/buttons/" + command + ".gif\" width=\"16\" height=\"16\"/>" + desc;
+		var imageName = "<img src=\"org/jbundle/res/images/buttons/" + command + ".gif\" width=\"16\" height=\"16\"/>" + desc;
 		if (button)
 			button.setLabel(imageName);
 	},
@@ -20195,7 +20209,7 @@ return stamp;
 /**
  * Base utilities.
  */
-define([
+define("jbundle/thinutil", [
 ], function(){
     return {
 	/**
@@ -20581,7 +20595,7 @@ define([
 /**
  * Remote access utilities.
  */
-define([
+define("jbundle/remote", [
 	"jbundle/main",
 	"jbundle/gui",
 	"jbundle/classes",
@@ -22986,7 +23000,7 @@ define([
  * Public Utilities.
  */
 
-define([
+define("jbundle/xml", [
     	"dojo/request",
     	"dojox/xml/parser",
     	"dojo/domReady!"

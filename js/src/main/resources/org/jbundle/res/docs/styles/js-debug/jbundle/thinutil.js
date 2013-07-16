@@ -1,7 +1,7 @@
 /**
  * Base utilities.
  */
-define([
+define("jbundle/thinutil", [
 ], function(){
     return {
 	/**

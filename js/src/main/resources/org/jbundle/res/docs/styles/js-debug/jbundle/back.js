@@ -1,5 +1,5 @@
 define(
-		["dojo/hash", "dojo/topic"],
+		"jbundle/back", ["dojo/hash", "dojo/topic"],
 			function(hash, topic) {
 		    return {
 

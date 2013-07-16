@@ -1,7 +1,7 @@
 /**
  * Remote access utilities.
  */
-define([
+define("jbundle/remote", [
 	"jbundle/main",
 	"jbundle/gui",
 	"jbundle/classes",

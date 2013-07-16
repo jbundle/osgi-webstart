@@ -2,7 +2,7 @@
  * Public Utilities.
  */
 
-define([
+define("jbundle/xml", [
     	"dojo/request",
     	"dojox/xml/parser",
     	"dojo/domReady!"

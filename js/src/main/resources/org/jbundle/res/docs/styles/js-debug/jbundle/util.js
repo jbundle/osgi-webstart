@@ -3,7 +3,7 @@
  */
 // + dojo.addOnLoad(jbundle.util, "init");
 
-define([
+define("jbundle/util", [
 	"jbundle/main",
 	"jbundle/gui",
 	"jbundle/classes",
