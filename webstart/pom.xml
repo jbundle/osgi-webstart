@@ -149,6 +149,11 @@
   </distributionManagement>
 
 	<dependencies>
+		<dependency>
+    <groupId>org.jbundle.util.osgi</groupId>
+  <artifactId>org.jbundle.util.osgi.webstart.sign</artifactId>
+    <version>${project.version}</version>
+		</dependency>
 	    <dependency>
 		    <groupId>org.jibx.schema.net.java</groupId>
 		    <artifactId>org.jibx.schema.net.java.jnlp_6_0</artifactId>

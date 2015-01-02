@@ -29,6 +29,7 @@ import java.util.zip.ZipOutputStream;
 import org.jbundle.util.osgi.ClassFinder;
 import org.jbundle.util.osgi.ClassService;
 import org.jbundle.util.osgi.finder.ClassServiceUtility;
+import org.jbundle.util.osgi.webstart.sign.SigningUtil;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 
@@ -43,7 +44,12 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
 
     private static final long serialVersionUID = 1L;
 
-	public static final String MANIFEST_DIR = "META-INF/";
+    public static final String KEYSTORE_PATH = "keystorePath";
+    public static final String TIMESTAMP_URL = "timestampURL";
+    public static final String KEYSTORE_PASSWORK = "keystorePassword";
+    public static final String KEYSTORE_ALIAS = "keystoreAlias";
+
+    public static final String MANIFEST_DIR = "META-INF/";
 	public static final String MANIFEST_PATH = MANIFEST_DIR + "MANIFEST.MF";
     public static final int ONE_SEC_IN_MS = 1000;
 
@@ -225,8 +231,8 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
 	    p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
 	    // throw an error if an attribute is unrecognized
 	    p.put(Packer.UNKNOWN_ATTRIBUTE, Packer.ERROR);
-	    // pass one class file uncompressed:
-	    p.put(Packer.PASS_FILE_PFX+0, "mutants/Rogue.class");
+	    // pass one class directory uncompressed: Don't modify the manifest
+	    p.put(Packer.PASS_FILE_PFX+0, "META-INF");
 	    try {
 	        JarFile jarFile = new JarFile(jarFileName);
 	        FileOutputStream fos = new FileOutputStream(packFileName);
@@ -246,6 +252,15 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
 	        unpacker.unpack(f, jostream);
 	        // Must explicitly close the output.
 	        jostream.close();
+	        
+	        String keystorePath = getProperty(KEYSTORE_PATH);
+            if (keystorePath != null) {
+            	String timestampURL = getProperty(TIMESTAMP_URL);
+            	String password = getProperty(KEYSTORE_PASSWORK);
+            	String alias = getProperty(KEYSTORE_ALIAS);
+            	SigningUtil.sign(timestampURL, password, alias, reJaredFileName, keystorePath);
+            }
+	        
 	        // Need to repack it so the new magic number will be correct
             jarFile = new JarFile(reJaredFileName);
             fos = new FileOutputStream(packFileName);

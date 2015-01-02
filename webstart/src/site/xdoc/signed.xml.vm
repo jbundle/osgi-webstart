@@ -14,22 +14,19 @@
 
   <body>
 
-     <section name="Note on signed jars">
+     <section name="Signed jars usage">
         <p>
-        I'm still not sure how I want to handle signed jars.<br/>
-        No user in their right mind would accept this dialog box.<br/>
-        <img src="images/javasecuritywarning.png" /><br/>
-        The majority of applications should run fine in the sandbox. You should not request access to files on the local computer
-        and you should not access web sites that don't originate at the application's site. <br/>
-        If you need to access web content, just add a proxy to your web server to deliver these pages to your user's application.<br/>
-        If you are worried about your applet getting hacked in-transit, just deliver it with https.<br/>
-        </p>
-        <p>
-        If you must use a signed jar, you can disable compression by setting the jnlp.packEnabled flag to false. Alternatively,
-        if you want compression, just
-        add an OSGi manifest and do a pack200 repack operation during the build process to make sure that your jar gets to the destination unchanged.<br/>
-        Disable compression like this:<br/>
-        <code>http://localhost:8181/webstart/docs/javafx.html?appletClass=ensemble.Ensemble2&amp;jnlp.packEnabled=false</code>
+        Jar signing can be enabled by supplying a java keystore path to the webstart bundle.
+        <br/>
+        Just set the following properties in your OSGI container:<br/>
+<source>
+config:edit org.jbundle.util.osgi.webstart
+config:property-set keystorePath /path/to/keystore.jks
+config:property-set timestampURL http://timestamp.digicert.com (For example)
+config:property-set keystorePassword **your keystore password**
+config:property-set keystoreAlias keystorealias
+config:update 
+</source>
         </p>
     </section>
 

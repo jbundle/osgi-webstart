@@ -32,8 +32,8 @@ Here are the instructions for several provisioning systems:
 <p>
 You can install <b>Auto Web Start</b> directly into <a href="karaf.apache.org">apache karaf</a> from maven central by typing:
 <source>
-features:install obr
-obr:addurl http://www.jbundle.org/repository/repository.xml
+feature:install obr
+obr:url-add http://www.jbundle.org/repository/repository.xml
 obr:start -d 'jbundle-util-osgi-obr - obr bundle retrieval'
 obr:start -d 'jbundle-util-osgi-webstart - osgi to web start web bundle'
 </source>
