@@ -10,7 +10,7 @@ import java.util.jar.Pack200;
 import java.util.jar.Pack200.Packer;
 import java.util.jar.Pack200.Unpacker;
 
-import sun.security.tools.JarSigner;
+import sun.security.tools.jarsigner.Main;
 
 public class SigningUtil {  
   
@@ -74,8 +74,12 @@ public class SigningUtil {
     	sb.append(jar).append(',');
     	sb.append(alias);
         String[] args = sb.toString().split(",");
-        JarSigner signer = new JarSigner();  
-        signer.run(args);  
+        Main signer = new Main();
+        try {
+            signer.run(args);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }  
   
 } 

@@ -21,6 +21,7 @@
         <inherited>true</inherited>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <version>4.2.1</version>    <!-- TODO Remove this and use default -->
         <configuration>
           <instructions>
             <!-- Private-Package>
@@ -29,7 +30,7 @@
             </Private-Package -->
             <Export-Package>
             org.jbundle.util.osgi.webstart.sign.*;
-            sun.security.tools.*;
+            sun.security.tools.jarsigner.*;
             com.sun.jarsigner.*;
             </Export-Package>
             <Main-Class>org.jbundle.util.osgi.webstart.sign.SigningUtil</Main-Class>
