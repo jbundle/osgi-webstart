@@ -474,9 +474,11 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
     		{	// Version may have been split because it has commas
     			for (int j = i + 1; j < properties.length; j++)
     			{
+                    if (properties[j].contains(";"))
+                        break;
     	    		if (!properties[j].endsWith("\""))
     	    			break;
-	    			properties[i] = properties[i] + "," + properties[j];	// Version	
+	    			properties[i] = properties[i] + "," + properties[j];	// Version
 	    			properties[j] = "";
     			}
     		}
