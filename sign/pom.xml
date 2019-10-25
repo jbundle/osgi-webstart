@@ -21,7 +21,6 @@
         <inherited>true</inherited>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>4.2.1</version>    <!-- TODO Remove this and use default -->
         <configuration>
           <instructions>
             <!-- Private-Package>
