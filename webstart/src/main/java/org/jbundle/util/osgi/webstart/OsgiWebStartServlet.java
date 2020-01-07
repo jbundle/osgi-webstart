@@ -37,6 +37,7 @@ import java.util.TreeSet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -157,7 +158,6 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
 
     /**
      * Constructor.
-     * @param context
      */
     public OsgiWebStartServlet() {
     	super();
@@ -167,7 +167,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      * Constructor.
      * @param context
      */
-    public OsgiWebStartServlet(Object context, String servicePid, Dictionary<String, String> properties) {
+    public OsgiWebStartServlet(Object context, String servicePid, Dictionary<String, Object> properties) {
     	this();
     	init(context, servicePid, properties);
     }
@@ -176,7 +176,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      * Constructor.
      * @param context
      */
-    public void init(Object context, String servicePid, Dictionary<String, String> properties) {
+    public void init(Object context, String servicePid, Dictionary<String, Object> properties) {
     	super.init(context, servicePid, properties);
     }
     
@@ -355,7 +355,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      * Get the jnlp cache file name.
      * @param request
      * @param sbBase Returns the cache file name of using just the component parameters
-     * @param dbUnique Returns the cache file name of using all the parameters
+     * @param sbUnique Returns the cache file name of using all the parameters
      */
     @SuppressWarnings("unchecked")
     protected void getJnlpCacheFilenames(HttpServletRequest request, StringBuilder sbBase, StringBuilder sbUnique)
@@ -409,7 +409,6 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
      * @param response The http response
      * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @param elementsToChange Which xml elements should I change?
-     * @param baseCacheFileStatus The current cache file status
      * @return How much have I changed this jnlp?
      */
     protected BundleChangeStatus setupJnlp(Jnlp jnlp, HttpServletRequest request, HttpServletResponse response, boolean forceScanBundle, ElementsToChange elementsToChange)
@@ -608,7 +607,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     /**
      * Set the one-line description
      * @param information
-     * @param desc
+     * @param kind
      */
     public Description getJnlpDescription(Information information, Kind kind)
     {
@@ -779,10 +778,10 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
 		if ((activationPolicy == null) || (activationPolicy.length() == 0))
 		    activationPolicy = this.getRequestParam(request, Constants.BUNDLE_ACTIVATIONPOLICY, null);
         if ((activationPolicy == null) || (activationPolicy.length() == 0))
-            activationPolicy = this.getProperty(Constants.BUNDLE_ACTIVATIONPOLICY);
+            activationPolicy = (String)this.getProperty(Constants.BUNDLE_ACTIVATIONPOLICY);
 		Download download = Constants.ACTIVATION_LAZY.equalsIgnoreCase(activationPolicy) ? Download.LAZY : Download.EAGER;
 		String filename = name + '-' + version + ".jar";
-		boolean pack = !"false".equalsIgnoreCase(this.getProperty("jnlp.packEnabled"));   // Pack by default
+		boolean pack = !"false".equalsIgnoreCase((String)this.getProperty("jnlp.packEnabled"));   // Pack by default
 		String[] packages = moveBundleToJar(bundle, filename, forceScanBundle, pack);
 		if (packages == null) // No changes on this bundle
 	        return (bundleChanged == BundleChangeStatus.NONE || bundleChanged == BundleChangeStatus.UNKNOWN) ? BundleChangeStatus.NONE : BundleChangeStatus.PARTIAL;
@@ -801,7 +800,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
 	/**
 	 * Add all the dependent bundles (of this bundle) to the jar and package list.
 	 * @param jnlp
-	 * @param bundle
+	 * @param importPackage
 	 * @param bundles
 	 * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @return true if the bundle has changed from last time
@@ -962,7 +961,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     /**
      * Set jnlp component xml (empty) element.
      * @param jnlp
-     * @param mainClass
+     * @param request
      */
     public void setComponentDesc(Jnlp jnlp, HttpServletRequest request)
     {
@@ -1147,9 +1146,8 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     /**
      * Add all the dependent bundles (of this bundle) to the jar and package list.
      * @param jnlp
-     * @param bundle
-     * @param bundles
-     * @param forceScanBundle Scan the bundle for package names even if the cache is current
+     * @param request
+     * @param response
      * @return true if the bundle has changed from last time
      */
     public void addProperties(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp)
@@ -1170,7 +1168,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
         String key = "jnlp.packEnabled";
         if (properties.get(key) == null)
         {
-            String value = this.getProperty(key);
+            String value = (String)this.getProperty(key);
             if (value == null)
                 value = "true"; // Defaults to true
             properties.put(key, value);
@@ -1191,9 +1189,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     /**
      * Add all the dependent bundles (of this bundle) to the jar and package list.
      * @param jnlp
-     * @param bundle
      * @param bundles
-     * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @return true if the bundle has changed from last time
      */
     public BundleChangeStatus processComponents(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp, Map<String,String>components, Set<Bundle> bundles, BundleChangeStatus bundleChanged, String pathToJars)
@@ -1222,10 +1218,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     }
     /**
      * Add all the dependent bundles (of this bundle) to the jar and package list.
-     * @param jnlp
-     * @param bundle
      * @param bundles
-     * @param forceScanBundle Scan the bundle for package names even if the cache is current
      * @return true if the bundle has changed from last time
      */
     public BundleChangeStatus addComponents(HttpServletRequest request, HttpServletResponse response, Jnlp jnlp, Map<String,String>components, Set<Bundle> bundles, BundleChangeStatus bundleChanged, String pathToJars)
@@ -1509,6 +1502,41 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
             } catch (IOException e) {   // Never
             }
             return streamOut.toString();
+        }
+        /**
+         * This method can be used to determine if data can be written without blocking.
+         *
+         * @return <code>true</code> if a write to this <code>ServletOutputStream</code>
+         *  will succeed, otherwise returns <code>false</code>.
+         *
+         *  @since Servlet 3.1
+         */
+        public boolean isReady()
+        {
+            return true;    // TODO Fix this
+        }
+
+        /**
+         * Instructs the <code>ServletOutputStream</code> to invoke the provided
+         * {@link WriteListener} when it is possible to write
+         *
+         *
+         * @param writeListener the {@link WriteListener} that should be notified
+         *  when it's possible to write
+         *
+         * @exception IllegalStateException if one of the following conditions is true
+         * <ul>
+         * <li>the associated request is neither upgraded nor the async started
+         * <li>setWriteListener is called more than once within the scope of the same request.
+         * </ul>
+         *
+         * @throws NullPointerException if writeListener is null
+         *
+         * @since Servlet 3.1
+         */
+        public void setWriteListener(WriteListener writeListener)
+        {
+            // TODO Fix this
         }
     }
     /**

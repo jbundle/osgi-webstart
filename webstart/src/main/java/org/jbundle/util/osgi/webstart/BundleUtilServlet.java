@@ -98,7 +98,7 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
 	 * Jar this bundle.
      * @param bundle
      * @param createNewJar - If false, don't create a jar, just scan the bundle
-     * @param fileout
+     * @param fileOut
      * @param compressJar - If false, Don't compress the jar
      * @return All the package names in the bundle or null if I am using the cached jar.
 	 */
@@ -253,11 +253,11 @@ public class BundleUtilServlet extends BundleCacheServlet /*JnlpDownloadServlet*
 	        // Must explicitly close the output.
 	        jostream.close();
 	        
-	        String keystorePath = getProperty(KEYSTORE_PATH);
+	        String keystorePath = (String)getProperty(KEYSTORE_PATH);
             if (keystorePath != null) {
-            	String timestampURL = getProperty(TIMESTAMP_URL);
-            	String password = getProperty(KEYSTORE_PASSWORK);
-            	String alias = getProperty(KEYSTORE_ALIAS);
+            	String timestampURL = (String)getProperty(TIMESTAMP_URL);
+            	String password = (String)getProperty(KEYSTORE_PASSWORK);
+            	String alias = (String)getProperty(KEYSTORE_ALIAS);
             	SigningUtil.sign(timestampURL, password, alias, reJaredFileName, keystorePath);
             }
 	        

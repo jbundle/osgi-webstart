@@ -61,7 +61,7 @@ public class BundleCacheServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
      * Constructor.
      * @param context
      */
-    public void init(Object context, String servicePid, Dictionary<String, String> properties) {
+    public void init(Object context, String servicePid, Dictionary<String, Object> properties) {
     	super.init(context, servicePid, properties);
     	
         lastBundleChange = new Date();
@@ -190,7 +190,7 @@ public class BundleCacheServlet extends BaseOsgiServlet /*JnlpDownloadServlet*/
     /**
      * Is the cache file up-to-date.
      * @param request
-     * @param file
+     * @param jnlpBaseCacheFile
      * @return CURRENT - Same as last http request, UNCHANGED since last request (from other client?), DIRTY - changed
      */
     public boolean hasFileChanged(HttpServletRequest request, File jnlpBaseCacheFile, boolean checkBundleChanges)
