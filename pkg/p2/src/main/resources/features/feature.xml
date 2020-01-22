@@ -2,7 +2,7 @@
 <feature
       id="feature"
       label="jbundle.osgi"
-      version="${jbundle-osgi-version}">
+      version="${jbundle-util-osgi-version}">
 
    <description url="http://www.jbundle.org/osgi">
       ${project.description}
@@ -20,7 +20,7 @@
          id="org.jbundle.util.osgi.org.jbundle.util.osgi.jnlp"
          download-size="0"
          install-size="0"
-         version="${jbundle-osgi-version}"
+         version="${jbundle-util-osgi-version}"
          unpack="false"/>
 
 </feature>

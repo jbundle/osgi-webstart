@@ -144,7 +144,7 @@
   <distributionManagement>
     <site>
       <id>jbundle.org</id>
-      <url>${documentationURL}/jbundle/auto-webstart</url>
+      <url>${documentationURL}/jbundle/osgi-webstart</url>
     </site>
   </distributionManagement>
 
