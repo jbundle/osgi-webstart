@@ -12,7 +12,7 @@
 
   <groupId>org.jbundle.util.osgi</groupId>
   <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
-  <version>1.6.10-SNAPSHOT</version>
+  <version>1.6.10</version>
 
   <packaging>pom</packaging>
   <name>jbundle-util-osgi-webstart-reactor</name>
@@ -25,6 +25,7 @@
     <url>https://github.com/jbundle/osgi-webstart</url>
     <connection>scm:git:https://github.com/jbundle/osgi-webstart</connection>
     <developerConnection>scm:git:https://github.com/jbundle/osgi-webstart</developerConnection>
+    <tag>jbundle-util-osgi-webstart-reactor-1.6.10</tag>
   </scm>
 
   <modules>
@@ -33,7 +34,7 @@
     <module>browser</module>
     <module>dojo</module>
     <module>js</module>
-    <module>pkg</module>
+<!--    <module>pkg</module>-->
     <module>sign</module>
   </modules>
 
