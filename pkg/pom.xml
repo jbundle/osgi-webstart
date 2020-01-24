@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jbundle.util.osgi</groupId>
     <artifactId>jbundle-util-osgi-webstart-reactor</artifactId>
-    <version>1.6.10-SNAPSHOT</version>
+    <version>1.6.10</version>
   </parent>
 
   <artifactId>jbundle-util-osgi-pkg-reactor</artifactId>
@@ -15,7 +15,7 @@
   <name>jbundle-util-osgi-pkg-reactor</name>
 
   <modules>
-    <!-- module>p2</module -->
+     module>p2</module
     <module>karaf</module>
   </modules>
 </project>
