@@ -35,7 +35,7 @@
         <p>
         If you want to deploy JavaFX jars that were not packaged with an OSGi manifest, just use the wrap protocol to automatically generate a manifest.<br/>
         For example, for a regular java jar file, in karaf, I would type:<br/>
-        <code>install wrap:file:///home/don/workspace/workspace/jbundle/javafx/helloworld/target/org.jbundle.javafx.example.helloworld-${project.version}.jar</code><br/>
+        <code>install wrap:file:///home/dcorley/workspace/workspace/jbundle/javafx/helloworld/target/org.jbundle.javafx.example.helloworld-${project.version}.jar</code><br/>
         and I'm ready to run the application from a browser with the same command that we used in the first example. 
         </p>
         <p>
