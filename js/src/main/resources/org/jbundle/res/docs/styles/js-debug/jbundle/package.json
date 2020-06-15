@@ -21,7 +21,7 @@
     }],
     "dependencies": {
         "dojo": "~1.9.0",
-        "dijit": "~1.9.0",
+        "dijit": "~1.16.3",
         "dojox": "~1.9.0"
     },
     "main": "js/src/main/resources/org/jbundle/res/docs/styles/js",
