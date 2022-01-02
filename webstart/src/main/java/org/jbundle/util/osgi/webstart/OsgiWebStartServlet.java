@@ -1413,7 +1413,17 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
     protected String getUrlPrefix(HttpServletRequest request) {
         StringBuffer url = new StringBuffer();
         String scheme = request.getScheme();
+        String xscheme = request.getHeader("X-Forwarded-Proto");
+        if ((xscheme != null) && (xscheme.length() > 0))
+            scheme = xscheme;
         int port = request.getServerPort();
+        try {
+            int xport = request.getIntHeader("X-Forwarded-Port");
+            if (xport != -1)
+                port = xport;
+        } catch (NumberFormatException ex) {
+            //Ignore
+        }
         url.append(scheme);		// http, https
         url.append("://");
         url.append(request.getServerName());
