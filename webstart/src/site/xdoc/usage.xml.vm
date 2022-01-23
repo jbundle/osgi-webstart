@@ -55,7 +55,7 @@ icon - Icon path
 online - Set to 'true' if application must run online
 shortcutDesktop -  Set to 'true' to include application on user's desktop
 shortcutMenu - Setting this value will include the application in the system's menu
-javaVersion - Required java version (defaults to 1.6+)
+javaVersion - Required java version (defaults to 1.8+)
 initialHeapSize - Initial heap size
 maxHeapSize - Maximum heap size
 width - Applet width

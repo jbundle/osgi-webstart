@@ -723,7 +723,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
 		    choice.setJava(java = new Java());
 		}
 		if ((java.getVersion() == null) || (getRequestParam(request, JAVA_VERSION, null) != null))
-		    java.setVersion(getRequestParam(request, JAVA_VERSION, "1.6+"));
+		    java.setVersion(getRequestParam(request, JAVA_VERSION, "1.8+"));
 		if (getRequestParam(request, INITIAL_HEAP_SIZE, null) != null)
 		    java.setInitialHeapSize(getRequestParam(request, INITIAL_HEAP_SIZE, null));
         if (getRequestParam(request, MAX_HEAP_SIZE, null) != null)
@@ -740,7 +740,7 @@ public class OsgiWebStartServlet extends BundleUtilServlet /*JnlpDownloadServlet
         if (java == null)
             choice.setJ2se(java = new J2se());
         if ((java.getVersion() == null) || (getRequestParam(request, JAVA_VERSION, null) != null))
-            java.setVersion(getRequestParam(request, JAVA_VERSION, "1.6+"));
+            java.setVersion(getRequestParam(request, JAVA_VERSION, "1.8+"));
         if (getRequestParam(request, INITIAL_HEAP_SIZE, null) != null)
             java.setInitialHeapSize(getRequestParam(request, INITIAL_HEAP_SIZE, null));
         if (getRequestParam(request, MAX_HEAP_SIZE, null) != null)

@@ -9,7 +9,7 @@
   <security>
   </security>
   <resources>
-    <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <java version="1.8+" href="http://java.sun.com/products/autodl/j2se"/>
     <jfx:javafx-runtime version="2.0+" href="http://javafx.com/jfx-20.exe"/>
   </resources>
   <applet-desc width="960" height="720"

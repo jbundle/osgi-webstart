@@ -9,7 +9,7 @@
   <security>
   </security>
   <resources>
-    <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <java version="1.8+" href="http://java.sun.com/products/autodl/j2se"/>
     <jfx:javafx-runtime version="2.2+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
     <!-- jar href="yourjars.jar" size="8848189" download="eager" / -->
   </resources>
